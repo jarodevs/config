@@ -1,5 +1,5 @@
 {
-    "modules-left": ["custom/launch", "sway/workspaces"],
+    "modules-left": ["sway/workspaces"],
     "modules-center": ["custom/spotify"],
     "modules-right": [
         "pulseaudio",
@@ -7,13 +7,8 @@
         "network",
         "battery#bat0",
         "battery#bat1",
-        "clock",
-        "custom/off"
+        "clock"
     ],
-    "custom/launch": {
-        "format": " ",
-        "on-click": "rofi -show run"
-    },
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
@@ -100,9 +95,5 @@
         "interval": 1,
         "format": "  {:%I:%M %p}",
         "format-alt": "  {:%b %d, %G}"
-    },
-    "custom/off": {
-        "format": " ",
-        "on-click": "swaymsg exit"
     }
 }
