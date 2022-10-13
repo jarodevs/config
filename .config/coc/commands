@@ -1,0 +1,3 @@
+eslint.showOutputChannel
+eslint.executeAutofix
+json.retryResolveSchema

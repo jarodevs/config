@@ -1,0 +1,4 @@
+unsetopt BEEP
+
+# startup
+rxfetch

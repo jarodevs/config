@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "coc-json": ">=1.6.1",
+    "coc-tsserver": ">=1.11.11",
+    "coc-sh": ">=0.7.0",
+    "coc-eslint": ">=1.5.8",
+    "coc-lua": ">=1.0.1"
+  },
+  "lastUpdate": 1665608563047
+}
