@@ -12,7 +12,7 @@ return require('packer').startup(function(use)
 	use 'sbdchd/neoformat'
 	use {'neoclide/coc.nvim', branch = 'release'}
 	use {
-	"windwp/nvim-autopairs",
-    config = function() require("nvim-autopairs").setup {} end
-}
+		"windwp/nvim-autopairs", 
+		config = function() require("nvim-autopairs").setup {map_cr = false} end
+	}
 end)
