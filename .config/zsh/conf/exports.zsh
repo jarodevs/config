@@ -24,4 +24,4 @@ export GIT_PS1_SHOWSTASHSTATE=1
 # #	NPM_TOKEN
 # # CI_JOB_TOKEN
 # # GL_TOKEN
-source ~/secret-exports.zsh
+source ~/.secret-exports.zsh
