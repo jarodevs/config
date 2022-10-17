@@ -101,6 +101,13 @@ output "*" bg ~/Media/Pictures/breathe-in-radium.png fill
     bindsym $mod+Shift+6 move container to workspace number 6
     bindsym $mod+Shift+7 move container to workspace number 7
 
+	# Move workspace to different output
+	bindsym $mod+Control+Shift+l move workspace to output right
+	bindsym $mod+Control+Shift+h move workspace to output left
+	bindsym $mod+Control+Shift+k move workspace to output down
+	bindsym $mod+Control+Shift+j move workspace to output up
+
+
 ## Layout stuff:
 
     # Switch layout style of current container
