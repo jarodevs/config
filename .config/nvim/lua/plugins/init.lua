@@ -1,5 +1,6 @@
 require('packer').startup(function(use)
-	use 'ayu-theme/ayu-vim'
+	-- use 'ayu-theme/ayu-vim'
+	use ({ 'projekt0n/github-nvim-theme' })
 	use {
 			'nvim-tree/nvim-tree.lua',
 			requires = {
