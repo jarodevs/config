@@ -3,5 +3,7 @@
 	"eslint.options": {
 		"cache": true
 	},
-	"eslint.format.enable": true
+	"coc.preferences.formatOnSaveFiletypes": [
+		"*"
+	]
 }
