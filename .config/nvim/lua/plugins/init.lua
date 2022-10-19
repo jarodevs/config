@@ -11,7 +11,7 @@ require('packer').startup(function(use)
 	use {'neoclide/coc.nvim', branch = 'release'}
 	use {
 		'windwp/nvim-autopairs', 
-		config = function() require("nvim-autopairs").setup {map_cr = false} end
+		config = function() require('nvim-autopairs').setup {map_cr = false} end
 	}
 	use {
   		'nvim-telescope/telescope.nvim', tag = '0.1.0',
@@ -23,8 +23,9 @@ require('packer').startup(function(use)
         'nvim-treesitter/nvim-treesitter',
 		run = ':TSUpdate'
     }
-	use "lukas-reineke/indent-blankline.nvim"
+	use 'lukas-reineke/indent-blankline.nvim'
 	use 'voldikss/vim-floaterm'
+	use 'pantharshit00/vim-prisma'
 end)
 
 require('plugins.nvim-tree')
