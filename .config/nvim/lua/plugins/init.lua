@@ -30,3 +30,4 @@ end)
 
 require('plugins.nvim-tree')
 require('telescope').load_extension('fzf')
+require('plugins.coc')
