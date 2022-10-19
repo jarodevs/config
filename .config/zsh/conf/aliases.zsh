@@ -77,3 +77,7 @@ alias vpn_disco='sudo protonvpn d'
 
 # info
 alias info='info --vi-keys'
+
+# SWAY
+# toggle laptop video output
+alias tlvo='swaymsg output eDP-1 toggle'
