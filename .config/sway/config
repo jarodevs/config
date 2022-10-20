@@ -63,7 +63,8 @@ output "*" bg ~/Media/Pictures/breathe-in-radium.png fill
 
     bindsym $mod+q kill
     bindsym $mod+Shift+q exec swaymsg exit
-    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+r reload
+	bindsym $mod+Shift+c exec swaymsg move position center && exec swaymsg resize set 50ppt 100ppt 
 
     floating_modifier $mod normal
 
