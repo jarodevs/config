@@ -22,12 +22,10 @@ set $right l
 
 workspace 1
 exec $browser
-workspace 2
-exec $term
-workspace 3
+workspace 5
 exec thunderbird
-workspace 7
-exec spotify
+workspace 6
+exec slack
 
 ################################################################################
 ###  STYLING
