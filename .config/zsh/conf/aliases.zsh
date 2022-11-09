@@ -16,7 +16,7 @@ alias gp+='git push --force'
 alias ga='git add'
 alias gb='git checkout'
 alias gf='git fetch --all --prune'
-alias gl='git log --color --graph --pretty=format:"%C(bold white)%h%Creset -%C(bold green)%d%Creset %s %C(bold red)(%cr)%Creset %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
+alias gl='git log --color --graph --pretty=format:"%C(bold white)%h%Creset -%C(bold green)%d%Creset %s %C(bold red)(%cr)%Creset %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative --oneline'
 alias gc='git commit'
 
 # neovim typing errors
