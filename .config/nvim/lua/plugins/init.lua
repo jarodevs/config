@@ -10,7 +10,7 @@ require('packer').startup(function(use)
 	use 'sbdchd/neoformat'
 	use {'neoclide/coc.nvim', branch = 'release'}
 	use {
-		'windwp/nvim-autopairs', 
+		'windwp/nvim-autopairs',
 		config = function() require('nvim-autopairs').setup {map_cr = false} end
 	}
 	use {
@@ -26,6 +26,8 @@ require('packer').startup(function(use)
 	use 'lukas-reineke/indent-blankline.nvim'
 	use 'voldikss/vim-floaterm'
 	use 'pantharshit00/vim-prisma'
+	use	'tpope/vim-fugitive'
+	use 'mtth/scratch.vim'
 end)
 
 require('plugins.nvim-tree')
