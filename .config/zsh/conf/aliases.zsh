@@ -1,3 +1,5 @@
+# Yay alias is better than paru
+alias yay='paru'
 # replacing `ls` with `exa`
 alias l='exa --color=always --sort=type -1'
 alias la='exa -a --color=always --sort=type -1'
