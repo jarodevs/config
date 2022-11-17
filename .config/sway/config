@@ -146,10 +146,10 @@ output "*" bg ~/Media/Pictures/breathe-in-radium.png fill
     bindsym $mod+p exec grim
 
 mode "resize" {
-    bindsym $left resize grow width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize shrink width 10px
+    bindsym $left resize grow width 20px
+    bindsym $down resize grow height 20px
+    bindsym $up resize shrink height 20px
+    bindsym $right resize shrink width 20px
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
