@@ -28,8 +28,13 @@ require('packer').startup(function(use)
 	use 'pantharshit00/vim-prisma'
 	use	'tpope/vim-fugitive'
 	use 'mtth/scratch.vim'
+	use {
+	  	"folke/todo-comments.nvim",
+	  	requires = "nvim-lua/plenary.nvim",
+	}
 end)
 
 require('plugins.nvim-tree')
+require('plugins.todo-comments')
 require('telescope').load_extension('fzf')
 require('plugins.coc')
