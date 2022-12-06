@@ -14,3 +14,5 @@ source $ZDOTDIR/conf/plugins.zsh
 source $ZDOTDIR/conf/general.zsh
 
 autoload -Uz compinit && compinit
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
