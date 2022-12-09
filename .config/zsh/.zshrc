@@ -16,3 +16,9 @@ source $ZDOTDIR/conf/general.zsh
 autoload -Uz compinit && compinit
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/ariagroult/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ariagroult/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/ariagroult/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ariagroult/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
