@@ -36,5 +36,5 @@ end)
 
 require('plugins.nvim-tree')
 require('plugins.todo-comments')
-require('telescope').load_extension('fzf')
+require('telescope')
 require('plugins.coc')
