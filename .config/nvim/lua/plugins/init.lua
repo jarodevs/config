@@ -1,6 +1,11 @@
 require('packer').startup(function(use)
 	-- use 'ayu-theme/ayu-vim'
 	use ({ 'projekt0n/github-nvim-theme' })
+	use 'Mofiqul/dracula.nvim'
+	use {
+	  'nvim-lualine/lualine.nvim',
+	  requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+	}
 	use {
 			'nvim-tree/nvim-tree.lua',
 			requires = {
@@ -34,6 +39,7 @@ require('packer').startup(function(use)
 	}
 end)
 
+require('lualine')
 require('plugins.nvim-tree')
 require('plugins.todo-comments')
 require('telescope')
