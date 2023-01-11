@@ -1,7 +1,6 @@
 require('packer').startup(function(use)
-	-- use 'ayu-theme/ayu-vim'
-	use ({ 'projekt0n/github-nvim-theme' })
-	use 'Mofiqul/dracula.nvim'
+	use 'wbthomason/packer.nvim'
+	use 'UtkarshVerma/molokai.nvim'
 	use {
 	  'nvim-lualine/lualine.nvim',
 	  requires = { 'kyazdani42/nvim-web-devicons', opt = true }
