@@ -41,10 +41,12 @@ require('packer').startup(function(use)
 		run = function() vim.fn["mkdp#util#install"]() end,
 	})
 	use 'preservim/tagbar'
+	use {'akinsho/bufferline.nvim', tag = 'v3.*', requires = 'nvim-tree/nvim-web-devicons'}
 end)
 
-require('lualine')
+require('plugins.lualine')
 require('plugins.nvim-tree')
 require('plugins.todo-comments')
-require('telescope')
+require('plugins.telescope')
 require('plugins.coc')
+require('plugins.bufferline')
