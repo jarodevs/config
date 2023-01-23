@@ -1,3 +1,6 @@
+
+vim.keymap.set('n', '<C-w>', ':bw <CR>', {})
+
 require('keybindings.autopairs')
 require('keybindings.coc')
 require('keybindings.nvim-tree')
