@@ -40,8 +40,9 @@ require('packer').startup(function(use)
 		"iamcco/markdown-preview.nvim",
 		run = function() vim.fn["mkdp#util#install"]() end,
 	})
-	use 'preservim/tagbar'
 	use {'akinsho/bufferline.nvim', tag = 'v3.*', requires = 'nvim-tree/nvim-web-devicons'}
+	use 'preservim/tagbar'
+	use 'ctrlpvim/ctrlp.vim'
 end)
 
 require('plugins.lualine')
