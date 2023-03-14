@@ -83,3 +83,6 @@ alias info='info --vi-keys'
 # SWAY
 # toggle laptop video output
 alias tlvo='swaymsg output eDP-1 toggle'
+
+# Needed to make kitty work with ssh
+alias ssh='env TERM=xterm-256color ssh'
