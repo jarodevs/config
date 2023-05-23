@@ -19,3 +19,6 @@ export GIT_PS1_SHOWSTASHSTATE=1
 
 # Import secret un-commited exports
 source ~/.secret-exports.zsh
+
+# SKHD
+export SKHD_SOCK=~/.config/skhd/skhdrc
