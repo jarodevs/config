@@ -1,0 +1,10 @@
+[user]
+	name 	= Aria Groult
+	email 	= aria.groult@pm.me
+	signingKey = aria.groult@pm.me
+[core]
+	editor 	= nvim
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
