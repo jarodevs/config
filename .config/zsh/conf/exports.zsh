@@ -4,7 +4,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export WLR_NO_HARDWARE_CURSORS=1
 
 # JDK
-export JDK_HOME=/etc/java11-openjdk
+export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
 # Android Studio opening issue on sway
 export _JAVA_AWT_WM_NONREPARENTING=1
 # Android Studio general 
