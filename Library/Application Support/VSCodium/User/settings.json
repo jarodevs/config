@@ -1,0 +1,66 @@
+{
+    "[json]": {
+        "editor.codeActionsOnSave": {
+            "json.sort": true
+        },
+        "editor.quickSuggestions": {
+            "strings": true
+        }
+    },
+    "[typescript]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "activitusbar.activeColour": "#615F61",
+    "editor.codeActionsOnSave": {
+        "source.fixall.eslint": true
+    },
+    "editor.fontFamily": "SF Mono, Monaco",
+    "editor.fontSize": 16,
+    "editor.fontWeight": "normal",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.inlineSuggest.showToolbar": "always",
+    "editor.lineNumbers": "relative",
+    "editor.minimap.enabled": false,
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "eslint.format.enable": true,
+    "eslint.validate": [
+        "typescript",
+        "javascript",
+        "json",
+        "prisma"
+    ],
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "gitlens.currentLine.enabled": false,
+    "html.format.wrapLineLength": 85,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "jest.jestCommandLine": "jest",
+    "jest.rootPath": ".",
+    "livePreview.defaultPreviewPath": "/coverage/lcov-report/index.html",
+    "problems.decorations.enabled": false,
+    "sonarlint.pathToNodeExecutable": "/Users/ariagroult/.nvm/versions/node/v18.16.0/bin/node",
+    "terminal.external.linuxExec": "kitty",
+    "terminal.external.osxExec": "Kitty.app",
+    "terminal.integrated.fontFamily": "MesloLGL Nerd Font",
+    "terminal.integrated.fontSize": 14,
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.preferGoToSourceDefinition": true,
+    "typescript.suggest.completeFunctionCalls": true,
+    "typescript.tsserver.log": "verbose",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "vscode-neovim.neovimInitVimPaths.darwin": "/Users/ariagroult/.vscode-oss/init.vim",
+    "window.nativeTabs": true,
+    "window.titleBarStyle": "native",
+    "window.zoomLevel": -1,
+    "workbench.activityBar.visible": true,
+    "workbench.colorTheme": "MacOS Modern Dark - Xcode Modern",
+    "workbench.editor.showIcons": false
+}
