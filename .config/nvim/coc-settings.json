@@ -1,14 +1,6 @@
 {
-	"coc.preferences.formatOnSaveFiletypes": [
-		"go",
-		"python",
-		"json",
-		"typescript"
-	],
-	"eslint.autoFixOnSave": true,
-	"eslint.options": {
-		"cache": true
-	},
-	"python.formatting.provider": "autopep8",
-	"python.formatting.autopep8Path": "/opt/homebrew/bin/autopep8"
+  "python.formatting.provider": "autopep8",
+  "python.formatting.autopep8Path": "/opt/homebrew/bin/autopep8",
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "coc.preferences.formatOnSave": true
 }
