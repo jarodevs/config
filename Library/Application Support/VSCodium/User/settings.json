@@ -9,7 +9,8 @@
     },
     "[typescript]": {
         "editor.codeActionsOnSave": {
-            "source.organizeImports": true
+            "source.organizeImports": true,
+            "source.sortImports": true
         },
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
@@ -62,5 +63,18 @@
     "window.zoomLevel": -1,
     "workbench.activityBar.visible": true,
     "workbench.colorTheme": "MacOS Modern Dark - Xcode Modern",
-    "workbench.editor.showIcons": false
+    "workbench.editor.showIcons": false,
+    "[yaml]": {
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.autoIndent": "keep",
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": true
+        },
+    },
+    "workbench.startupEditor": "none"
 }
