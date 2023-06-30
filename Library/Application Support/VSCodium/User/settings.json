@@ -14,6 +14,18 @@
         },
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
+    "[yaml]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.autoIndent": "keep",
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": true,
+        "editor.quickSuggestions": {
+            "comments": false,
+            "other": true,
+            "strings": true
+        },
+        "editor.tabSize": 2
+    },
     "activitusbar.activeColour": "#615F61",
     "editor.codeActionsOnSave": {
         "source.fixall.eslint": true
@@ -43,10 +55,16 @@
     "gitlens.currentLine.enabled": false,
     "html.format.wrapLineLength": 85,
     "javascript.updateImportsOnFileMove.enabled": "always",
+    "jest.coverageColors": {
+        "covered": "rgba(39, 202, 245, 0.8)",
+        "partially-covered": "rgba(142, 39, 245, 0.8)",
+        "uncovered": "rgb(128, 1, 80)"
+    },
     "jest.jestCommandLine": "jest",
     "jest.rootPath": ".",
     "livePreview.defaultPreviewPath": "/coverage/lcov-report/index.html",
     "problems.decorations.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
     "sonarlint.pathToNodeExecutable": "/Users/ariagroult/.nvm/versions/node/v18.16.0/bin/node",
     "terminal.external.linuxExec": "kitty",
     "terminal.external.osxExec": "Kitty.app",
@@ -55,26 +73,15 @@
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "typescript.preferGoToSourceDefinition": true,
     "typescript.suggest.completeFunctionCalls": true,
-    "typescript.tsserver.log": "verbose",
+    "typescript.tsserver.log": "off",
     "typescript.updateImportsOnFileMove.enabled": "always",
     "vscode-neovim.neovimInitVimPaths.darwin": "/Users/ariagroult/.vscode-oss/init.vim",
     "window.nativeTabs": true,
     "window.titleBarStyle": "native",
     "window.zoomLevel": -1,
     "workbench.activityBar.visible": true,
-    "workbench.colorTheme": "MacOS Modern Dark - Xcode Modern",
     "workbench.editor.showIcons": false,
-    "[yaml]": {
-        "editor.formatOnSave": true,
-        "editor.insertSpaces": true,
-        "editor.tabSize": 2,
-        "editor.autoIndent": "keep",
-        "diffEditor.ignoreTrimWhitespace": false,
-        "editor.quickSuggestions": {
-            "other": true,
-            "comments": false,
-            "strings": true
-        },
-    },
-    "workbench.startupEditor": "none"
+    "workbench.startupEditor": "none",
+    "jest.showCoverageOnLoad": true,
+    "workbench.colorTheme": "Cobalt Next Dark",
 }
