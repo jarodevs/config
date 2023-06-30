@@ -37,20 +37,22 @@ function setup_space {
   yabai -m space "$idx" --label "$name"
 }
 
-setup_space 1 emacs
-setup_space 2 nvim
-setup_space 3 web
-setup_space 4 social
-setup_space 5 media
+setup_space 1 web
+setup_space 2 code
+setup_space 3 other
+setup_space 4 other
+setup_space 5 other
 setup_space 6 other
+setup_space 7 other
+setup_space 8 other
+setup_space 9 social
+setup_space 10 media
 
 # move some apps automatically to specific spaces
-yabai -m rule --add app="^Emacs$" space=1 manage=on
-yabai -m rule --add app="^kitty$" space=2
-yabai -m rule --add app="^Firefox$" space=^3
-yabai -m rule --add app="^Slack$" space=4
-#yabai -m rule --add app="^Spotify$" space=5
-yabai -m rule --add app="^Deezer$" space=5
+yabai -m rule --add app="^Firefox$" space=^1
+yabai -m rule --add app="^VSCodium$" space=^2
+yabai -m rule --add app="^Slack$" space=9
+yabai -m rule --add app="^Spotify$" space=10
 yabai -m rule --add app="^Finder$" manage=off grid=600:600:50:50:500:500 layer=above
 yabai -m rule --add app="^System Settings$" manage=off grid=600:800:100:50:800:500 layer=above
 yabai -m rule --add app="^Gitify$" manage=off layer=above
