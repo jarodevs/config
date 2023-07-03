@@ -55,4 +55,5 @@ yabai -m rule --add app="^Slack$" space=9
 yabai -m rule --add app="^Spotify$" space=10
 yabai -m rule --add app="^Finder$" manage=off grid=600:600:50:50:500:500 layer=above
 yabai -m rule --add app="^System Settings$" manage=off grid=600:800:100:50:800:500 layer=above
+yabai -m rule --add app="^Kitty$" manage=off layer=above
 yabai -m rule --add app="^Gitify$" manage=off layer=above
