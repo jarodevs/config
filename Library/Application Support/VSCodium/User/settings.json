@@ -78,10 +78,10 @@
     "vscode-neovim.neovimInitVimPaths.darwin": "/Users/ariagroult/.vscode-oss/init.vim",
     "window.nativeTabs": true,
     "window.titleBarStyle": "native",
-    "window.zoomLevel": -1,
     "workbench.activityBar.visible": true,
     "workbench.editor.showIcons": false,
     "workbench.startupEditor": "none",
     "jest.showCoverageOnLoad": true,
     "workbench.colorTheme": "Cobalt Next Dark",
+    "window.zoomLevel": -2,
 }
