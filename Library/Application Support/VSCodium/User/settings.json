@@ -83,5 +83,5 @@
     "workbench.startupEditor": "none",
     "jest.showCoverageOnLoad": true,
     "workbench.colorTheme": "Cobalt Next Dark",
-    "window.zoomLevel": -2,
+    "window.zoomLevel": -1,
 }
