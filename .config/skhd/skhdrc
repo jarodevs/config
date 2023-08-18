@@ -67,10 +67,9 @@ shift + lctrl + alt - j : yabai -m window --insert south
 shift + lctrl + alt - k : yabai -m window --insert north
 shift + lctrl + alt - l : yabai -m window --insert east
 
-# Float / Unfloat window
-shift + alt - space : \
-    yabai -m window --toggle float; \
-    yabai -m window --toggle border
+# Toggle window float and center
+alt - t : yabai -m window --toggle float;\
+          yabai -m window --grid 4:4:1:1:2:2
 
 # Restart Yabai
 shift + lctrl + alt - r : \
@@ -81,3 +80,7 @@ shift + lctrl + alt - r : \
 # Make window native fullscreen
 alt - f         : yabai -m window --toggle zoom-fullscreen
 shift + alt - f : yabai -m window --toggle native-fullscreen
+
+cmd - return : open -n /Applications/kitty.app
+cmd + shift - c : open -n /Applications/kitty.app
+

@@ -5,6 +5,7 @@ export WLR_NO_HARDWARE_CURSORS=1
 
 # JDK
 export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+export CPPFLAGS="-I/opt/homebrew/opt/openjdk@11/include"
 # Android Studio opening issue on sway
 export _JAVA_AWT_WM_NONREPARENTING=1
 # Android Studio general 
@@ -22,3 +23,4 @@ source ~/.secret-exports.zsh
 
 # SKHD
 export SKHD_SOCK=~/.config/skhd/skhdrc
+

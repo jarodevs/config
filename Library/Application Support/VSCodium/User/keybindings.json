@@ -25,4 +25,14 @@
         "key": "ctrl+]",
         "command": "editor.action.goToTypeDefinition"
     },
+    {
+        "key": "ctrl+`", // you could use     "key": "ctrl+`",  if you wish
+        "command": "workbench.action.closePanel",
+        // "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+`",
+        "command": "workbench.action.toggleMaximizedPanel",
+        "when": "!terminalFocus"
+    },
 ]

@@ -40,6 +40,7 @@
     "editor.lineNumbers": "relative",
     "editor.minimap.enabled": false,
     "editor.tabSize": 2,
+    "editor.unicodeHighlight.invisibleCharacters": false,
     "editor.wordWrap": "on",
     "eslint.format.enable": true,
     "eslint.validate": [
@@ -56,14 +57,16 @@
     "html.format.wrapLineLength": 85,
     "javascript.updateImportsOnFileMove.enabled": "always",
     "jest.coverageColors": {
-        "covered": "rgba(39, 202, 245, 0.8)",
-        "partially-covered": "rgba(142, 39, 245, 0.8)",
-        "uncovered": "rgb(128, 1, 80)"
+        "covered": "rgba(39, 202, 245, 0)",
+        "partially-covered": "rgba(142, 39, 245, 0)",
+        "uncovered": "rgba(128, 1, 80, 0.6)"
     },
     "jest.jestCommandLine": "jest",
     "jest.rootPath": ".",
+    "jest.showCoverageOnLoad": true,
     "livePreview.defaultPreviewPath": "/coverage/lcov-report/index.html",
     "problems.decorations.enabled": false,
+    "redhat.telemetry.enabled": true,
     "security.workspace.trust.untrustedFiles": "open",
     "sonarlint.pathToNodeExecutable": "/Users/ariagroult/.nvm/versions/node/v18.16.0/bin/node",
     "terminal.external.linuxExec": "kitty",
@@ -78,10 +81,9 @@
     "vscode-neovim.neovimInitVimPaths.darwin": "/Users/ariagroult/.vscode-oss/init.vim",
     "window.nativeTabs": true,
     "window.titleBarStyle": "native",
-    "workbench.activityBar.visible": true,
-    "workbench.editor.showIcons": false,
-    "workbench.startupEditor": "none",
-    "jest.showCoverageOnLoad": true,
-    "workbench.colorTheme": "Cobalt Next Dark",
     "window.zoomLevel": -1,
+    "workbench.activityBar.visible": true,
+    "workbench.colorTheme": "MacOS Modern Dark - Xcode Modern",
+    "workbench.editor.showIcons": false,
+    "workbench.startupEditor": "none"
 }

@@ -1,16 +1,21 @@
 [user]
-	name 	= Aria Groult
+	name 	= JaroDevs
 	email 	= aria.groult@pm.me
-	signingKey = aria.groult@pm.me
+	signingkey = aria.groult@pm.me
 [core]
 	editor 	= nvim
-[commit]
-	gpgsign = true
-[tag]
-	gpgsign = true
 [merge]
   tool = codium
 [mergetool "codium"]
   cmd = codium --wait --merge $REMOTE $LOCAL $BASE $MERGED
 [diff]
 	tool = codium
+[pull]
+	rebase = true
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[gpg]
+	program = gpg
+	signinkey = aria.groult@pm.me
