@@ -69,13 +69,13 @@ shift + lctrl + alt - l : yabai -m window --insert east
 
 # Toggle window float and center
 alt - t : yabai -m window --toggle float;\
-          yabai -m window --grid 4:4:1:1:2:2
+          yabai -m window --grid 10:10:1:1:8:8
 
 # Restart Yabai
 shift + lctrl + alt - r : \
     /usr/bin/env osascript <<< \
         "display notification \"Restarting Yabai\" with title \"Yabai\""; \
-    launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
+    yabai --restart-service
 
 # Make window native fullscreen
 alt - f         : yabai -m window --toggle zoom-fullscreen
