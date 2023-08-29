@@ -24,3 +24,5 @@ source ~/.secret-exports.zsh
 # SKHD
 export SKHD_SOCK=~/.config/skhd/skhdrc
 
+# DOCKER
+export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"

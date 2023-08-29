@@ -68,12 +68,8 @@ ex ()
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 # SQL connection - Eimy - sql proxy google cloud
-alias sqlproxy-eimy-dev="cloud_sql_proxy -instances=eimy-cloud:europe-west3:dev=tcp:5433 > /dev/null & disown %cloud_sql_proxy"
-alias sqlproxy-eimy-qa="cloud_sql_proxy -instances=eimy-cloud-qa:europe-west3:eimy=tcp:5434 > /dev/null & disown %cloud_sql_proxy"
-alias sqlproxy-eimy-staging="cloud_sql_proxy -instances=eimy-cloud-staging:europe-west3:eimy=tcp:5435 > /dev/null & disown %cloud_sql_proxy" 
-alias sqlproxy-eimy-prod="cloud_sql_proxy -instances=eimy-cloud-production:europe-west3:eimy=tcp:5436 > /dev/null & disown %cloud_sql_proxy" 
 alias sqlproxy-keru-dev="cloud_sql_proxy -instances=black-overview-387614:europe-west9:kerudb=tcp:5555 > /dev/null & disown %cloud_sql_proxy"
-alias sqlproxy-technikwerk-dev="cloud_sql_proxy -instances=technikwerk-dev:europe-west3:technikwerk-dev=tcp:5556 > /dev/null & disown %cloud_sql_proxy"
+alias sqlproxy-technikwerk-dev="cloud_sql_proxy -instances=technikwerk-dev:europe-west3:technikwerk-dev=tcp:5433 > /dev/null & disown %cloud_sql_proxy"
 
 # Protonvpn
 alias vpn_co_random_udp_fastest='sudo protonvpn c -f -p "UDP"'
@@ -88,3 +84,5 @@ alias tlvo='swaymsg output eDP-1 toggle'
 
 # Needed to make kitty work with ssh
 alias ssh='env TERM=xterm-256color ssh'
+
+alias psql='/opt/homebrew/opt/postgresql@15/bin/psql'

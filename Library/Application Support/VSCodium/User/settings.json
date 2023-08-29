@@ -5,7 +5,8 @@
         },
         "editor.quickSuggestions": {
             "strings": true
-        }
+        },
+        "editor.defaultFormatter": "vscode.json-language-features"
     },
     "[typescript]": {
         "editor.codeActionsOnSave": {
@@ -36,7 +37,6 @@
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
-    "editor.inlineSuggest.showToolbar": "always",
     "editor.lineNumbers": "relative",
     "editor.minimap.enabled": false,
     "editor.tabSize": 2,
@@ -81,9 +81,9 @@
     "vscode-neovim.neovimInitVimPaths.darwin": "/Users/ariagroult/.vscode-oss/init.vim",
     "window.nativeTabs": true,
     "window.titleBarStyle": "native",
-    "window.zoomLevel": -1,
     "workbench.activityBar.visible": true,
     "workbench.colorTheme": "MacOS Modern Dark - Xcode Modern",
     "workbench.editor.showIcons": false,
-    "workbench.startupEditor": "none"
+    "workbench.startupEditor": "none",
+    "window.zoomLevel": -1
 }
