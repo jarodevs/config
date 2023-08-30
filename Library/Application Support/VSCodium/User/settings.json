@@ -3,10 +3,10 @@
         "editor.codeActionsOnSave": {
             "json.sort": true
         },
+        "editor.defaultFormatter": "vscode.json-language-features",
         "editor.quickSuggestions": {
             "strings": true
-        },
-        "editor.defaultFormatter": "vscode.json-language-features"
+        }
     },
     "[typescript]": {
         "editor.codeActionsOnSave": {
@@ -68,6 +68,7 @@
     "problems.decorations.enabled": false,
     "redhat.telemetry.enabled": true,
     "security.workspace.trust.untrustedFiles": "open",
+    "shellformat.path": "/opt/homebrew/bin/shfmt",
     "sonarlint.pathToNodeExecutable": "/Users/ariagroult/.nvm/versions/node/v18.16.0/bin/node",
     "terminal.external.linuxExec": "kitty",
     "terminal.external.osxExec": "Kitty.app",
@@ -81,9 +82,9 @@
     "vscode-neovim.neovimInitVimPaths.darwin": "/Users/ariagroult/.vscode-oss/init.vim",
     "window.nativeTabs": true,
     "window.titleBarStyle": "native",
+    "window.zoomLevel": -1,
     "workbench.activityBar.visible": true,
     "workbench.colorTheme": "MacOS Modern Dark - Xcode Modern",
     "workbench.editor.showIcons": false,
-    "workbench.startupEditor": "none",
-    "window.zoomLevel": -1
+    "workbench.startupEditor": "none"
 }
