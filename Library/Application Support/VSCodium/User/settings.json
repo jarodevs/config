@@ -53,6 +53,7 @@
     "explorer.confirmDragAndDrop": false,
     "git.autofetch": true,
     "git.confirmSync": false,
+    "gitlab.aiAssistedCodeSuggestions.enabled": false,
     "gitlens.currentLine.enabled": false,
     "html.format.wrapLineLength": 85,
     "javascript.updateImportsOnFileMove.enabled": "always",
