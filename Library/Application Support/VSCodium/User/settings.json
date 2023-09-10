@@ -53,18 +53,28 @@
     "explorer.confirmDragAndDrop": false,
     "git.autofetch": true,
     "git.confirmSync": false,
+    "githubIssues.issueBranchTitle": "${issueNumber}-${sanitizedIssueTitle}",
+    "githubIssues.queries": [
+        {
+            "label": "My Issues",
+            "query": "default"
+        },
+        {
+            "label": "Created Issues",
+            "query": "author:${user} state:open repo:${owner}/${repository} sort:created-desc"
+        },
+        {
+            "label": "Recent Issues",
+            "query": "state:open repo:${owner}/${repository} sort:updated-desc"
+        }
+    ],
+    "githubPullRequests.defaultMergeMethod": "squash",
+    "githubPullRequests.notifications": "pullRequests",
     "gitlab.aiAssistedCodeSuggestions.enabled": false,
     "gitlens.currentLine.enabled": false,
+    "gitlens.mode.active": "zen",
     "html.format.wrapLineLength": 85,
     "javascript.updateImportsOnFileMove.enabled": "always",
-    "jest.coverageColors": {
-        "covered": "rgba(39, 202, 245, 0)",
-        "partially-covered": "rgba(142, 39, 245, 0)",
-        "uncovered": "rgba(128, 1, 80, 0.6)"
-    },
-    "jest.jestCommandLine": "jest",
-    "jest.rootPath": ".",
-    "jest.showCoverageOnLoad": true,
     "livePreview.defaultPreviewPath": "/coverage/lcov-report/index.html",
     "problems.decorations.enabled": false,
     "redhat.telemetry.enabled": true,
@@ -87,24 +97,6 @@
     "workbench.activityBar.visible": true,
     "workbench.colorTheme": "MacOS Modern Dark - Xcode Civic",
     "workbench.editor.showIcons": false,
-    "workbench.startupEditor": "none",
     "workbench.iconTheme": "Monokai Pro Icons",
-    "gitlens.mode.active": "zen",
-    "githubIssues.queries": [
-        {
-            "label": "My Issues",
-            "query": "default"
-        },
-        {
-            "label": "Created Issues",
-            "query": "author:${user} state:open repo:${owner}/${repository} sort:created-desc"
-        },
-        {
-            "label": "Recent Issues",
-            "query": "state:open repo:${owner}/${repository} sort:updated-desc"
-        }
-    ],
-    "githubIssues.issueBranchTitle": "${issueNumber}-${sanitizedIssueTitle}",
-    "githubPullRequests.defaultMergeMethod": "squash",
-    "githubPullRequests.notifications": "pullRequests"
+    "workbench.startupEditor": "none"
 }
