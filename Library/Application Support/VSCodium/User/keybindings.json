@@ -28,7 +28,7 @@
     {
         "key": "ctrl+§", // you could use     "key": "ctrl+`",  if you wish
         "command": "workbench.action.closePanel",
-        // "when": "terminalFocus"
+        //"when": "terminalFocus"
     },
     {
         "key": "ctrl+§",
