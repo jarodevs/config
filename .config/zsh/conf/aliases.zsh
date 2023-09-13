@@ -1,8 +1,8 @@
 # Yay alias is better than paru
 alias yay='paru'
-# replacing `ls` with `exa`
-alias l='exa --color=always --sort=type -1 --icons'
-alias la='exa -a --color=always --sort=type -1 --icons'
+# replacing `ls` with `eza`
+alias l='eza --color=always --sort=type -1 --icons'
+alias la='eza -a --color=always --sort=type -1 --icons'
 alias rls="clear ; ls"
 alias rla="clear ; la"
 
@@ -18,6 +18,7 @@ alias gp+='git push --force'
 alias ga='git add'
 alias gb='git checkout'
 alias gf='git fetch --all --prune'
+alias gcl='git fetch --all --prune && git switch main && git pull origin main && git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs -r git branch -d'
 alias gl='git log --color --graph --pretty=format:"%C(bold white)%h%Creset -%C(bold green)%d%Creset %s %C(bold red)(%cr)%Creset %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative --oneline'
 alias gc='git commit'
 
