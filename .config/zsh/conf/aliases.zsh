@@ -87,6 +87,3 @@ alias tlvo='swaymsg output eDP-1 toggle'
 alias ssh='env TERM=xterm-256color ssh'
 
 alias psql='/opt/homebrew/opt/postgresql@15/bin/psql'
-
-# Docker
-alias dsa="docker stop $(docker ps | awk '{ if (NR>1) {print $1}}')"
