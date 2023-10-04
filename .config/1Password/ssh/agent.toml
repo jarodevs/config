@@ -28,8 +28,16 @@
 #
 # More examples can be found here:
 #  https://developer.1password.com/docs/ssh/agent/config
-[[ssh-keys]]
-account = "Jaro"
 
+# Add my signing key from my Private vault
+# GH
 [[ssh-keys]]
-account = "Technikwerk"
+item = "u2yt3tnryqcxbjegucz4uj5xcm"
+
+# GL TW
+[[ssh-keys]]
+item = "u2yt3tnryqcxbjegucz4uj5xcm"
+
+# GL Nomadic
+[[ssh-keys]]
+item = "cyvscdi55xwmvfj3psxqpp4gxe"
