@@ -26,3 +26,6 @@ export SKHD_SOCK=~/.config/skhd/skhdrc
 
 # DOCKER
 export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
+
+# EMACS
+export PATH="$PATH:/opt/homebrew/bin/emacs"
