@@ -146,8 +146,14 @@
 (setq display-line-numbers-type 'relative)
 ;; Make ESC quit prompts
 
+(defun kill-all-buffers ()
+  (interactive)
+  (mapcar 'kill-buffer (buffer-list))
+  (delete-other-windows))
+
 (general-define-key
  "C-M-j" 'counsel-switch-buffer
+ "C-c k" 'kill-all-buffers
  "<escape>" 'keyboard-escape-quit)
 
 (when (string= system-type "darwin")       
@@ -160,3 +166,5 @@
 (menu-bar-mode -1)            ; Disable the menu bar
 (global-display-line-numbers-mode)
 (set-face-attribute 'default nil :font "SFMono Nerd Font" :height 150)
+
+
