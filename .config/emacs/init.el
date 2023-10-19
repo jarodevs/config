@@ -20,6 +20,12 @@
   :config
   (evil-mode 1))
 
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
 (use-package swiper :ensure t)
 (use-package ivy
   :diminish
@@ -114,9 +120,6 @@
 
 (use-package magit
   :commands magit-status)
-
-(use-package evil-magit
-  :after magit)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
