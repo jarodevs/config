@@ -1,13 +1,25 @@
+(scroll-bar-mode -1)        ; Disable visible scrollbar
+(tool-bar-mode -1)          ; Disable the toolbar
+(tooltip-mode -1)           ; Disable tooltips
+(menu-bar-mode -1)            ; Disable the menu bar
+(global-display-line-numbers-mode)
+(setq
+    inhibit-startup-message t
+    display-line-numbers-type 'relative)
+
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+
+(when (string= system-type "darwin")       
+  (setq dired-use-ls-dired nil))
+
+
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages/")))
-(package-initialize)
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
-(unless package-archive-contents
-  (package-refresh-contents))
+
 
 ;; Initialize use-package on non-Linux platforms
 (unless (package-installed-p 'use-package)
@@ -16,6 +28,8 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+
+(setq evil-want-keybinding nil)
 (use-package evil
   :config
   (evil-mode 1))
@@ -54,6 +68,15 @@
   :config
   (setq ivy-initial-inputs-alist nil))
 
+(use-package ivy-prescient
+  :after counsel
+  :custom
+  (ivy-prescient-enable-filtering nil)
+  :config
+  ;; Uncomment the following line to have sorting remembered across sessions!
+  ;(prescient-persist-mode 1)
+  (ivy-prescient-mode 1))
+
 (use-package ivy-rich
   :config
   (ivy-rich-mode 1)
@@ -63,6 +86,15 @@
   :ensure t
   :init (doom-modeline-mode 1)
   :custom ((doom-modeline-height 15)))
+
+(use-package hydra
+  :defer t)
+
+(defhydra hydra-text-scale (:timeout 4)
+  "scale text"
+  ("j" text-scale-increase "in")
+  ("k" text-scale-decrease "out")
+  ("f" nil "finished" :exit t))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -99,7 +131,6 @@
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-dracula") ; use "doom-colors" for less minimal icon theme
   (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
 (use-package projectile
@@ -107,7 +138,7 @@
   :config (projectile-mode)
   :custom ((projectile-completion-system 'ivy))
   :bind-keymap
-  ("C-c p" . projectile-command-map)
+  ("s-p" . projectile-command-map)
   :init
   ;; NOTE: Set this to the folder where you keep your Git repos!
   (when (file-directory-p "~/Projects")
@@ -122,6 +153,132 @@
   :commands magit-status)
 
 
+(use-package term
+  :commands term
+  :config
+  (setq explicit-shell-file-name "bash") ;; Change this to zsh, etc
+  ;;(setq explicit-zsh-args '())         ;; Use 'explicit-<shell>-args for shell-specific args
+
+  ;; Match the default Bash shell prompt.  Update this if you have a custom prompt
+  (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
+
+(use-package eterm-256color
+  :hook (term-mode . eterm-256color-mode))
+
+;; org-mode ---------------------------- 
+(use-package org
+  :hook
+    (org-mode . org-indent-mode)
+  :config
+    (setq org-agenda-files
+	  '("~/Documents/org/tasks.org"
+	    "~/Documents/org/agenda.org"
+	    "~/Documents/org/birthday.org"))
+    (setq org-ellipsis " ▾")
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+    (setq org-todo-keywords
+    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+
+    (evil-set-initial-state 'org-agenda-mode 'normal)
+
+     (setq org-tag-alist
+    '((:startgroup)
+       ; Put mutually exclusive tags here
+       (:endgroup)
+       ("tache" . ?T)
+       ("work" . ?W)))
+     
+    (setq org-agenda-custom-commands
+    '(("d" "Dashboard"
+	((agenda "" ((org-deadline-warning-days 7)))
+	(todo "NEXT"
+	    ((org-agenda-overriding-header "Next Tasks")))
+	(tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+	("n" "Next Tasks"
+	((todo "NEXT"
+	    ((org-agenda-overriding-header "Next Tasks")))))
+
+	("W" "Work Tasks" tags-todo "+work-email")
+
+	;; Low-effort next actions
+	("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+	((org-agenda-overriding-header "Low Effort Tasks")
+	(org-agenda-max-todos 20)
+	(org-agenda-files org-agenda-files)))
+
+    ("w" "Workflow Status"
+     ((todo "WAIT"
+            ((org-agenda-overriding-header "Waiting on External")
+             (org-agenda-files org-agenda-files)))
+      (todo "REVIEW"
+            ((org-agenda-overriding-header "In Review")
+             (org-agenda-files org-agenda-files)))
+      (todo "PLAN"
+            ((org-agenda-overriding-header "In Planning")
+             (org-agenda-todo-list-sublevels nil)
+             (org-agenda-files org-agenda-files)))
+      (todo "BACKLOG"
+            ((org-agenda-overriding-header "Project Backlog")
+             (org-agenda-todo-list-sublevels nil)
+             (org-agenda-files org-agenda-files)))
+      (todo "READY"
+            ((org-agenda-overriding-header "Ready for Work")
+             (org-agenda-files org-agenda-files)))
+      (todo "ACTIVE"
+            ((org-agenda-overriding-header "Active Projects")
+             (org-agenda-files org-agenda-files)))
+      (todo "COMPLETED"
+            ((org-agenda-overriding-header "Completed Projects")
+             (org-agenda-files org-agenda-files)))
+      (todo "CANC"
+            ((org-agenda-overriding-header "Cancelled Projects")
+             (org-agenda-files org-agenda-files)))))))
+    )
+
+
+;; org-mode ---------------------------- 
+
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         ((js-mode typescript-ts-mode) . lsp-deferred)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally if you want to use debugger
+;;(use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+;; optionally if you want to use debugger
+;;(use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+
+(use-package neotree)
+
+
+(defun kill-all-buffers ()
+  (interactive)
+  (mapcar 'kill-buffer (buffer-list))
+  (delete-other-windows))
+
+(general-define-key
+ "C-M-j" 'counsel-switch-buffer
+ "C-c k" 'kill-all-buffers
+ "<f8>" 'neotree-toggle
+ "<escape>" 'keyboard-escape-quit)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -132,39 +289,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(exec-path-from-shell evil-magit magit counsel-projectile projectile general all-the-icons doom-themes helpful ivy-rich counsel swiper ivy which-key rainbow-delimiters doom-modeline evil)))
+   '(neotree emacs-neotree lsp-ui lsp-mode corfu org-mode hydra ivy-prescient org-bullets exec-path-from-shell evil-magit magit counsel-projectile projectile general all-the-icons doom-themes helpful ivy-rich counsel swiper ivy which-key rainbow-delimiters doom-modeline evil)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-(add-hook 'org-mode-hook 'org-indent-mode)
-(setq inhibit-startup-message t)
-(setq display-line-numbers-type 'relative)
-;; Make ESC quit prompts
-
-(defun kill-all-buffers ()
-  (interactive)
-  (mapcar 'kill-buffer (buffer-list))
-  (delete-other-windows))
-
-(general-define-key
- "C-M-j" 'counsel-switch-buffer
- "C-c k" 'kill-all-buffers
- "<escape>" 'keyboard-escape-quit)
-
-(when (string= system-type "darwin")       
-  (setq dired-use-ls-dired nil))
-
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-(set-fringe-mode 10)        ; Give some breathing room
-(menu-bar-mode -1)            ; Disable the menu bar
-(global-display-line-numbers-mode)
-(set-face-attribute 'default nil :font "SFMono Nerd Font" :height 150)
-
-
