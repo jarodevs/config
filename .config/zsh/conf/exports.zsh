@@ -29,3 +29,5 @@ export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
 
 # EMACS
 export PATH="$PATH:/opt/homebrew/bin/emacs"
+
+export PATH="$PATH:/opt/local/bin"

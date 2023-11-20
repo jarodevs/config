@@ -71,9 +71,9 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 # SQL connection - Eimy - sql proxy google cloud
 alias sqlproxy-keru-dev="cloud_sql_proxy -instances=black-overview-387614:europe-west9:kerudb=tcp:5555 > /dev/null & disown %cloud_sql_proxy"
 alias sqlproxy-technikwerk-dev="cloud_sql_proxy -instances=technikwerk-dev:europe-west3:technikwerk-dev=tcp:5433 > /dev/null & disown %cloud_sql_proxy"
-alias sqlproxy-technikwerk-qa="cloud_sql_proxy -instances=technikwerk-qa:europe-west3:technikwerk=tcp:5434 > /dev/null & disown %cloud_sql_proxy"
-alias sqlproxy-technikwerk-staging="cloud_sql_proxy -instances=technikwerk-staging:europe-west3:technikwerk-staging=tcp:5435 > /dev/null & disown %cloud_sql_proxy"
-alias sqlproxy-technikwerk-production="cloud_sql_proxy -instances=technikwerk-production:europe-west3:technikwerk-production=tcp:5436 > /dev/null & disown %cloud_sql_proxy"
+alias sqlproxy-technikwerk-qa="cloud_sql_proxy -instances=technikwerk-qa:europe-west3:eu=tcp:5434 > /dev/null & disown %cloud_sql_proxy"
+alias sqlproxy-technikwerk-staging="cloud_sql_proxy -instances=technikwerk-staging:europe-west3:eu=tcp:5435 > /dev/null & disown %cloud_sql_proxy"
+alias sqlproxy-technikwerk-production="cloud_sql_proxy -instances=technikwerk-production:europe-west3:eu=tcp:5436 > /dev/null & disown %cloud_sql_proxy"
 
 # Protonvpn
 alias vpn_co_random_udp_fastest='sudo protonvpn c -f -p "UDP"'

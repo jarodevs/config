@@ -1,85 +1,74 @@
 # Navigation
-ralt - h : yabai -m window --focus west
-ralt - j : yabai -m window --focus south
-ralt - k : yabai -m window --focus north
-ralt - l : yabai -m window --focus east
+cmd - h : yabai -m window --focus west
+cmd - j : yabai -m window --focus south
+cmd - k : yabai -m window --focus north
+cmd - l : yabai -m window --focus east
 
 # Moving windows
-shift + ralt - h : yabai -m window --warp west
-shift + ralt - j : yabai -m window --warp south
-shift + ralt - k : yabai -m window --warp north
-shift + ralt - l : yabai -m window --warp east
+shift + cmd - h : yabai -m window --warp west
+shift + cmd - j : yabai -m window --warp south
+shift + cmd - k : yabai -m window --warp north
+shift + cmd - l : yabai -m window --warp east
 
 # Move focus container to workspace
-shift + ralt - m : yabai -m window --space last; yabai -m space --focus last
-shift + ralt - p : yabai -m window --space prev; yabai -m space --focus prev
-shift + ralt - n : yabai -m window --space next; yabai -m space --focus next
-shift + ralt - 1 : yabai -m window --space 1; yabai -m space --focus 1
-shift + ralt - 2 : yabai -m window --space 2; yabai -m space --focus 2
-shift + ralt - 3 : yabai -m window --space 3; yabai -m space --focus 3
-shift + ralt - 4 : yabai -m window --space 4; yabai -m space --focus 4
-shift + ralt - 5 : yabai -m window --space 5; yabai -m space --focus 5
-shift + ralt - 6 : yabai -m window --space 6; yabai -m space --focus 6
-shift + ralt - 7 : yabai -m window --space 7; yabai -m space --focus 7
-shift + ralt - 8 : yabai -m window --space 8; yabai -m space --focus 8
-shift + ralt - 9 : yabai -m window --space 9; yabai -m space --focus 9
-shift + ralt - 0 : yabai -m window --space 0; yabai -m space --focus 10
+shift + cmd - 1 : yabai -m window --space 1; yabai -m space --focus 1
+shift + cmd - 2 : yabai -m window --space 2; yabai -m space --focus 2
+shift + cmd - 3 : yabai -m window --space 3; yabai -m space --focus 3
+shift + cmd - 4 : yabai -m window --space 4; yabai -m space --focus 4
+shift + cmd - 5 : yabai -m window --space 5; yabai -m space --focus 5
+shift + cmd - 6 : yabai -m window --space 6; yabai -m space --focus 6
+shift + cmd - 7 : yabai -m window --space 7; yabai -m space --focus 7
+shift + cmd - 8 : yabai -m window --space 8; yabai -m space --focus 8
+shift + cmd - 9 : yabai -m window --space 9; yabai -m space --focus 9
+shift + cmd - 0 : yabai -m window --space 0; yabai -m space --focus 10
 
 # goto space
-ralt - 1 : yabai -m space --focus 1
-ralt - 2 : yabai -m space --focus 2
-ralt - 3 : yabai -m space --focus 3
-ralt - 4 : yabai -m space --focus 4
-ralt - 5 : yabai -m space --focus 5
-ralt - 6 : yabai -m space --focus 6
-ralt - 7 : yabai -m space --focus 7
-ralt - 8 : yabai -m space --focus 8
-ralt - 9 : yabai -m space --focus 9
-ralt - 0 : yabai -m space --focus 10
+cmd - 1 : yabai -m space --focus 1
+cmd - 2 : yabai -m space --focus 2
+cmd - 3 : yabai -m space --focus 3
+cmd - 4 : yabai -m space --focus 4
+cmd - 5 : yabai -m space --focus 5
+cmd - 6 : yabai -m space --focus 6
+cmd - 7 : yabai -m space --focus 7
+cmd - 8 : yabai -m space --focus 8
+cmd - 9 : yabai -m space --focus 9
+cmd - 0 : yabai -m space --focus 10
 
 # Resize windows
-lctrl + ralt - h : yabai -m window --resize left:-50:0; \
+lctrl + cmd - h : yabai -m window --resize left:-50:0; \
                   yabai -m window --resize right:-50:0
-lctrl + ralt - j : yabai -m window --resize bottom:0:50; \
+lctrl + cmd - j : yabai -m window --resize bottom:0:50; \
                   yabai -m window --resize top:0:50
-lctrl + ralt - k : yabai -m window --resize top:0:-50; \
+lctrl + cmd - k : yabai -m window --resize top:0:-50; \
                   yabai -m window --resize bottom:0:-50
-lctrl + ralt - l : yabai -m window --resize right:50:0; \
+lctrl + cmd - l : yabai -m window --resize right:50:0; \
                   yabai -m window --resize left:50:0
 
 # Equalize size of windows
-lctrl + ralt - e : yabai -m space --balance
+lctrl + cmd - e : yabai -m space --balance
 
 # Enable / Disable gaps in current workspace
-lctrl + ralt - g : yabai -m space --toggle padding; yabai -m space --toggle gap
-
-# Rotate windows clockwise and anticlockwise
-ralt - r         : yabai -m space --rotate 270
-shift + ralt - r : yabai -m space --rotate 90
+lctrl + cmd - g : yabai -m space --toggle padding; yabai -m space --toggle gap
 
 # Rotate on X and Y Axis
-shift + ralt - x : yabai -m space --mirror x-axis
-shift + ralt - y : yabai -m space --mirror y-axis
+shift + cmd - x : yabai -m space --mirror x-axis
+shift + cmd - y : yabai -m space --mirror y-axis
 
 # Set insertion point for focused container
-shift + lctrl + ralt - h : yabai -m window --insert west
-shift + lctrl + ralt - j : yabai -m window --insert south
-shift + lctrl + ralt - k : yabai -m window --insert north
-shift + lctrl + ralt - l : yabai -m window --insert east
+shift + lctrl + cmd - h : yabai -m window --insert west
+shift + lctrl + cmd - j : yabai -m window --insert south
+shift + lctrl + cmd - k : yabai -m window --insert north
+shift + lctrl + cmd - l : yabai -m window --insert east
 
 # Toggle window float and center
-ralt - t : yabai -m window --toggle float;\
-          yabai -m window --grid 10:10:1:1:8:8
+#cmd - t : yabai -m window --toggle float;\
+          #yabai -m window --grid 10:10:1:1:8:8
 
 # Restart Yabai
-shift + lctrl + ralt - r : \
+shift + lctrl + cmd - r : \
     /usr/bin/env osascript <<< \
         "display notification \"Restarting Yabai\" with title \"Yabai\""; \
     yabai --restart-service
-
-# Make window native fullscreen
-ralt - f         : yabai -m window --toggle zoom-fullscreen
-shift + ralt - f : yabai -m window --toggle native-fullscreen
 
 cmd - return : open -n /Applications/kitty.app
 
