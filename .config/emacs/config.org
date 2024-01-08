@@ -1,0 +1,445 @@
+#+TITLE: My Emacs Configuration
+#+AUTHOR: Jaro
+#+EMAIL: jaromods@pm.me
+
+* Repositories & Core Packages
+** Repositories 
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(setq package-archives '(("elpa" . "https://elpa.gnu.org/packages/")
+			 ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ))
+#+END_SRC
+
+** use-package 
+#+BEGIN_SRC emacs-lisp
+;; Initialize use-package on non-Linux platforms
+(unless (package-installed-p 'use-package)
+   (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+(setq use-package-compute-statistics t)
+#+END_SRC
+
+** Evil mode
+#+begin_src emacs-lisp
+  (use-package evil
+    :init
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode 1))
+
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+#+end_src
+
+** Load theme
+I am using a builtin emacs theme
+
+#+begin_src emacs-lisp
+  (load-theme 'modus-vivendi-tritanopia)
+#+end_src
+
+** Dashboard (starting screen)
+This fires up every time I open emacs
+
+#+begin_src emacs-lisp
+  (use-package dashboard
+  :ensure t
+  :config
+  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
+  (setq dashboard-startup-banner "~/Pictures/jarodevs.png")
+    ;; Value can be
+    ;; - nil to display no banner
+    ;; - 'official which displays the official emacs logo
+    ;; - 'logo which displays an alternative emacs logo
+    ;; - 1, 2 or 3 which displays one of the text banners
+    ;; - "path/to/your/image.gif", "path/to/your/image.png", "path/to/your/text.txt" or "path/to/your/image.xbm" which displays whatever gif/image/text/xbm you would prefer
+    ;; - a cons of '("path/to/your/image.png" . "path/to/your/text.txt")
+  (setq dashboard-center-content t)
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+  (setq dashboard-items '((recents  . 5)
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (agenda . 5)))
+  (setq dashboard-icon-type 'all-the-icons)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-set-navigator t)
+  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project)
+  (dashboard-setup-startup-hook))
+#+end_src
+
+** Search & Completion
+*** Searching
+
+#+BEGIN_SRC emacs-lisp
+(use-package swiper :ensure t)
+#+END_SRC
+
+*** Completion
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :diminish
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)	
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :config
+    (ivy-mode 1))
+#+END_SRC
+
+*Enhancing Ivy*
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :bind (("M-x" . counsel-M-x)
+  	 ("C-x b" . counsel-ibuffer)
+  	 ("C-x C-f" . counsel-find-file)
+  	 :map minibuffer-local-map
+  	 ("C-x C-r" . counsel-minibuffer-history))
+    :config
+    (setq ivy-initial-inputs-alist nil))
+#+END_SRC
+
+*Filtering Ivy*
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-prescient
+    :after counsel
+    :custom
+    (ivy-prescient-enable-filtering nil)
+    :config
+    (ivy-prescient-mode 1))
+#+END_SRC
+
+*Better interface*
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-rich
+    :config
+    (ivy-rich-mode 1)
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+#+END_SRC
+
+** Help in emacs
+*** Which key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :init (which-key-mode)
+    :diminish which-key-mode
+    :config
+    (setq which-key-idle-delay 0.3))
+#+END_SRC
+
+*** Helpful
+#+BEGIN_SRC emacs-lisp
+  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key)
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+#+END_SRC
+** Org
+#+BEGIN_SRC emacs-lisp
+(use-package org
+  :hook
+    (org-mode . org-indent-mode)
+  :config
+    (setq org-agenda-files
+	  '("~/Documents/org/")
+	  org-ellipsis " ▾"
+	  org-log-done 'time)
+    (evil-set-initial-state 'org-agenda-mode 'normal))
+#+END_SRC
+** Get path from shell
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :init
+  (exec-path-from-shell-initialize))
+#+END_SRC
+** General
+#+BEGIN_SRC emacs-lisp
+(general-define-key
+ "C-c l" 'org-store-link
+ "C-c a" 'org-agenda
+ "C-c c" 'org-capture
+ "C-M-j" 'counsel-switch-buffer
+ "C-c k" 'kill-all-buffers
+ "<f8>" 'neotree-project-dir
+ "s-w" 'kill-this-buffer
+ "<escape>" 'keyboard-escape-quit)
+#+END_SRC
+** Global settings
+#+BEGIN_SRC emacs-lisp
+(scroll-bar-mode -1)        ; Disable visible scrollbar
+(tool-bar-mode -1)          ; Disable the toolbar
+(tooltip-mode -1)           ; Disable tooltips
+(menu-bar-mode -1)            ; Disable the menu bar
+(global-display-line-numbers-mode)
+(set-face-attribute 'default nil :height 180)
+(setq make-backup-files nil)
+(setq
+    inhibit-startup-message t
+    display-line-numbers-type 'relative)
+(setq mac-option-modifier 'meta)
+#+END_SRC
+
+
+* Additional packages
+** Code snippets
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :config
+    (yas-global-mode 1))
+#+END_SRC
+** Icons
+#+BEGIN_SRC emacs-lisp
+  (use-package all-the-icons
+    :if (display-graphic-p))
+#+END_SRC
+** Rainbow delimiters
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+** Buffer contrast
+#+BEGIN_SRC emacs-lisp
+  (use-package solaire-mode
+    :ensure t
+    :config
+    (solaire-global-mode))
+#+END_SRC
+** Buffer automatic resize
+#+BEGIN_SRC emacs-lisp
+  (use-package golden-ratio
+    :ensure t
+    :config
+    (golden-ratio-mode)
+    (setq golden-ratio-auto-scale t))
+#+END_SRC
+** Better modeline
+#+BEGIN_SRC emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :init
+    (doom-modeline-mode 1))
+#+END_SRC
+** Buffer padding in frame
+#+BEGIN_SRC emacs-lisp
+(use-package spacious-padding
+  :ensure t
+  :config
+  (setq spacious-padding-subtle-mode-line
+	`( :mode-line-active 'default
+	   :mode-line-inactive vertical-border))
+  (spacious-padding-mode 1))
+#+END_SRC
+** Command chaining
+#+BEGIN_SRC emacs-lisp
+(use-package hydra
+  :defer t)
+
+(defhydra hydra-text-scale (:timeout 4)
+  "scale text"
+  ("j" text-scale-increase "in")
+  ("k" text-scale-decrease "out")
+  ("f" nil "finished" :exit t))
+#+END_SRC
+** Window switching
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+  :ensure t
+  :bind ("M-o" . 'ace-window))
+#+END_SRC
+
+** Versioning
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :commands (magit-status magit-get-current-branch)
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+(use-package forge)
+#+END_SRC
+
+** Project management
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :ensure t
+  :init (projectile-mode)
+  :config
+  (setq projectile-switch-project-action 'magit-status)
+  :bind ("C-x p" . 'projectile-command-map))
+#+END_SRC
+
+** Code completion
+#+BEGIN_SRC emacs-lisp
+(use-package cape)
+
+(use-package orderless
+  :init
+  ;; Tune the global completion style settings to your liking!
+  ;; This affects the minibuffer and non-lsp completion at point.
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil))
+#+END_SRC
+
+** Code completion UI
+#+BEGIN_SRC emacs-lisp
+(use-package corfu
+  ;; Optional customizations
+  :custom
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-separator ?\s)          ;; Orderless field separator
+  (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;;(corfu-preview-current nil)    ;; Disable current candidate preview
+  (corfu-preselect 'prompt)      ;; Preselect the prompt
+  (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  (corfu-popupinfo-delay nil)
+  ;; Recommended: Enable Corfu globally.  This is recommended since Dabbrev can
+  ;; be used globally (M-/).  See also the customization variable
+  ;; `global-corfu-modes' to exclude certain modes.
+  :hook
+  (corfu-mode . corfu-popupinfo-mode)
+  :init
+  (global-corfu-mode))
+
+;; A few more useful configurations...
+(use-package emacs
+  :init
+  ;; TAB cycle if there are only few candidates
+  (setq completion-cycle-threshold 3)
+
+  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p)
+
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (setq tab-always-indent 'complete))
+
+(use-package kind-icon
+  :ensure t
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+END_SRC
+
+** Drag stuff
+#+BEGIN_SRC emacs-lisp
+(use-package drag-stuff
+  :ensure t
+  :init (drag-stuff-mode)
+  :hook
+  (drag-stuff-mode . 'drag-stuff-define-keys))
+#+END_SRC
+
+** LSP
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+   :commands lsp
+   :custom
+   (lsp-prefer-flymake nil)
+   (lsp-completion-provider :none) ;; we use Corfu!
+    :init
+    (defun my/orderless-dispatch-flex-first (_pattern index _total)
+      (and (eq index 0) 'orderless-flex))
+
+    (defun my/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless)))
+
+    ;; Optionally configure the first word as flex filtered.
+    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
+
+    ;; Optionally configure the cape-capf-buster.
+    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
+   :config
+   (setq lsp-keymap-prefix "C-c l"
+         lsp-eslint-auto-fix-on-save t
+         lsp-modeline-diagnostics-enable nil)
+ 
+   :hook ((typescript-ts-mode . lsp)
+          (lsp-completion-mode . my/lsp-mode-setup-completion)
+          (lsp-mode . yas-minor-mode)
+          (lsp-mode . lsp-enable-which-key-integration)))
+(use-package lsp-ui
+ :commands lsp-ui-mode
+ :bind ("M-d" . lsp-ui-doc-toggle)
+ :custom
+ (lsp-ui-doc-alignment 'at-point)
+ :config
+ (setq lsp-ui-sideline-show-diagnostics t
+       lsp-ui-sideline-show-hover nil)
+ :hook
+ (lsp-mode . lsp-ui-mode))
+
+(use-package flycheck
+ :ensure t
+ :init (global-flycheck-mode))
+#+END_SRC
+** Typescript
+#+BEGIN_SRC emacs-lisp
+(use-package typescript-ts-mode
+  :ensure t
+  :mode ("\\.ts\\'" . typescript-ts-mode)
+  :hook
+  (typescript-ts-mode . electric-pair-mode)
+  :config
+  (setq indent-tabs-mode t
+	tab-width 4))
+#+END_SRC
+** Rust
+#+BEGIN_SRC emacs-lisp
+(use-package rustic
+  :ensure t
+  :bind (:map rustic-mode-map
+        ("<f5>" . rustic-cargo-run))
+  :config
+  (defun rustic-mode-auto-save-hook ()
+    "Enable auto-saving in rustic-mode buffers."
+    (when buffer-file-name
+    (setq-local compilation-ask-about-save nil)))
+  :hook
+  (rustic-mode . (lambda()
+		   (rustic-mode-auto-save-hook)
+		   (setq rustic-format-display-method 'ignore
+			 rustic-format-trigger 'on-save
+			 rustic-compile-display-method 'switch-to-buffer
+			 compilation-scroll-output t
+			 flycheck-checker 'rustic-clippy))))
+#+END_SRC
+** Org notifications
+#+BEGIN_SRC emacs-lisp
+(use-package org-wild-notifier
+  :ensure t
+  :config
+  (setq alert-default-style 'osx-notifier)
+  :init
+  (org-wild-notifier-mode))
+#+END_SRC
+
+

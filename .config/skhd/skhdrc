@@ -4,7 +4,7 @@ cmd - j : yabai -m window --focus south
 cmd - k : yabai -m window --focus north
 cmd - l : yabai -m window --focus east
 
-# Moving windows
+# Movin windows
 shift + cmd - h : yabai -m window --warp west
 shift + cmd - j : yabai -m window --warp south
 shift + cmd - k : yabai -m window --warp north
@@ -22,18 +22,6 @@ shift + cmd - 8 : yabai -m window --space 8; yabai -m space --focus 8
 shift + cmd - 9 : yabai -m window --space 9; yabai -m space --focus 9
 shift + cmd - 0 : yabai -m window --space 0; yabai -m space --focus 10
 
-# goto space
-cmd - 1 : yabai -m space --focus 1
-cmd - 2 : yabai -m space --focus 2
-cmd - 3 : yabai -m space --focus 3
-cmd - 4 : yabai -m space --focus 4
-cmd - 5 : yabai -m space --focus 5
-cmd - 6 : yabai -m space --focus 6
-cmd - 7 : yabai -m space --focus 7
-cmd - 8 : yabai -m space --focus 8
-cmd - 9 : yabai -m space --focus 9
-cmd - 0 : yabai -m space --focus 10
-
 # Resize windows
 lctrl + cmd - h : yabai -m window --resize left:-50:0; \
                   yabai -m window --resize right:-50:0
@@ -47,9 +35,6 @@ lctrl + cmd - l : yabai -m window --resize right:50:0; \
 # Equalize size of windows
 lctrl + cmd - e : yabai -m space --balance
 
-# Enable / Disable gaps in current workspace
-lctrl + cmd - g : yabai -m space --toggle padding; yabai -m space --toggle gap
-
 # Rotate on X and Y Axis
 shift + cmd - x : yabai -m space --mirror x-axis
 shift + cmd - y : yabai -m space --mirror y-axis
@@ -60,15 +45,24 @@ shift + lctrl + cmd - j : yabai -m window --insert south
 shift + lctrl + cmd - k : yabai -m window --insert north
 shift + lctrl + cmd - l : yabai -m window --insert east
 
-# Toggle window float and center
-#cmd - t : yabai -m window --toggle float;\
-          #yabai -m window --grid 10:10:1:1:8:8
-
 # Restart Yabai
 shift + lctrl + cmd - r : \
     /usr/bin/env osascript <<< \
         "display notification \"Restarting Yabai\" with title \"Yabai\""; \
     yabai --restart-service
 
-cmd - return : open -n /Applications/kitty.app
+# float / unfloat window and center on screen
+shift + alt - t : yabai -m window --toggle float;\
+          yabai -m window --grid 4:4:1:1:2:2
 
+alt - p : yabai -m window --grid 5:5:4:0:1:1
+
+# change layout of desktop
+ctrl + alt - z : yabai -m space --layout bsp
+ctrl + alt - x : yabai -m space --layout float
+
+# Focus display
+ctrl + alt - left : yabai -m display --focus next 
+ctrl + alt - right : yabai -m display --focus prev 
+
+cmd - return : open -n /Applications/kitty.app

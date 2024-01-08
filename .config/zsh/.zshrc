@@ -1,25 +1,19 @@
-## LIB: Base Configuration (Copied from OMZ)
+source /opt/homebrew/opt/spaceship/spaceship.zsh
 
-source $ZDOTDIR/lib/history.zsh
-source $ZDOTDIR/lib/completions.zsh
-source $ZDOTDIR/lib/keybindings.zsh
-source $ZDOTDIR/lib/vim.zsh
+SPACESHIP_GCLOUD_SHOW=false
+SPACESHIP_NODE_SHOW=false
 
-## CONFIGURATION: My Configuration
 
-source $ZDOTDIR/conf/aliases.zsh
-source $ZDOTDIR/conf/exports.zsh
-source $ZDOTDIR/conf/theme.zsh
-source $ZDOTDIR/conf/plugins.zsh
-source $ZDOTDIR/conf/general.zsh
+function brew() {
+  command brew "$@" 
 
-autoload -Uz compinit && compinit
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
-source $HOME/.docker/init-zsh.sh || true # Added by Docker Desktop
+  if [[ $* =~ "upgrade" ]] || [[ $* =~ "update" ]] || [[ $* =~ "outdated" ]]; then
+    sketchybar --trigger brew_update
+  fi
+}
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then . '/opt/google-cloud-sdk/path.zsh.inc'; fi
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then . '/opt/google-cloud-sdk/completion.zsh.inc'; fi
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
