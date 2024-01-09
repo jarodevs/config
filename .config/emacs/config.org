@@ -87,7 +87,7 @@ This fires up every time I open emacs
     :diminish
     :bind (("C-s" . swiper)
            :map ivy-minibuffer-map
-           ("TAB" . ivy-alt-done)	
+           ("<tab>" . ivy-alt-done)	
            ("C-l" . ivy-alt-done)
            ("C-j" . ivy-next-line)
            ("C-k" . ivy-previous-line)
