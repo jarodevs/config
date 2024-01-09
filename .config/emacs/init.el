@@ -7,7 +7,7 @@
    '("21055a064d6d673f666baaed35a69519841134829982cbbb76960575f43424db" "15604b083d03519b0c2ed7b32da6d7b2dc2f6630bef62608def60cdcf9216184" default))
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(ace-window dashboard page-break-lines page-break-line spacious-padding golden-ratio solaire-mode modus-themes org-agenda drag-stuff org-wild-notifier terminal-notifier gruber-darker-theme flycheck-rust rustic autothemer orderless cape corfu lsp-ui lsp-mode multi-vterm vterm ayu-theme doom-themes cyberpunk-theme eterm-256color forge yasnippet terraform-mode hcl-mode flycheck neotree emacs-neotree org-mode ivy-prescient exec-path-from-shell evil-magit magit counsel-projectile projectile general all-the-icons helpful ivy-rich counsel swiper ivy which-key doom-modeline evil))
+   '(impatient-mode simple-httpd ace-window dashboard page-break-lines page-break-line spacious-padding golden-ratio solaire-mode modus-themes org-agenda drag-stuff org-wild-notifier terminal-notifier gruber-darker-theme flycheck-rust rustic autothemer orderless cape corfu lsp-ui lsp-mode multi-vterm vterm ayu-theme doom-themes cyberpunk-theme eterm-256color forge yasnippet terraform-mode hcl-mode flycheck neotree emacs-neotree org-mode ivy-prescient exec-path-from-shell evil-magit magit counsel-projectile projectile general all-the-icons helpful ivy-rich counsel swiper ivy which-key doom-modeline evil))
  '(warning-suppress-log-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -29,5 +29,5 @@
  '(window-divider-first-pixel ((t :background "#000000" :foreground "#000000")))
  '(window-divider-last-pixel ((t :background "#000000" :foreground "#000000"))))
 
-(package-initialize)
+(setq package-enable-at-startup nil)
 (org-babel-load-file "~/.config/emacs/config.org")

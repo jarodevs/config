@@ -3,26 +3,25 @@
 #+EMAIL: jaromods@pm.me
 
 * Repositories & Core Packages
-** Repositories 
+** Straight.el bootstrap
 #+BEGIN_SRC emacs-lisp
-(require 'package)
-(setq package-archives '(("elpa" . "https://elpa.gnu.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ))
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name
+          "straight/repos/straight.el/bootstrap.el"
+          (or (bound-and-true-p straight-base-dir)
+              user-emacs-directory)))
+        (bootstrap-version 7))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+  (straight-use-package 'use-package)
 #+END_SRC
-
-** use-package 
-#+BEGIN_SRC emacs-lisp
-;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-   (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
-(setq use-package-compute-statistics t)
-#+END_SRC
-
 ** Evil mode
 #+begin_src emacs-lisp
   (use-package evil
@@ -168,10 +167,17 @@ This fires up every time I open emacs
 	  org-log-done 'time)
     (evil-set-initial-state 'org-agenda-mode 'normal))
 #+END_SRC
+** Terminal emulation
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm
+    :ensure t)
+#+END_SRC
+
 ** Get path from shell
 #+BEGIN_SRC emacs-lisp
-(use-package exec-path-from-shell
-  :init
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+(when (daemonp)
   (exec-path-from-shell-initialize))
 #+END_SRC
 ** General
@@ -188,17 +194,17 @@ This fires up every time I open emacs
 #+END_SRC
 ** Global settings
 #+BEGIN_SRC emacs-lisp
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-(menu-bar-mode -1)            ; Disable the menu bar
-(global-display-line-numbers-mode)
-(set-face-attribute 'default nil :height 180)
-(setq make-backup-files nil)
-(setq
-    inhibit-startup-message t
-    display-line-numbers-type 'relative)
-(setq mac-option-modifier 'meta)
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (global-display-line-numbers-mode)
+  (set-face-attribute 'default nil :height 180)
+  (setq make-backup-files nil)
+  (setq
+      inhibit-startup-message t
+      display-line-numbers-type 'relative)
+  (setq mac-option-modifier 'meta)
+  (setq auth-sources '("~/.authinfo.gpg"))
 #+END_SRC
 
 
@@ -272,11 +278,12 @@ This fires up every time I open emacs
 
 ** Versioning
 #+BEGIN_SRC emacs-lisp
-(use-package magit
-  :commands (magit-status magit-get-current-branch)
-  :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-(use-package forge)
+  (use-package magit
+    :commands (magit-status magit-get-current-branch)
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+  (use-package forge
+    :after magit)
 #+END_SRC
 
 ** Project management
@@ -309,16 +316,11 @@ This fires up every time I open emacs
   :custom
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
-  (corfu-separator ?\s)          ;; Orderless field separator
   (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
   (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;;(corfu-preview-current nil)    ;; Disable current candidate preview
-  (corfu-preselect 'prompt)      ;; Preselect the prompt
+  (corfu-preselect 'first)      ;; Preselect the prompt
   (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   (corfu-popupinfo-delay nil)
-  ;; Recommended: Enable Corfu globally.  This is recommended since Dabbrev can
-  ;; be used globally (M-/).  See also the customization variable
-  ;; `global-corfu-modes' to exclude certain modes.
   :hook
   (corfu-mode . corfu-popupinfo-mode)
   :init
@@ -441,5 +443,25 @@ This fires up every time I open emacs
   :init
   (org-wild-notifier-mode))
 #+END_SRC
-
+** Markdown
+*** Editing
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . gfm-mode)
+  :commands (markdown-mode gfm-mode)
+  :config
+  (setq markdown-command "pandoc -t html5"))
+#+END_SRC
+** Copilot
+#+BEGIN_SRC emacs-lisp
+  (use-package copilot
+    :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+    :ensure t
+    :bind (
+      ("<tab>" . 'copilot-accept-completion)
+      ("<backtab>" . 'copilot-accept-completion-by-word))
+    :hook
+    (lsp-mode . copilot-mode))
+#+END_SRC
 
