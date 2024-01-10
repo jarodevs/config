@@ -186,8 +186,8 @@ This fires up every time I open emacs
  "C-c l" 'org-store-link
  "C-c a" 'org-agenda
  "C-c c" 'org-capture
- "C-M-j" 'counsel-switch-buffer
- "C-c k" 'kill-all-buffers
+ "C-M-j" 'persp-counsel-switch-buffer
+ "C-x k" 'persp-kill-buffer*
  "<f8>" 'neotree-project-dir
  "s-w" 'kill-this-buffer
  "<escape>" 'keyboard-escape-quit)
@@ -459,9 +459,27 @@ This fires up every time I open emacs
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
     :ensure t
     :bind (
+      :map copilot-mode
       ("<tab>" . 'copilot-accept-completion)
       ("<backtab>" . 'copilot-accept-completion-by-word))
     :hook
     (lsp-mode . copilot-mode))
 #+END_SRC
-
+** Workspace management
+#+begin_src emacs-lisp
+  (use-package perspective
+    :straight t
+    :bind
+    ("C-x M-n" . 'persp-next)
+    ("C-x M-p" . 'persp-prev)
+    ("C-x M-s" . 'persp-state-save)
+    ("C-x M-l" . 'persp-state-load)
+    :custom
+    (persp-mode-prefix-key (kbd "C-c M-p"))
+    :hook (
+      (kill-emacs . persp-state-save))
+    :config
+      (setq persp-state-default-file "~/.config/emacs/persp-state")
+    :init
+    (persp-mode))
+#+end_src
