@@ -1,8 +1,14 @@
+source /opt/homebrew/share/antigen/antigen.zsh
 source /opt/homebrew/opt/spaceship/spaceship.zsh
 source ~/.profile
 
+antigen bundle zsh-users/zsh-autosuggestions
+
+antigen apply
+
 SPACESHIP_GCLOUD_SHOW=false
 SPACESHIP_NODE_SHOW=false
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#112A46,bg=#ACC8E5,bold,underline"
 
 
 function brew() {
