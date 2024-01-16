@@ -3,6 +3,50 @@
 #+EMAIL: jaromods@pm.me
 
 * Repositories & Core Packages
+** Global settings
+#+BEGIN_SRC emacs-lisp
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (global-display-line-numbers-mode)
+  (set-face-attribute 'default nil :height 180)
+  (setq make-backup-files nil)
+  (setq
+      inhibit-startup-message t
+      display-line-numbers-type 'relative)
+  (setq mac-option-modifier 'meta)
+  (setq auth-sources '("~/.authinfo.gpg"))
+#+END_SRC
+
+*** Make Emacs faster
+**** Adjust gc-cons-threshold
+The default setting is too low for lsp-mode's needs due to the fact that client/server communication generates a lot of memory/garbage. You have two options:
+
+- Set it to big number(100mb) like most of the popular starter kits like Spacemacs/Doom/Prelude, etc do:
+
+```
+  (setq gc-cons-threshold 100000000)
+```
+
+- Follow the method recommended by Gnu Emacs Maintainer Eli Zaretskii: "My suggestion is to repeatedly multiply gc-cons-threshold by 2 until you stop seeing significant improvements in responsiveness, and in any case not to increase by a factor larger than 100 or somesuch. If even a 100-fold increase doesn't help, there's some deeper problem with the Lisp code which produces so much garbage, or maybe GC is not the reason for slowdown." Source: <https://www.reddit.com/r/emacs/comments/brc05y/is_lspmode_too_slow_to_use_for_anyone_else/eofulix/>
+
+#+BEGIN_SRC emacs-lisp
+  (setq gc-cons-threshold 100000000)
+#+END_SRC
+
+**** Increase the amount of data which Emacs reads from the process#
+#+BEGIN_SRC emacs-lisp
+  (setq read-process-output-max (* 1024 1024)) ;; 1mb
+#+END_SRC
+**** Use plists for deserialization.
+lsp-mode can be compiled in 2 modes plist and hash-table based lsp-use-plists flag. plists provide better performance in deserialization and also put less presure than hash-tables.
+
+I created in ./early-init.el
+``` emacs-lisp
+(setenv "LSP_USE_PLISTS" "true")
+```
+
+
 ** Get path from shell
     #+BEGIN_SRC emacs-lisp
       (when (memq window-system '(mac ns x))
@@ -138,22 +182,6 @@
  "s-w" 'kill-this-buffer
  "<escape>" 'keyboard-escape-quit)
 #+END_SRC
-** Global settings
-#+BEGIN_SRC emacs-lisp
-  (scroll-bar-mode -1)        ; Disable visible scrollbar
-  (tool-bar-mode -1)          ; Disable the toolbar
-  (tooltip-mode -1)           ; Disable tooltips
-  (global-display-line-numbers-mode)
-  (set-face-attribute 'default nil :height 180)
-  (setq make-backup-files nil)
-  (setq
-      inhibit-startup-message t
-      display-line-numbers-type 'relative)
-  (setq mac-option-modifier 'meta)
-  (setq auth-sources '("~/.authinfo.gpg"))
-#+END_SRC
-
-
 * Additional packages
 ** Code snippets
 #+BEGIN_SRC emacs-lisp
@@ -296,15 +324,6 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+END_SRC
 
-** Drag stuff
-#+BEGIN_SRC emacs-lisp
-(use-package drag-stuff
-  :ensure t
-  :init (drag-stuff-mode)
-  :hook
-  (drag-stuff-mode . 'drag-stuff-define-keys))
-#+END_SRC
-
 ** LSP
 #+BEGIN_SRC emacs-lisp
     (use-package lsp-mode
@@ -314,7 +333,8 @@
      (lsp-completion-provider :none) ;; we use Corfu!
      :config
      (setq lsp-keymap-prefix "C-c l")
- 
+     (setq lsp-idle-delay 0.500)
+     (setq lsp-log-io nil) ; if set to true can cause a performance hit
      :hook ((typescript-ts-mode . lsp)
             (lsp-mode . yas-minor-mode)
             (lsp-mode . lsp-enable-which-key-integration)))
@@ -333,13 +353,20 @@
    :ensure t
    :init (global-flycheck-mode))
 #+END_SRC
-** Typescript
+*** Treemacs
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-treemacs
+    :ensure t
+    :config
+    (setq lsp-treemacs-sync-mode 1))
+#+END_SRC
+*** Typescript
 #+BEGIN_SRC emacs-lisp
 (use-package typescript-ts-mode
   :ensure t
   :mode ("\\.ts\\'" . typescript-ts-mode))
 #+END_SRC
-** Rust
+*** Rust
 #+BEGIN_SRC emacs-lisp
 (use-package rustic
   :ensure t
@@ -359,6 +386,7 @@
 			 compilation-scroll-output t
 			 flycheck-checker 'rustic-clippy))))
 #+END_SRC
+
 ** Org notifications
 #+BEGIN_SRC emacs-lisp
 (use-package org-wild-notifier
@@ -446,3 +474,4 @@ This fires up every time I open emacs
   (setq dashboard-projects-switch-function 'counsel-projectile-switch-project)
   (dashboard-setup-startup-hook))
 #+end_src
+

@@ -51,13 +51,7 @@
   (setq straight-use-package-by-default t)
 
 (use-package org
-  :hook
-    (org-mode . org-indent-mode)
-  :config
-    (setq org-agenda-files
-	  '("~/Documents/org/")
-	  org-ellipsis " ▾"
-	  org-log-done 'time)
-    (evil-set-initial-state 'org-agenda-mode 'normal))
+  :straight t
+  :ensure t)
 
 (org-babel-load-file "~/.config/emacs/config.org")
