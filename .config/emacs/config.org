@@ -3,25 +3,13 @@
 #+EMAIL: jaromods@pm.me
 
 * Repositories & Core Packages
-** Straight.el bootstrap
-#+BEGIN_SRC emacs-lisp
-  (defvar bootstrap-version)
-  (let ((bootstrap-file
-         (expand-file-name
-          "straight/repos/straight.el/bootstrap.el"
-          (or (bound-and-true-p straight-base-dir)
-              user-emacs-directory)))
-        (bootstrap-version 7))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-  (straight-use-package 'use-package)
-#+END_SRC
+** Get path from shell
+    #+BEGIN_SRC emacs-lisp
+      (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize))
+      (when (daemonp)
+      (exec-path-from-shell-initialize))
+    #+END_SRC
 ** Evil mode
 #+begin_src emacs-lisp
   (use-package evil
@@ -35,42 +23,6 @@
     :ensure t
     :config
     (evil-collection-init))
-#+end_src
-
-** Load theme
-I am using a builtin emacs theme
-
-#+begin_src emacs-lisp
-  (load-theme 'modus-vivendi-tritanopia)
-#+end_src
-
-** Dashboard (starting screen)
-This fires up every time I open emacs
-
-#+begin_src emacs-lisp
-  (use-package dashboard
-  :ensure t
-  :config
-  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
-  (setq dashboard-startup-banner "~/Pictures/jarodevs.png")
-    ;; Value can be
-    ;; - nil to display no banner
-    ;; - 'official which displays the official emacs logo
-    ;; - 'logo which displays an alternative emacs logo
-    ;; - 1, 2 or 3 which displays one of the text banners
-    ;; - "path/to/your/image.gif", "path/to/your/image.png", "path/to/your/text.txt" or "path/to/your/image.xbm" which displays whatever gif/image/text/xbm you would prefer
-    ;; - a cons of '("path/to/your/image.png" . "path/to/your/text.txt")
-  (setq dashboard-center-content t)
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-  (setq dashboard-items '((recents  . 5)
-                          (bookmarks . 5)
-                          (projects . 5)
-                          (agenda . 5)))
-  (setq dashboard-icon-type 'all-the-icons)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-set-navigator t)
-  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project)
-  (dashboard-setup-startup-hook))
 #+end_src
 
 ** Search & Completion
@@ -173,15 +125,9 @@ This fires up every time I open emacs
     :ensure t)
 #+END_SRC
 
-** Get path from shell
-#+BEGIN_SRC emacs-lisp
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
-(when (daemonp)
-  (exec-path-from-shell-initialize))
-#+END_SRC
 ** General
 #+BEGIN_SRC emacs-lisp
+(use-package general)
 (general-define-key
  "C-c l" 'org-store-link
  "C-c a" 'org-agenda
@@ -462,4 +408,41 @@ This fires up every time I open emacs
       (setq persp-state-default-file "~/.config/emacs/persp-state")
     :init
     (persp-mode))
+#+end_src
+
+** Load theme
+I am using a builtin emacs theme
+
+#+begin_src emacs-lisp
+  (use-package modus-themes)
+  (load-theme 'modus-vivendi-tritanopia)
+#+end_src
+
+** Dashboard (starting screen)
+This fires up every time I open emacs
+
+#+begin_src emacs-lisp
+  (use-package dashboard
+  :ensure t
+  :config
+  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
+  (setq dashboard-startup-banner "~/Pictures/jarodevs.png")
+    ;; Value can be
+    ;; - nil to display no banner
+    ;; - 'official which displays the official emacs logo
+    ;; - 'logo which displays an alternative emacs logo
+    ;; - 1, 2 or 3 which displays one of the text banners
+    ;; - "path/to/your/image.gif", "path/to/your/image.png", "path/to/your/text.txt" or "path/to/your/image.xbm" which displays whatever gif/image/text/xbm you would prefer
+    ;; - a cons of '("path/to/your/image.png" . "path/to/your/text.txt")
+  (setq dashboard-center-content t)
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+  (setq dashboard-items '((recents  . 5)
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (agenda . 5)))
+  ;;(setq dashboard-icon-type 'all-the-icons)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-set-navigator t)
+  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project)
+  (dashboard-setup-startup-hook))
 #+end_src
