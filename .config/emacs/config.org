@@ -415,7 +415,7 @@ I created in ./early-init.el
       :map copilot-mode
      ;; ("<tab>" . 'copilot-accept-completion)
      ;; ("<backtab>" . 'copilot-accept-completion-by-word))
-        ("<backtab>" . 'copilot-accept-completion-by-word))
+        ("<backtab>" . 'copilot-accept-completion))
     :hook
     (lsp-mode . copilot-mode))
 #+END_SRC
@@ -439,13 +439,13 @@ I created in ./early-init.el
 #+end_src
 
 ** Load theme
-I am using a builtin emacs theme
-
 #+begin_src emacs-lisp
-  (use-package modus-themes)
-  (load-theme 'modus-vivendi-tritanopia)
+    ;;(use-package modus-themes)
+    ;;(load-theme 'modus-vivendi-tritanopia)
+  (use-package night-owl-theme
+    :config
+    (load-theme 'night-owl t))
 #+end_src
-
 ** Dashboard (starting screen)
 This fires up every time I open emacs
 
@@ -474,4 +474,11 @@ This fires up every time I open emacs
   (setq dashboard-projects-switch-function 'counsel-projectile-switch-project)
   (dashboard-setup-startup-hook))
 #+end_src
-
+** Org modern
+#+BEGIN_SRC emacs-lisp
+  (use-package org-modern
+    :ensure t  ; Ensure that org-modern is installed
+    :after org ; Load after org
+    :config
+    (global-org-modern-mode))
+#+END_SRC
