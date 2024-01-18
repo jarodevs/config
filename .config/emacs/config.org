@@ -16,7 +16,8 @@
       display-line-numbers-type 'relative)
   (setq mac-option-modifier 'meta)
   (setq auth-sources '("~/.authinfo.gpg"))
-#+END_SRC
+  (set-frame-font "SFMono Nerd Font-15")
+#+End_SRC
 
 *** Make Emacs faster
 **** Adjust gc-cons-threshold
