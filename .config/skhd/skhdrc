@@ -66,3 +66,7 @@ ctrl + alt - left : yabai -m display --focus next
 ctrl + alt - right : yabai -m display --focus prev 
 
 cmd - return : open -n /Applications/kitty.app
+
+# Open emacs
+cmd + shift - e : osascript -e 'tell application "Emacs" to activate'
+
