@@ -258,6 +258,19 @@ I created in ./early-init.el
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
   (use-package forge
     :after magit)
+  (use-package emojify
+    :ensure t)
+  (use-package code-review
+    :straight (:host github :repo "phelrine/code-review" :branch "fix/closql-update")
+    :ensure t
+    :after magit
+    :hook (code-review-mode . emojify-mode)
+    :config
+    (setq code-review-fill-column 80)
+    (setq code-review-new-buffer-window-strategy #'switch-to-buffer-other-window)
+    ;; SET KEYBINDINGS
+    )
+
 #+END_SRC
 
 ** Project management
@@ -573,9 +586,13 @@ I created in ./early-init.el
 #+begin_src emacs-lisp
     ;;(use-package modus-themes)
     ;;(load-theme 'modus-vivendi-tritanopia)
-  (use-package night-owl-theme
+  ;;(use-package night-owl-theme
+  ;;  :config
+  ;;  (load-theme 'night-owl t))
+  (use-package vscode-dark-plus-theme
+    :ensure t
     :config
-    (load-theme 'night-owl t))
+    (load-theme 'vscode-dark-plus t))
 #+end_src
 ** Dashboard (starting screen)
 This fires up every time I open emacs
