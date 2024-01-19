@@ -2,6 +2,11 @@
 #+AUTHOR: Jaro
 #+EMAIL: jaromods@pm.me
 
+
+* TODO Need to allow minibuffer search in fuzzy order
+* TODO Need to understand why typescript needs restarts
+* TODO projectile-switch-project binding
+* TODO can't command in vterm
 * Repositories & Core Packages
 ** Global settings
 #+BEGIN_SRC emacs-lisp
@@ -16,7 +21,7 @@
       display-line-numbers-type 'relative)
   (setq mac-option-modifier 'meta)
   (setq auth-sources '("~/.authinfo.gpg"))
-  (set-frame-font "SFMono Nerd Font-15")
+  (set-frame-font "SFMono Nerd Font-20")
 #+End_SRC
 
 *** Make Emacs faster
