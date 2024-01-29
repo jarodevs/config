@@ -7,6 +7,7 @@
 * TODO Need to understand why typescript needs restarts
 * TODO projectile-switch-project binding
 * TODO can't command in vterm
+* TODO Fix eslint-fix-all not executed on save
 * Repositories & Core Packages
 ** Global settings
 #+BEGIN_SRC emacs-lisp
@@ -22,6 +23,8 @@
   (setq mac-option-modifier 'meta)
   (setq auth-sources '("~/.authinfo.gpg"))
   (set-frame-font "SFMono Nerd Font-20")
+  (global-visual-line-mode 1)
+
 #+End_SRC
 
 *** Make Emacs faster
@@ -185,7 +188,8 @@ I created in ./early-init.el
  "C-M-j" 'persp-counsel-switch-buffer
  "C-x k" 'persp-kill-buffer*
  "<f8>" 'neotree-project-dir
- "s-w" 'kill-this-buffer
+ "C-x C-w" 'kill-this-buffer
+ "s-w" 'save-buffer
  "<escape>" 'keyboard-escape-quit)
 #+END_SRC
 * Additional packages
