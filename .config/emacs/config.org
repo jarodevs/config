@@ -22,7 +22,7 @@
       display-line-numbers-type 'relative)
   (setq mac-option-modifier 'meta)
   (setq auth-sources '("~/.authinfo.gpg"))
-  (set-frame-font "SFMono Nerd Font-20")
+  (set-frame-font "SFMono Nerd Font-18")
   (global-visual-line-mode 1)
 
 #+End_SRC
