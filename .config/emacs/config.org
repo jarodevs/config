@@ -22,7 +22,7 @@
       display-line-numbers-type 'relative)
   (setq mac-option-modifier 'meta)
   (setq auth-sources '("~/.authinfo.gpg"))
-  (set-frame-font "SFMono Nerd Font-18")
+  (set-frame-font "SFMono Nerd Font-15")
   (global-visual-line-mode 1)
 
 #+End_SRC
@@ -384,18 +384,13 @@ I created in ./early-init.el
   ;; CURRENTLY THIS DOES NOT WORK
 
 
-  (defun show-hello-world-message ()
-    "Create a buffer and display a 'Hello World' message."
-    (interactive)
-    (let ((buf (generate-new-buffer "*Hello World*")))
-      (with-current-buffer buf
-        (insert "Hello World")
-        (display-buffer buf))))
-
     (use-package typescript-ts-mode
       :ensure t
       ;;:hook (lsp--before-save . show-hello-world-message)
-      :mode ("\\.ts\\'" . typescript-ts-mode))
+      :mode ("\\.ts\\'" . typescript-ts-mode)
+      :config
+      (require 'dap-node)
+      (dap-node-setup))
 #+END_SRC
 *** Rust
 #+BEGIN_SRC emacs-lisp
@@ -424,6 +419,10 @@ I created in ./early-init.el
     :config
     (setq lsp-treemacs-sync-mode 1))
 #+END_SRC
+*** Debugging with dap-mode
+#+begin_src emacs-lisp
+  (use-package dap-mode)
+#+end_src
 ** Tree file navigation
 #+begin_src emacs-lisp
 (use-package treemacs
@@ -640,3 +639,12 @@ This fires up every time I open emacs
     :config
     (global-org-modern-mode))
 #+END_SRC
+* Custom functions
+** Kill other buffers but current one
+#+begin_src emacs-lisp
+     (defun kill-other-buffers ()
+        "Kill all other buffers."
+        (interactive)
+        (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+#+end_src
+

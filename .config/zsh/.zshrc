@@ -37,3 +37,5 @@ vterm_printf() {
         printf "\e]%s\e\\" "$1"
     fi
 }
+
+export PATH="$HOME/bin:$PATH"
