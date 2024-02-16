@@ -39,3 +39,4 @@ vterm_printf() {
 }
 
 export PATH="$HOME/bin:$PATH"
+alias kubectl="minikube kubectl --"

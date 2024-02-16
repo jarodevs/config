@@ -3,12 +3,19 @@
 #+EMAIL: jaromods@pm.me
 
 
-* TODO Need to allow minibuffer search in fuzzy order
-* TODO Need to understand why typescript needs restarts
-* TODO projectile-switch-project binding
-* TODO can't command in vterm
-* TODO Fix eslint-fix-all not executed on save
-* Repositories & Core Packages
+** TODO Need to allow minibuffer search in fuzzy order
+** TODO Need to understand why typescript needs restarts
+** TODO projectile-switch-project binding
+** TODO can't command in vterm
+** TODO Fix eslint-fix-all not executed on save
+By the way, managed to make it work with prettier using prettier-minor-mode which updates on save. Probably could look into that
+** TODO How to list an entire file structure with lsp
+** TODO [#A] Look into references in org mode                        :emacs:
+** TODO [#A] Refiling done tasks
+** TODO yasnipet, understand why parameter $0 is not working in cbel :emacs:
+** TODO configure prescient-corfu                                    :emacs:
+** TODO Fix tab in lsp as it is used in copilot                      :emacs:
+* Core Packages
 ** Global settings
 #+BEGIN_SRC emacs-lisp
   (scroll-bar-mode -1)        ; Disable visible scrollbar
@@ -54,7 +61,6 @@ I created in ./early-init.el
 ``` emacs-lisp
 (setenv "LSP_USE_PLISTS" "true")
 ```
-
 
 ** Get path from shell
     #+BEGIN_SRC emacs-lisp
@@ -185,7 +191,7 @@ I created in ./early-init.el
  "C-c l" 'org-store-link
  "C-c a" 'org-agenda
  "C-c c" 'org-capture
- "C-M-j" 'persp-counsel-switch-buffer
+ "C-<tab>" 'persp-counsel-switch-buffer
  "C-x k" 'persp-kill-buffer*
  "<f8>" 'neotree-project-dir
  "C-x C-w" 'kill-this-buffer
@@ -264,6 +270,10 @@ I created in ./early-init.el
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :commands (magit-status magit-get-current-branch)
+    :config
+      (setq display-line-numbers-type 'visual)
+      (global-display-line-numbers-mode t)
+      (setq magit-section-disable-line-numbers nil)
     :custom
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
   (use-package forge
@@ -361,9 +371,13 @@ I created in ./early-init.el
      ;; ESLINT configuration
      (setq lsp-eslint-auto-fix-on-save t)
      (setq lsp-eslint-enable t)
-     :hook ((typescript-ts-mode . lsp)
+     (setq lsp-restart 'auto-restart)
+     :hook ((typescript-ts-mode . lsp-deferred)
             (lsp-mode . yas-minor-mode)
             (lsp-mode . lsp-enable-which-key-integration)))
+
+
+
   (use-package lsp-ui
    :commands lsp-ui-mode
    :bind ("M-d" . lsp-ui-doc-toggle)
@@ -378,6 +392,10 @@ I created in ./early-init.el
   (use-package flycheck
    :ensure t
    :init (global-flycheck-mode))
+
+  (use-package prettier-js
+    :hook
+    (typescript-ts-mode . prettier-js-mode))
 #+END_SRC
 *** Typescript
 #+BEGIN_SRC emacs-lisp
@@ -388,9 +406,7 @@ I created in ./early-init.el
       :ensure t
       ;;:hook (lsp--before-save . show-hello-world-message)
       :mode ("\\.ts\\'" . typescript-ts-mode)
-      :config
-      (require 'dap-node)
-      (dap-node-setup))
+      )
 #+END_SRC
 *** Rust
 #+BEGIN_SRC emacs-lisp
@@ -421,7 +437,23 @@ I created in ./early-init.el
 #+END_SRC
 *** Debugging with dap-mode
 #+begin_src emacs-lisp
-  (use-package dap-mode)
+  ;; dap-mode setup for Node.js
+  (use-package dap-mode
+    :ensure t
+    :after lsp-mode
+    :config
+    (require 'dap-node)
+    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+    (dap-register-debug-template
+     "Node.js: Attach"
+     (list :type "node"
+           :request "attach"
+           :name "Node.js: Attach to Process"
+  	 :localRoot  nil
+  	 :remoteRoot nil
+           :port 9229))
+    ;; Other dap configurations...
+    )
 #+end_src
 ** Tree file navigation
 #+begin_src emacs-lisp
@@ -639,6 +671,43 @@ This fires up every time I open emacs
     :config
     (global-org-modern-mode))
 #+END_SRC
+** COMMENT Multiple vterm buffers
+#+begin_src emacs-lisp
+  (use-package multi-vterm
+  	:config
+  	(add-hook 'vterm-mode-hook
+  			(lambda ()
+  			(setq-local evil-insert-state-cursor 'box)
+  			(evil-insert-state)))
+  	(define-key vterm-mode-map [return]                      #'vterm-send-return)
+
+  	(setq vterm-keymap-exceptions nil)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-e")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-f")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-a")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-v")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-b")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-w")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-u")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-n")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-m")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-p")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-j")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-k")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-r")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-t")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-g")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-c")      #'vterm--self-insert)
+  	(evil-define-key 'insert vterm-mode-map (kbd "C-SPC")    #'vterm--self-insert)
+  	(evil-define-key 'normal vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+  	(evil-define-key 'normal vterm-mode-map (kbd ",c")       #'multi-vterm)
+  	(evil-define-key 'normal vterm-mode-map (kbd ",n")       #'multi-vterm-next)
+  	(evil-define-key 'normal vterm-mode-map (kbd ",p")       #'multi-vterm-prev)
+  	(evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
+  	(evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
+  	(evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
+#+end_src
 * Custom functions
 ** Kill other buffers but current one
 #+begin_src emacs-lisp
