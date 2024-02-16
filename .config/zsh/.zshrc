@@ -8,7 +8,7 @@ antigen apply
 
 SPACESHIP_GCLOUD_SHOW=false
 SPACESHIP_NODE_SHOW=false
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#112A46,bg=#ACC8E5,bold,underline"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
 
 
 function brew() {
