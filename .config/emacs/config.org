@@ -31,11 +31,10 @@ By the way, managed to make it work with prettier using prettier-minor-mode whic
   (setq auth-sources '("~/.authinfo.gpg"))
   (set-frame-font "SFMono Nerd Font-15")
   (global-visual-line-mode 1)
-
 #+End_SRC
 
-*** Make Emacs faster
-**** Adjust gc-cons-threshold
+** Make Emacs faster
+*** Adjust gc-cons-threshold
 The default setting is too low for lsp-mode's needs due to the fact that client/server communication generates a lot of memory/garbage. You have two options:
 
 - Set it to big number(100mb) like most of the popular starter kits like Spacemacs/Doom/Prelude, etc do:
@@ -50,11 +49,11 @@ The default setting is too low for lsp-mode's needs due to the fact that client/
   (setq gc-cons-threshold 100000000)
 #+END_SRC
 
-**** Increase the amount of data which Emacs reads from the process#
+*** Increase the amount of data which Emacs reads from the process#
 #+BEGIN_SRC emacs-lisp
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
 #+END_SRC
-**** Use plists for deserialization.
+*** Use plists for deserialization.
 lsp-mode can be compiled in 2 modes plist and hash-table based lsp-use-plists flag. plists provide better performance in deserialization and also put less presure than hash-tables.
 
 I created in ./early-init.el
@@ -198,6 +197,17 @@ I created in ./early-init.el
  "s-w" 'save-buffer
  "<escape>" 'keyboard-escape-quit)
 #+END_SRC
+** Ansi Color
+#+begin_src emacs-lisp
+  (use-package ansi-color
+    :config
+    (defun colorize-ansi-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (ansi-color-apply-on-region compilation-filter-start (point-max))))
+    :hook
+    (compilation-filter . colorize-ansi-compilation-buffer))
+
+#+end_src
 * Additional packages
 ** Code snippets
 #+BEGIN_SRC emacs-lisp
