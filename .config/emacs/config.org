@@ -4,6 +4,7 @@
 
 
 ** TODO Need to allow minibuffer search in fuzzy order
+** TODO Dired creates a new buffer everytime i select a folder
 ** TODO Need to understand why typescript needs restarts
 ** TODO projectile-switch-project binding
 ** TODO can't command in vterm
@@ -183,29 +184,15 @@ I created in ./early-init.el
     :ensure t)
 #+END_SRC
 
-** General
-#+BEGIN_SRC emacs-lisp
-(use-package general)
-(general-define-key
- "C-c l" 'org-store-link
- "C-c a" 'org-agenda
- "C-c c" 'org-capture
- "C-<tab>" 'persp-counsel-switch-buffer
- "C-x k" 'persp-kill-buffer*
- "<f8>" 'neotree-project-dir
- "C-x C-w" 'kill-this-buffer
- "s-w" 'save-buffer
- "<escape>" 'keyboard-escape-quit)
-#+END_SRC
 ** Ansi Color
 #+begin_src emacs-lisp
-  (use-package ansi-color
-    :config
-    (defun colorize-ansi-compilation-buffer ()
-      (when (eq major-mode 'compilation-mode)
-        (ansi-color-apply-on-region compilation-filter-start (point-max))))
-    :hook
-    (compilation-filter . colorize-ansi-compilation-buffer))
+    (use-package ansi-color
+      :config
+      (defun colorize-ansi-compilation-buffer ()
+        (when (eq major-mode 'compilation-mode)
+          (ansi-color-apply-on-region compilation-filter-start (point-max))))
+      :hook
+      (compilation-filter . colorize-ansi-compilation-buffer))
 
 #+end_src
 * Additional packages
@@ -238,7 +225,7 @@ I created in ./early-init.el
   (use-package golden-ratio
     :ensure t
     :config
-    (golden-ratio-mode)
+    ;;(golden-ratio-mode)
     (setq golden-ratio-auto-scale t))
 #+END_SRC
 ** Better modeline
@@ -284,6 +271,11 @@ I created in ./early-init.el
       (setq display-line-numbers-type 'visual)
       (global-display-line-numbers-mode t)
       (setq magit-section-disable-line-numbers nil)
+      (setq magit-process-finish-apply-ansi-colors t)
+      (evil-define-key 'normal magit-section-mode-map (kbd "1") nil)
+      (evil-define-key 'normal magit-section-mode-map (kbd "2") nil)
+      (evil-define-key 'normal magit-section-mode-map (kbd "3") nil)
+      (evil-define-key 'normal magit-section-mode-map (kbd "4") nil)
     :custom
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
   (use-package forge
@@ -438,6 +430,13 @@ I created in ./early-init.el
 			 compilation-scroll-output t
 			 flycheck-checker 'rustic-clippy))))
 #+END_SRC
+*** C
+**** Setting up electric pair mode
+#+begin_src emacs-lisp
+  (use-package cc-mode
+    :hook
+    (c-mode-common-hook . electric-pair-mode))
+#+end_src
 *** Treemacs
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-treemacs
@@ -734,7 +733,7 @@ This fires up every time I open emacs
     :config
     (global-org-modern-mode))
 #+END_SRC
-** COMMENT Multiple vterm buffers
+** Multiple vterm buffers
 #+begin_src emacs-lisp
   (use-package multi-vterm
   	:config
@@ -771,6 +770,21 @@ This fires up every time I open emacs
   	(evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
   	(evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
 #+end_src
+** General
+#+BEGIN_SRC emacs-lisp
+  (use-package general)
+  (general-define-key
+   "C-c l" 'org-store-link
+   "C-c a" 'org-agenda
+   "C-c c" 'org-capture
+   "C-<tab>" 'persp-counsel-switch-buffer
+   "C-x k" 'persp-kill-buffer*
+   "<f8>" 'neotree-project-dir
+   "C-x C-w" 'kill-this-buffer
+   "s-w" 'save-buffer
+   "M-<f12>" 'multi-vterm-dedicated-toggle
+   "<escape>" 'keyboard-escape-quit)
+#+END_SRC
 * Custom functions
 ** Kill other buffers but current one
 #+begin_src emacs-lisp
