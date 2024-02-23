@@ -181,6 +181,13 @@ I created in ./early-init.el
 ** Terminal emulation
 #+BEGIN_SRC emacs-lisp
   (use-package vterm
+    :init
+    (defun vterm-process-query-on-exit ()
+      (let ((proc (get-buffer-process (current-buffer))))
+        (when proc
+          (set-process-query-on-exit-flag proc nil))))
+    :hook
+      (vterm-mode . vterm-process-query-on-exit)
     :ensure t)
 #+END_SRC
 
@@ -297,12 +304,12 @@ I created in ./early-init.el
 
 ** Project management
 #+BEGIN_SRC emacs-lisp
-(use-package projectile
-  :ensure t
-  :init (projectile-mode)
-  :config
-  (setq projectile-switch-project-action 'magit-status)
-  :bind ("C-x p" . 'projectile-command-map))
+  (use-package projectile
+    :ensure t
+    :init (projectile-mode)
+    :config
+    (setq project-switch-project-action 'magit-status)
+    :bind ("C-x p" . 'projectile-command-map))
 #+END_SRC
 
 ** Code completion
