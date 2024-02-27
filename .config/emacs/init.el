@@ -3,8 +3,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(gruber-darker))
  '(custom-safe-themes
-   '("e27c9668d7eddf75373fa6b07475ae2d6892185f07ebed037eedf783318761d7"
+   '("ee29cabce91f27eb1f9540ceb2bb69b4c509cd5d3bb3e6d8ad3a4ab799ebf8f7"
+     "e13beeb34b932f309fb2c360a04a460821ca99fe58f69e65557d6c1b10ba18c7"
+     "e27c9668d7eddf75373fa6b07475ae2d6892185f07ebed037eedf783318761d7"
      "c171012778b7cf795ac215b91e1ecab8e3946738d03095397a790ed41e0a3386"
      "21055a064d6d673f666baaed35a69519841134829982cbbb76960575f43424db"
      "15604b083d03519b0c2ed7b32da6d7b2dc2f6630bef62608def60cdcf9216184"
