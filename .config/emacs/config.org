@@ -6,7 +6,6 @@
 ** TODO Need to allow minibuffer search in fuzzy order
 ** TODO Dired creates a new buffer everytime i select a folder
 ** TODO Need to understand why typescript needs restarts
-** TODO projectile-switch-project binding
 ** TODO can't command in vterm
 ** TODO Fix eslint-fix-all not executed on save
 By the way, managed to make it work with prettier using prettier-minor-mode which updates on save. Probably could look into that
@@ -20,18 +19,19 @@ By the way, managed to make it work with prettier using prettier-minor-mode whic
 
 ** Global settings
 #+BEGIN_SRC emacs-lisp
-  (setq-default indent-tabs-mode nil)
-  (setq auth-sources '("~/.authinfo.gpg")
-        whitespace-style '(face tabs spaces trailing space-before-tab newline indentation empty space-after-tab space-mark tab-mark)
-        display-line-numbers-type 'relative
-        indent-tabs-mode nil)
-  (global-whitespace-mode 1)
-  (global-display-line-numbers-mode 1)
-  (column-number-mode 1)
-  (show-paren-mode 1)
-  (tool-bar-mode 0)
-  (menu-bar-mode 0)
-  (scroll-bar-mode 0)
+    (setq-default indent-tabs-mode nil)
+    (setq auth-sources '("~/.authinfo.gpg")
+          whitespace-style '(face tabs spaces trailing space-before-tab newline indentation empty space-after-tab space-mark tab-mark)
+          display-line-numbers-type 'relative
+          indent-tabs-mode nil
+          mac-option-modifier 'meta)
+    (global-whitespace-mode 1)
+    (global-display-line-numbers-mode 1)
+    (column-number-mode 1)
+    (show-paren-mode 1)
+    (tool-bar-mode 0)
+    (menu-bar-mode 0)
+    (scroll-bar-mode 0)
 #+End_SRC
 
 ** Make Emacs faster
@@ -382,4 +382,16 @@ I created in ./early-init.el
 ** Font
 #+begin_src emacs-lisp
   (set-face-attribute 'default (selected-frame) :height 170)
+#+end_src
+** Project
+#+begin_src emacs-lisp
+#+end_src
+** Text scale increase/decrease
+#+begin_src emacs-lisp
+  (defun scale-text (delta)
+    "Scales the font size in all windows"
+    (interactive "nAdjust font height by (tenths of a point): ")
+    (let* ((current-height (face-attribute 'default :height))
+           (new-height (+ current-height delta)))
+      (set-face-attribute 'default (selected-frame) :height new-height)))
 #+end_src
