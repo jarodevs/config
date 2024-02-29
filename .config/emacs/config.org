@@ -78,14 +78,9 @@ I created in ./early-init.el
     :after evil-collection
     :init
     :config
-    (setq evil-want-minibuffer t)
+    (setq evil-want-minibuffer t
+          evil-undo-system 'undo-redo)
     (evil-mode 1))
-
-  (use-package evil-leader
-    :config
-    (evil-leader/set-leader "<SPC>")
-    :init
-    (global-evil-leader-mode))
 #+end_src
 
 ** Help in emacs
@@ -315,14 +310,20 @@ I created in ./early-init.el
      :config
      (indent-tabs-mode)
      (electric-pair-mode)
-     :hook (typescript-ts-mode . eglot-ensure))
+     :hook
+     (typescript-ts-mode . eglot-ensure)
+     (c-mode . eglot-ensure))
 
    (use-package company
      :ensure t
      :config
      (global-company-mode))
 
+   (use-package prettier-js
+     :ensure t)
+
    (add-to-list 'auto-mode-alist '("\\.ts?x\\'" . typescript-ts-mode))
+   (add-to-list 'auto-mode-alist '("\\.ts?x\\'" . prettier-js-mode))
  #+end_src
 ** Git link
 #+begin_src emacs-lisp
@@ -529,4 +530,10 @@ I created in ./early-init.el
     (let* ((current-height (face-attribute 'default :height))
            (new-height (+ current-height delta)))
       (set-face-attribute 'default (selected-frame) :height new-height)))
+#+end_src
+** IMenu side list
+#+begin_src emacs-lisp
+  (use-package imenu-list
+    :config
+    (setq imenu-list-focus-after-activation t))
 #+end_src
