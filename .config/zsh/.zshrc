@@ -1,5 +1,6 @@
 source /opt/homebrew/share/antigen/antigen.zsh
 source /opt/homebrew/opt/spaceship/spaceship.zsh
+source ~/bin
 source ~/.profile
 
 antigen bundle zsh-users/zsh-autosuggestions

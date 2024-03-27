@@ -19,21 +19,26 @@ By the way, managed to make it work with prettier using prettier-minor-mode whic
 
 ** Global settings
 #+BEGIN_SRC emacs-lisp
-      (setq-default indent-tabs-mode nil
-                    lexical-binding t)
-      (setq auth-sources '("~/.authinfo.gpg")
-            whitespace-style '(face tabs spaces trailing space-before-tab newline indentation empty space-after-tab space-mark tab-mark)
-            display-line-numbers-type 'relative
-            mac-option-modifier 'meta)
-      (global-whitespace-mode 1)
-      (global-display-line-numbers-mode 1)
-      (column-number-mode 1)
-      (show-paren-mode 1)
-      (tool-bar-mode 0)
-      (menu-bar-mode 0)
-      (scroll-bar-mode 0)
+    (setq-default indent-tabs-mode t
+      lexical-binding t)
+            (setq auth-sources '("~/.authinfo.gpg")
+                  whitespace-style '(face tabs spaces trailing space-before-tab newline empty space-after-tab space-mark tab-mark)
+                  display-line-numbers-type 'relative
+                  frame-resize-pixelwise t
+                  mac-option-modifier 'meta)
+            (global-whitespace-mode 1)
+            (global-display-line-numbers-mode 1)
+            (column-number-mode 1)
+            (show-paren-mode 1)
+            (tool-bar-mode 0)
+            (menu-bar-mode 0)
+            (scroll-bar-mode 0)
 #+End_SRC
 
+** eshell command path
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell)
+#+end_src
 ** Make Emacs faster
 *** Adjust gc-cons-threshold
 The default setting is too low for lsp-mode's needs due to the fact that client/server communication generates a lot of memory/garbage. You have two options:
@@ -103,15 +108,14 @@ I created in ./early-init.el
 #+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp
-(use-package org
-  :hook
-    (org-mode . org-indent-mode)
-  :config
-    (setq org-agenda-files
-	  '("~/Documents/org/")
-	  org-ellipsis " ▾"
-	  org-log-done 'time)
-    (evil-set-initial-state 'org-agenda-mode 'normal))
+  (use-package org
+    :hook
+      (org-mode . org-indent-mode)
+    :config
+      (setq org-agenda-files '("~/Documents/org/")
+            org-ellipsis " ▾"
+            org-log-done 'time)
+      (evil-set-initial-state 'org-agenda-mode 'normal))
 #+END_SRC
 ** Terminal emulation
 #+BEGIN_SRC emacs-lisp
@@ -183,12 +187,6 @@ I created in ./early-init.el
 
 #+END_SRC
 
-** Coding
-*** Typescript
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
-#+END_SRC
 ** Org notifications
 #+BEGIN_SRC emacs-lisp
 (use-package org-wild-notifier
@@ -242,11 +240,11 @@ I created in ./early-init.el
 
 ** Load theme
 #+begin_src emacs-lisp
-    ;;(use-package modus-themes)
-    ;;(load-theme 'modus-vivendi-tritanopia)
-    (use-package gruber-darker-theme
-      :straight (:host github :repo "rexim/gruber-darker-theme")
-      :config (load-theme 'gruber-darker))
+    (use-package modus-themes)
+    (load-theme 'modus-vivendi-tritanopia)
+    ;;(use-package gruber-darker-theme
+    ;;  :straight (:host github :repo "rexim/gruber-darker-theme")
+    ;;  :config (load-theme 'gruber-darker))
 
 #+End_src
 ** Multiple vterm buffers
@@ -300,13 +298,17 @@ I created in ./early-init.el
 #+end_src
 ** LSP
  #+begin_src emacs-lisp
+   (add-to-list 'auto-mode-alist '("\\.[jt]s?\\'" . typescript-ts-mode))
+   (add-to-list 'auto-mode-alist '("\\.[jt]s[x]?\\'" . tsx-mode))
+
+
    (use-package eglot
      :ensure t
      :config
-     (indent-tabs-mode)
      (electric-pair-mode)
      :hook
      (typescript-ts-mode . eglot-ensure)
+     (tsx-mode . eglot-ensure)
      (c-mode . eglot-ensure))
 
    (use-package company
@@ -315,10 +317,10 @@ I created in ./early-init.el
      (global-company-mode))
 
    (use-package prettier-js
-     :ensure t)
-
-   (add-to-list 'auto-mode-alist '("\\.ts?x\\'" . typescript-ts-mode))
-   (add-to-list 'auto-mode-alist '("\\.ts?x\\'" . prettier-js-mode))
+     :ensure t
+     :hook
+     (tsx-ts-mode . prettier-js-mode)
+     (typescript-ts-mode . prettier-js-mode))
  #+end_src
 ** Git link
 #+begin_src emacs-lisp
@@ -498,7 +500,7 @@ I created in ./early-init.el
 #+end_src
 ** Font
 #+begin_src emacs-lisp
-  (set-face-attribute 'default (selected-frame) :height 170)
+  (set-face-attribute 'default (selected-frame) :height 150)
 #+end_src
 ** Project
 #+begin_src emacs-lisp
@@ -528,7 +530,13 @@ I created in ./early-init.el
 #+end_src
 ** IMenu side list
 #+begin_src emacs-lisp
-  (use-package imenu-list
+  (use-package wgrep
+      :config
+      (setq wgrep-auto-save-buffer t))
+#+end_src
+** Move stuff around
+#+BEGIN_SRC emacs-lisp
+  (use-package drag-stuff
     :config
-    (setq imenu-list-focus-after-activation t))
+    (setq drag-stuff-global-mode 1))
 #+end_src
