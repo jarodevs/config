@@ -308,7 +308,7 @@ I created in ./early-init.el
      (electric-pair-mode)
      :hook
      (typescript-ts-mode . eglot-ensure)
-     (tsx-mode . eglot-ensure)
+     (tsx-ts-mode . eglot-ensure)
      (c-mode . eglot-ensure))
 
    (use-package company
