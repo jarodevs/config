@@ -19,7 +19,7 @@ By the way, managed to make it work with prettier using prettier-minor-mode whic
 
 ** Global settings
 #+BEGIN_SRC emacs-lisp
-    (setq-default indent-tabs-mode t
+    (setq-default indent-tabs-mode nil
       lexical-binding t)
             (setq auth-sources '("~/.authinfo.gpg")
                   whitespace-style '(face tabs spaces trailing space-before-tab newline empty space-after-tab space-mark tab-mark)
