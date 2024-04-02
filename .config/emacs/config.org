@@ -301,6 +301,9 @@ I created in ./early-init.el
    (add-to-list 'auto-mode-alist '("\\.[t]s?\\'" . typescript-ts-mode))
    (add-to-list 'auto-mode-alist '("\\.[t]s[x]?\\'" . tsx-ts-mode))
 
+   (use-package typescript-ts-mode
+     :config
+     (setq typescript-ts-mode-indent-offset 4))
 
    (use-package eglot
      :ensure t
