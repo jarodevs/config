@@ -19,8 +19,7 @@ By the way, managed to make it work with prettier using prettier-minor-mode whic
 
 ** Global settings
 #+BEGIN_SRC emacs-lisp
-    (setq-default indent-tabs-mode nil
-      lexical-binding t)
+    (setq-default lexical-binding t)
             (setq auth-sources '("~/.authinfo.gpg")
                   whitespace-style '(face tabs spaces trailing space-before-tab newline empty space-after-tab space-mark tab-mark)
                   display-line-numbers-type 'relative
@@ -296,6 +295,13 @@ I created in ./early-init.el
 ** Tools for minibuffer completion
 #+begin_src emacs-lisp
 #+end_src
+** Add node_modules path
+#+BEGIN_SRC emacs-lisp
+  (use-package add-node-modules-path
+    :hook
+    (tsx-ts-mode . add-node-modules-path)
+    (typescript-ts-mode . add-node-modules-path))
+#+END_SRC
 ** LSP
  #+begin_src emacs-lisp
    (add-to-list 'auto-mode-alist '("\\.[t]s?\\'" . typescript-ts-mode))
@@ -318,6 +324,15 @@ I created in ./early-init.el
      :ensure t
      :config
      (global-company-mode))
+
+   (use-package flymake-eslint
+     :hook
+     (eglot-managed-mode
+      . (lambda ()
+          (when (and (or (derived-mode-p 'tsx-ts-mode)
+                         (derived-mode-p 'typescript-ts-mode))
+                     (executable-find "eslint"))
+            (flymake-eslint-enable)))))
 
    (use-package prettier-js
      :ensure t
@@ -546,3 +561,7 @@ I created in ./early-init.el
     :config
     (setq drag-stuff-global-mode 1))
 #+end_src
+** TODO Dashboard
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
