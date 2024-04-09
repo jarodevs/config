@@ -674,3 +674,7 @@ I created in ./early-init.el
     :hook
     (prog-mode . fic-mode))
 #+end_src
+** Yaml mode
+#+begin_src emacs-lisp
+(use-package yaml-mode)
+#+end_src
