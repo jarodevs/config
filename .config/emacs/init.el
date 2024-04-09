@@ -5,7 +5,9 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(gruber-darker))
  '(custom-safe-themes
-   '("ee29cabce91f27eb1f9540ceb2bb69b4c509cd5d3bb3e6d8ad3a4ab799ebf8f7"
+   '("5bafdfa3e21f921abf9b9fd77e1e0ce032e62e3a6f8f13ec8ce7945727c654e9"
+     "2628939b8881388a9251b1bb71bc9dd7c6cffd5252104f9ef236ddfd8dbbf74a"
+     "ee29cabce91f27eb1f9540ceb2bb69b4c509cd5d3bb3e6d8ad3a4ab799ebf8f7"
      "e13beeb34b932f309fb2c360a04a460821ca99fe58f69e65557d6c1b10ba18c7"
      "e27c9668d7eddf75373fa6b07475ae2d6892185f07ebed037eedf783318761d7"
      "c171012778b7cf795ac215b91e1ecab8e3946738d03095397a790ed41e0a3386"
@@ -16,19 +18,19 @@
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
    '(impatient-mode simple-httpd ace-window dashboard page-break-lines
-                    page-break-line spacious-padding golden-ratio
-                    solaire-mode modus-themes org-agenda drag-stuff
-                    org-wild-notifier terminal-notifier
-                    gruber-darker-theme flycheck-rust rustic
-                    autothemer orderless cape corfu lsp-ui lsp-mode
-                    multi-vterm vterm ayu-theme doom-themes
-                    cyberpunk-theme eterm-256color forge yasnippet
-                    terraform-mode hcl-mode flycheck neotree
-                    emacs-neotree org-mode ivy-prescient
-                    exec-path-from-shell evil-magit magit
-                    counsel-projectile projectile general
-                    all-the-icons helpful ivy-rich counsel swiper ivy
-                    which-key doom-modeline evil))
+		    page-break-line spacious-padding golden-ratio
+		    solaire-mode modus-themes org-agenda drag-stuff
+		    org-wild-notifier terminal-notifier
+		    gruber-darker-theme flycheck-rust rustic
+		    autothemer orderless cape corfu lsp-ui lsp-mode
+		    multi-vterm vterm ayu-theme doom-themes
+		    cyberpunk-theme eterm-256color forge yasnippet
+		    terraform-mode hcl-mode flycheck neotree
+		    emacs-neotree org-mode ivy-prescient
+		    exec-path-from-shell evil-magit magit
+		    counsel-projectile projectile general
+		    all-the-icons helpful ivy-rich counsel swiper ivy
+		    which-key doom-modeline evil))
  '(safe-local-variable-values '((lsp-eslint-options "--config" "./functions/.eslintrc")))
  '(warning-suppress-log-types '((comp))))
 (custom-set-faces

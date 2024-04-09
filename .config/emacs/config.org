@@ -14,7 +14,8 @@
         display-line-numbers-type 'relative
         frame-resize-pixelwise t
         mac-option-modifier 'meta
-        lexical-binding t)
+        lexical-binding t
+        hl-line-mode t)
   (global-whitespace-mode 1)
   (global-display-line-numbers-mode 1)
   (column-number-mode 1)
@@ -229,11 +230,13 @@ I created in ./early-init.el
 
 ** Load theme
 #+begin_src emacs-lisp
-    ;;(use-package modus-themes)
-    ;;(load-theme 'modus-vivendi-tritanopia)
-    (use-package gruber-darker-theme
-      :straight (:host github :repo "rexim/gruber-darker-theme")
-      :config (load-theme 'gruber-darker))
+  ;;(use-package modus-themes)
+  ;;(load-theme 'modus-vivendi-tritanopia)
+  (use-package modus-themes)
+  (load-theme 'modus-vivendi-tinted)
+  ;;(use-package gruber-darker-theme
+  ;;  :straight (:host github :repo "rexim/gruber-darker-theme")
+  ;;  :config (load-theme 'gruber-darker))
 
 #+End_src
 ** Multiple vterm buffers
@@ -551,7 +554,18 @@ I created in ./early-init.el
 #+BEGIN_SRC emacs-lisp
   (use-package doom-modeline
     :ensure t
-    :init (doom-modeline-mode 1))
+    :init (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-major-mode-icon t
+  	doom-modeline-major-mode-color-icon t
+  	doom-modeline-buffer-state-icon t
+  	doom-modeline-buffer-modification-icon t
+  	doom-modeline-lsp-icon t
+  	doom-modeline-time-icon nil
+  	doom-modeline-time-analogue-clock t
+  	doom-modeline-time-clock-size 0.7
+  	doom-modeline-highlight-modified-buffer-name t
+          doom-modeline-project-detection 'auto))
 #+END_SRC 
 ** Treesitter
 #+BEGIN_SRC emacs-lisp
