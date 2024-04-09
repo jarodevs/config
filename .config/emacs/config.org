@@ -14,8 +14,7 @@
         display-line-numbers-type 'relative
         frame-resize-pixelwise t
         mac-option-modifier 'meta
-        lexical-binding t
-        hl-line-mode t)
+        lexical-binding t)
   (global-whitespace-mode 1)
   (global-display-line-numbers-mode 1)
   (column-number-mode 1)
@@ -23,6 +22,7 @@
   (tool-bar-mode 0)
   (menu-bar-mode 0)
   (scroll-bar-mode 0)
+  (global-hl-line-mode)
 #+End_SRC
 
 ** eshell command path
@@ -534,9 +534,8 @@ I created in ./early-init.el
 #+end_src
 ** IMenu side list
 #+begin_src emacs-lisp
-  (use-package wgrep
-      :config
-      (setq wgrep-auto-save-buffer t))
+  (use-package imenu-list
+    :bind ("C-'" . imenu-list-smart-toggle))
 #+end_src
 ** Move stuff around
 #+BEGIN_SRC emacs-lisp
