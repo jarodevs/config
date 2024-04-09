@@ -498,7 +498,7 @@ I created in ./early-init.el
 #+end_src
 ** Font
 #+begin_src emacs-lisp
-  (set-face-attribute 'default (selected-frame) :height 110)
+  (set-face-attribute 'default (selected-frame) :height 130)
 #+end_src
 ** Project
 #+begin_src emacs-lisp
@@ -654,4 +654,10 @@ I created in ./early-init.el
     :ensure t ; only need to install it, embark loads it after consult if found
     :hook
     (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+** Standout TODO comments
+#+begin_src emacs-lisp
+  (use-package fic-mode
+    :hook
+    (prog-mode . fic-mode))
 #+end_src
