@@ -73,4 +73,5 @@ alias start-ai-agent="cd ~/Gorgias/ai-agent && git pull origin main --rebase && 
 alias start-helpdesk="cd ~/Gorgias/helpdesk && git pull origin main --rebase && docker compose up --build -d && docker compose exec web flask tickets sync_tickets_in_elasticsearch && docker compose exec web flask customers sync_customers_in_es"
 alias start-help-center="cd ~/Gorgias/help-center && git pull origin main --rebase && docker compose up --build -d"
 alias start-helpdesk-web-app="cd ~/Gorgias/helpdesk-web-app && git pull origin main && nvm use && yarn install && launchctl start jarodevs.gorgias.helpdesk-web-app"
-alias start-gorgias-stack="start-ai-agent && start-helpdesk && start-help-center && start-helpdesk-web-app && launchctl start jarodevs.gorgias.ngrok"
+alias start-sendgrid-inbound="cd ~/Gorgias/sendgrid-inbound && git pull origin main && docker compose up --build -d"
+alias start-gorgias-stack="start-ai-agent && start-helpdesk && start-help-center && start-helpdesk-web-app && start-sendgrid-inbound &&launchctl start jarodevs.gorgias.ngrok"
