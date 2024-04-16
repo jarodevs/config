@@ -10,12 +10,10 @@
 ** Global settings
 #+BEGIN_SRC emacs-lisp
   (setq auth-sources '("~/.authinfo.gpg")
-        whitespace-style '(face tabs spaces trailing space-before-tab newline empty space-after-tab space-mark tab-mark)
         display-line-numbers-type 'relative
         frame-resize-pixelwise t
         mac-option-modifier 'meta
         lexical-binding t)
-  (global-whitespace-mode 1)
   (global-display-line-numbers-mode 1)
   (column-number-mode 1)
   (show-paren-mode 1)
@@ -161,7 +159,9 @@ I created in ./early-init.el
     :custom
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
   (use-package forge
-    :after magit)
+    :after magit
+    :config
+    (setq forge-add-default-bindings nil))
   (use-package emojify
     :ensure t)
   (use-package code-review
@@ -227,16 +227,25 @@ I created in ./early-init.el
     (persp-mode))
 #+end_src
 
-** Load theme
+** Themes
 #+begin_src emacs-lisp
-  ;;(use-package modus-themes)
-  ;;(load-theme 'modus-vivendi-tritanopia)
-  (use-package modus-themes)
-  (load-theme 'modus-vivendi-tinted)
-  ;;(use-package gruber-darker-theme
-  ;;  :straight (:host github :repo "rexim/gruber-darker-theme")
-  ;;  :config (load-theme 'gruber-darker))
+  (use-package modus-themes :ensure :defer)
+  (use-package apropospriate-theme :ensure :defer)
 
+  (use-package circadian
+    :ensure t
+    :config
+    (setq calendar-latitude 48.8)
+    (setq calendar-longitude 2.352222)
+    (setq circadian-themes '((:sunrise . apropospriate-light)
+(:sunrise . apropospriate-light)
+                             (:sunset  . modus-vivendi-tinted)))
+    (circadian-setup)
+    :hook
+    (circadian-after-load-theme-hook . (lambda (theme)
+                ;; Cursor
+                (set-default 'cursor-type 'box)
+                (set-cursor-color "#F52503"))))
 #+End_src
 ** Multiple vterm buffers
 #+begin_src emacs-lisp
@@ -254,7 +263,7 @@ I created in ./early-init.el
     	(evil-define-key 'insert vterm-mode-map (kbd "C-a")      #'vterm--self-insert)
     	(evil-define-key 'insert vterm-mode-map (kbd "C-v")      #'vterm--self-insert)
     	(evil-define-key 'insert vterm-mode-map (kbd "C-b")      #'vterm--self-insert)
-    	(evil-define-key 'insert vterm-mode-map (kbd "C-w")      #'vterm--self-insert)
+ (evil-define-key 'insert vterm-mode-map (kbd "C-w")      #'vterm--self-insert)
     	(evil-define-key 'insert vterm-mode-map (kbd "C-u")      #'vterm--self-insert)
     	(evil-define-key 'insert vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
     	(evil-define-key 'insert vterm-mode-map (kbd "C-n")      #'vterm--self-insert)
@@ -289,12 +298,14 @@ I created in ./early-init.el
 #+end_src
 ** LSP
  #+begin_src emacs-lisp
-   (add-to-list 'auto-mode-alist '("\\.[t]s?\\'" . typescript-ts-mode))
-   (add-to-list 'auto-mode-alist '("\\.[t]s[x]?\\'" . tsx-ts-mode))
+   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 
    (use-package typescript-ts-mode
      :config
      (setq typescript-ts-mode-indent-offset 4))
+
+   (use-package web-mode)
 
    (use-package eglot
      :ensure t
@@ -689,4 +700,44 @@ I created in ./early-init.el
   (use-package spacious-padding
     :config
     (spacious-padding-mode 1))
+#+end_src
+** Solaire mode
+#+begin_src emacs-lisp
+  (use-package solaire-mode
+    :config
+    (solaire-global-mode +1))
+#+end_src
+** Wgrep
+#+begin_src  emacs-lisp
+(use-package wgrep)
+#+end_src
+** Code folding
+#+begin_src emacs-lisp
+  (use-package origami
+    :config (global-origami-mode t))
+#+end_src 
+** Circadian
+#+begin_src emacs-lisp
+  ;; Install additinal themes from melpa
+  ;; make sure to use :defer keyword
+  (use-package apropospriate-theme :ensure :defer)
+  (use-package nord-theme :ensure :defer)
+
+  (use-package circadian
+    :ensure t
+    :config
+    (setq calendar-latitude 48.8)
+    (setq calendar-longitude 2.352222)
+    (setq circadian-themes '((:sunrise . )
+                             (:sunset  . )))
+    (circadian-setup))
+#+end_src
+** Highlight Indentation
+#+begin_src emacs-lisp
+  (use-package highlight-indent-guides
+    :ensure t
+    :hook (prog-mode . highlight-indent-guides-mode)
+    :config
+    (setq highlight-indent-guides-method 'bitmap
+  	highlight-indent-guides-responsive 'stack))
 #+end_src
