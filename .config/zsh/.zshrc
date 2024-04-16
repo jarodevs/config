@@ -34,8 +34,8 @@ load-nvmrc
 
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias kubectl="minikube kubectl --"
-alias yabai-echo-new-version="echo \"$(whoami) ALL=(root) NOPASSWD: sha256:$(shasum -a 256 $(which yabai) | cut -d " " -f 1) $(which yabai) --load-sa\" | sudo tee /private/etc/sudoers.d/yabai"
-alias yabai-update-in-file="sudo visudo -f /private/etc/sudoers.d/yabai"
+#alias yabai-echo-new-version="echo \"$(whoami) ALL=(root) NOPASSWD: sha256:$(shasum -a 256 $(which yabai) | cut -d " " -f 1) $(which yabai) --load-sa\" | sudo tee /private/etc/sudoers.d/yabai"
+#alias yabai-update-in-file="sudo visudo -f /private/etc/sudoers.d/yabai"
 alias start-ai-agent="cd ~/Gorgias/ai-agent && git pull origin main --rebase && npm install && launchctl start jarodevs.gorgias.ai-agent"
 alias start-helpdesk="cd ~/Gorgias/helpdesk && git pull origin main --rebase && docker compose up --build -d && docker compose exec web flask tickets sync_tickets_in_elasticsearch && docker compose exec web flask customers sync_customers_in_es"
 alias start-help-center="cd ~/Gorgias/help-center && git pull origin main --rebase && docker compose up --build -d"
@@ -88,3 +88,6 @@ plugins=(
 TYPEWRITTEN_PROMPT_LAYOUT="pure"
 
 source $ZSH/oh-my-zsh.sh
+
+export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/opt/homebrew/bin
+
