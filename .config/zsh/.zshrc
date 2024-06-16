@@ -1,5 +1,4 @@
-ZSH_THEME="typewritten/typewritten"
-source ~/bin
+#ZSH_THEME="typewritten/typewritten"
 
 export ZSH="$HOME/.config/.oh-my-zsh"
 export NVM_DIR="$HOME/.config/nvm"
@@ -32,16 +31,12 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
+alias ssh="kitty +kitten ssh"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias kubectl="minikube kubectl --"
-#alias yabai-echo-new-version="echo \"$(whoami) ALL=(root) NOPASSWD: sha256:$(shasum -a 256 $(which yabai) | cut -d " " -f 1) $(which yabai) --load-sa\" | sudo tee /private/etc/sudoers.d/yabai"
-#alias yabai-update-in-file="sudo visudo -f /private/etc/sudoers.d/yabai"
-alias start-ai-agent="cd ~/Gorgias/ai-agent && git pull origin main --rebase && npm install && launchctl start jarodevs.gorgias.ai-agent"
-alias start-helpdesk="cd ~/Gorgias/helpdesk && git pull origin main --rebase && docker compose up --build -d && docker compose exec web flask tickets sync_tickets_in_elasticsearch && docker compose exec web flask customers sync_customers_in_es"
-alias start-help-center="cd ~/Gorgias/help-center && git pull origin main --rebase && docker compose up --build -d"
-alias start-helpdesk-web-app="cd ~/Gorgias/helpdesk-web-app && git pull origin main && nvm use && yarn install && launchctl start jarodevs.gorgias.helpdesk-web-app"
-alias start-sendgrid-inbound="cd ~/Gorgias/sendgrid-inbound && git pull origin main && docker compose up --build -d"
-alias start-gorgias-stack="start-ai-agent && start-helpdesk && start-help-center && start-helpdesk-web-app && start-sendgrid-inbound &&launchctl start jarodevs.gorgias.ngrok"
+alias gcproxy-keru-production="cloud-sql-proxy -i keruproject-production:europe-west9:main --port 5432"
+alias gcproxy-gorgias-ai_agent-staging="cloud-sql-proxy -i gorgias-conversations-staging:us-central1:ai-agent-7d442106 --port 4933"
+alias gcproxy-gorgias-ai_agent-production="cloud-sql-proxy -i gorgias-conversations-prod:us-central1:ai-agent-ca38aecc --port 4932"
 
 # ENV
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
@@ -89,5 +84,15 @@ TYPEWRITTEN_PROMPT_LAYOUT="pure"
 
 source $ZSH/oh-my-zsh.sh
 
-export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/opt/homebrew/bin
+export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin
 
+GPG_TTY=$(tty)
+export GPG_TTY
+export EDITOR="emacsclient -c"
+export SOPS_GCP_KMS_IDS=projects/keruproject-dev/locations/global/keyRings/sops/cryptoKeys/df3e1271-7f0e-4211-abf3-416c596956b6
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jarodevs/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc'; fi
