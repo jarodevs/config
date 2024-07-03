@@ -1,5 +1,5 @@
 #ZSH_THEME="typewritten/typewritten"
-
+export XDG_CONFIG_HOME="/Users/jarodevs/.config"
 export ZSH="$HOME/.config/.oh-my-zsh"
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -88,7 +88,7 @@ export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew
 
 GPG_TTY=$(tty)
 export GPG_TTY
-export EDITOR="emacsclient -c"
+export EDITOR="emacsclient"
 export SOPS_GCP_KMS_IDS=projects/keruproject-dev/locations/global/keyRings/sops/cryptoKeys/df3e1271-7f0e-4211-abf3-416c596956b6
 
 # The next line updates PATH for the Google Cloud SDK.

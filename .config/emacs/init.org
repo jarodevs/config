@@ -1,0 +1,215 @@
+* Set exec path = PATH
+Exec path used by emacs needs to be configured to load path from shell
+#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+  (straight-use-package 'exec-path-from-shell)
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
+  (when (daemonp)
+    (exec-path-from-shell-initialize))
+#+end_src
+* Evil Mode
+#+begin_src emacs-lisp :tangle lisp/evil.el
+  (straight-use-package 'evil)
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (require 'evil)
+  (evil-mode 1)
+
+  (straight-use-package 'evil-collection)
+  (require 'evil-collection)
+  (evil-collection-init)
+#+end_src
+
+* Appearance
+Global ui tweaks
+#+begin_src emacs-lisp :tangle appearance.el
+  (setq-default indent-tabs-mode nil)
+  (global-display-line-numbers-mode 1)
+  (column-number-mode 1)
+  (show-paren-mode 1)
+  (tool-bar-mode 0)
+  (menu-bar-mode 0)
+  (scroll-bar-mode 0)
+#+end_src
+Font configuration
+#+begin_src emacs-lisp :tangle appearance.el
+  (set-face-attribute 'default nil :font "Ubuntu Mono-18")
+#+end_src
+
+Theme configuration
+#+begin_src emacs-lisp :tangle lisp/appearance.el
+  (straight-use-package 'modus-themes)
+  (straight-use-package 'dracula-theme)
+  (straight-use-package 'doom-themes)
+  (straight-use-package 'apropospriate-theme)
+  (straight-use-package 'gruber-darker-theme)
+
+  (setq custom-safe-theme t)
+  (require 'doom-themes)
+  (load-theme 'doom-nord t)
+#+end_src
+Distinguish write buffers from others
+#+begin_src emacs-lisp :tangl lisp/appearance.el
+  (straight-use-package 'solaire-mode)
+  (require 'solaire-mode)
+  (solaire-global-mode +1)
+#+end_src
+Dim non focused buffers
+#+begin_src emacs-lisp :tangl lisp/appearance.el
+  (straight-use-package 'dimmer)
+  (require 'dimmer)
+  (dimmer-configure-which-key)
+  (dimmer-mode 1)
+#+end_src
+Display time
+#+begin_src emacs-lisp :tangle lisp/minibuffer.el
+  (display-time)
+#+end_src
+
+* Minibuffer
+** Vertical completion
+Vertico Setup
+#+begin_src emacs-lisp :tangle lisp/minibuffer.el
+  (straight-use-package 'vertico)
+  (require 'vertico)
+  (vertico-mode)
+
+  ;; Setup indicator of current candidate
+  (defvar +vertico-current-arrow t)
+  (cl-defmethod vertico--format-candidate :around
+    (cand prefix suffix index start &context ((and +vertico-current-arrow
+						   (not (bound-and-true-p vertico-flat-mode)))
+					      (eql t)))
+    (setq cand (cl-call-next-method cand prefix suffix index start))
+    (if (bound-and-true-p vertico-grid-mode)
+	(if (= vertico--index index)
+	    (concat #("▶" 0 1 (face vertico-current)) cand)
+	  (concat #("_" 0 1 (display " ")) cand))
+      (if (= vertico--index index)
+	  (concat
+	   #(" " 0 1 (display (left-fringe right-triangle vertico-current)))
+	   cand)
+	cand)))
+
+#+end_src 
+
+Persists history
+#+begin_src emacs-lisp :tangle lisp/minibuffer.el
+  (straight-use-package 'savehist)
+  (require 'savehist)
+  (savehist-mode)
+#+end_src
+Candidate documentation annotation
+#+begin_src emacs-lisp :tangle lisp/minibuffer.el
+  (straight-use-package 'marginalia)
+  ;; Activate marginalia-mode right away.
+  (marginalia-mode)
+#+end_src
+** Search & Navigation commands
+Consult setup
+#+begin_src emacs-lisp :tangle lisp/minibuffer.el
+  (straight-use-package 'consult)
+#+end_src
+
+* Org mode
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (setq org-agenda-files '("~/Documents/org/"))
+  (evil-set-initial-state 'org-agenda-mode 'normal)
+#+end_src
+* Help utilities 
+#+begin_src emacs-lisp :tangle lisp/help-utilities.el
+  (straight-use-package 'which-key)
+  (require 'which-key)
+  (which-key-mode)
+
+  (straight-use-package 'helpful)
+  ;; Note that the built-in `describe-function' includes both functions
+  ;; and macros. `helpful-function' is functions only, so we provide
+  ;; `helpful-callable' as a drop-in replacement.
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-h x") #'helpful-command)
+  ;; Lookup the current symbol at point. C-c C-d is a common keybinding
+  ;; for this in lisp modes.
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+
+  ;; Look up *F*unctions (excludes macros).
+  ;;
+  ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+  ;; already links to the manual, if a function is referenced there.
+  (global-set-key (kbd "C-h F") #'helpful-function)
+#+end_src
+
+* Versionning
+Magit
+#+begin_src emacs-lisp :tangle lisp/magit.el
+  (straight-use-package 'magit)
+  (setq display-line-numbers-type 'visual
+	magit-section-disable-line-numbers nil
+	magit-process-finish-apply-ansi-colors t
+	magit-show-long-lines-warning nil)
+  (evil-define-key 'normal magit-section-mode-map (kbd "1") nil)
+  (evil-define-key 'normal magit-section-mode-map (kbd "2") nil)
+  (evil-define-key 'normal magit-section-mode-map (kbd "3") nil)
+  (evil-define-key 'normal magit-section-mode-map (kbd "4") nil)
+#+end_src
+* Coding
+** Code completion
+
+** Typescript mode
+Enable typescript-ts-mode on ts(x) files
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-ts-mode))
+#+end_src
+
+Prettier
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (straight-use-package 'prettier-js)
+  (add-hook 'typescript-ts-mode-hook 'prettier-js-mode)
+#+end_src
+
+Global typescript usefull variables
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (setq typescript-ts-mode-indent-offset 4)
+#+end_src
+* Package Manager - Straight.el 
+#+begin_src emacs-lisp :tangle lisp/straight.el
+  (setq package-enable-at-startup nil)
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+    (expand-file-name
+      "straight/repos/straight.el/bootstrap.el"
+    (or (bound-and-true-p straight-base-dir)
+      user-emacs-directory)))
+  (bootstrap-version 7))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+    (url-retrieve-synchronously
+      "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+      'silent 'inhibit-cookies)
+  (goto-char (point-max))
+  (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+end_src
+
+* Bootstrap
+#+begin_src emacs-lisp :tangle init.el
+  (setenv "LIBRARY_PATH"
+	(string-join
+	 '("/opt/homebrew/opt/gcc/lib/gcc/14"
+	   "/opt/homebrew/opt/libgccjit/lib/gcc/14"
+	   "/opt/homebrew/opt/gcc/lib/gcc/14/gcc/aarch64-apple-darwin23/14")
+	 ":"))
+  (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/help-utilities.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/magit.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/coding.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/miscellaneous.el" user-emacs-directory))
+#+end_src

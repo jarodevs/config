@@ -106,8 +106,8 @@ cmd - return : open -n /System/Applications/Utilities/Terminal.app
 cmd + shift - k     : yabai -m window --grid 1:1:0:0:1:1
 
 # make floating window fill left-half of screen
-#cmd + shift - h   : yabai -m window --grid 1:2:0:0:1:1
-#cmd + shift - l : yabai -m window --grid 1:2:1:0:1:1
+ctrl + cmd - h   : yabai -m window --grid 1:2:0:0:1:1
+ctrl + cmd - l : yabai -m window --grid 1:2:1:0:1:1
 
 # float / unfloat window and center on screen
 ctrl + cmd - c : yabai -m window --toggle float --grid 4:4:1:1:2:2
