@@ -29,7 +29,7 @@ Exec path used by emacs needs to be configured to load path from shell
 ** Global ui tweaks
 #+begin_src emacs-lisp :tangle appearance.el
   (setq-default indent-tabs-mode nil)
-  (global-display-line-numbers-mode 1)
+  (global-display-line-numbers-mode)
   (column-number-mode 1)
   (show-paren-mode 1)
   (tool-bar-mode 0)
