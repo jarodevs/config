@@ -166,6 +166,7 @@ Candidate documentation annotation
 Consult setup
 #+begin_src emacs-lisp :tangle lisp/minibuffer.el
   (straight-use-package 'consult)
+  (global-set-key (kbd "C-x b") #'consult-buffer)
 #+end_src
 
 ** Display time
