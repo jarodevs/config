@@ -220,7 +220,11 @@ Consult setup
 #+end_src
 * Coding
 ** Code completion
-
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (straight-use-package 'corfu)
+  (global-corfu-mode)
+  (setq corfu-auto t)
+#+end_src
 ** Typescript mode
 Enable typescript-ts-mode on ts(x) files
 #+begin_src emacs-lisp :tangle lisp/coding.el
