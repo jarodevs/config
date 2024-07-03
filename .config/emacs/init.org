@@ -38,7 +38,7 @@ Exec path used by emacs needs to be configured to load path from shell
 #+end_src
 ** Font configuration
 #+begin_src emacs-lisp :tangle appearance.el
-  (set-face-attribute 'default nil :font "Ubuntu Mono-18")
+  (set-face-attribute 'default nil :font "Ubuntu Mono" :height 200)
 #+end_src
 
 ** Theme configuration
@@ -219,6 +219,10 @@ Consult setup
   (evil-define-key 'normal magit-section-mode-map (kbd "4") nil)
 #+end_src
 * Coding
+** LSP Server - EGLOT
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+#+end_src
 ** Code completion
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (straight-use-package 'corfu)
