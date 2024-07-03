@@ -26,7 +26,7 @@ Exec path used by emacs needs to be configured to load path from shell
 #+end_src
 
 * Appearance
-Global ui tweaks
+** Global ui tweaks
 #+begin_src emacs-lisp :tangle appearance.el
   (setq-default indent-tabs-mode nil)
   (global-display-line-numbers-mode 1)
@@ -36,12 +36,12 @@ Global ui tweaks
   (menu-bar-mode 0)
   (scroll-bar-mode 0)
 #+end_src
-Font configuration
+** Font configuration
 #+begin_src emacs-lisp :tangle appearance.el
   (set-face-attribute 'default nil :font "Ubuntu Mono-18")
 #+end_src
 
-Theme configuration
+** Theme configuration
 #+begin_src emacs-lisp :tangle lisp/appearance.el
   (straight-use-package 'modus-themes)
   (straight-use-package 'dracula-theme)
@@ -53,24 +53,76 @@ Theme configuration
   (require 'doom-themes)
   (load-theme 'doom-nord t)
 #+end_src
-Distinguish write buffers from others
+** Distinguish write buffers from others
 #+begin_src emacs-lisp :tangl lisp/appearance.el
   (straight-use-package 'solaire-mode)
   (require 'solaire-mode)
   (solaire-global-mode +1)
 #+end_src
-Dim non focused buffers
+** Dim non focused buffers
 #+begin_src emacs-lisp :tangl lisp/appearance.el
   (straight-use-package 'dimmer)
   (require 'dimmer)
   (dimmer-configure-which-key)
   (dimmer-mode 1)
 #+end_src
-Display time
-#+begin_src emacs-lisp :tangle lisp/minibuffer.el
-  (display-time)
-#+end_src
+** Colorize compilation buffer
+There are two parts in this: 
+#+begin_src emacs-lisp :tangl lisp/appearance.el
+  ;; Stolen from (http://endlessparentheses.com/ansi-colors-in-the-compilation-buffer-output.html)
+  (require 'ansi-color)
+  (defun endless/colorize-compilation ()
+    "Colorize from `compilation-filter-start' to `point'."
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region
+       compilation-filter-start (point))))
 
+  (add-hook 'compilation-filter-hook
+            #'endless/colorize-compilation)
+#+end_src
+Next, filter out unwanted ANSI escape sequences, like the ones intended for ttys but Emacs doesn't know/care about:
+#+begin_src emacs-lisp :tangl lisp/appearance.el
+  ;; Stolen from (https://oleksandrmanzyuk.wordpress.com/2011/11/05/better-emacs-shell-part-i/)
+  (defun regexp-alternatives (regexps)
+    "Return the alternation of a list of regexps."
+    (mapconcat (lambda (regexp)
+                 (concat "\\(?:" regexp "\\)"))
+               regexps "\\|"))
+
+  (defvar non-sgr-control-sequence-regexp nil
+    "Regexp that matches non-SGR control sequences.")
+
+  (setq non-sgr-control-sequence-regexp
+        (regexp-alternatives
+         '(;; icon name escape sequences
+           "\033\\][0-2];.*?\007"
+           ;; non-SGR CSI escape sequences
+           "\033\\[\\??[0-9;]*[^0-9;m]"
+           ;; noop
+           "\012\033\\[2K\033\\[1F"
+           )))
+
+  (defun filter-non-sgr-control-sequences-in-region (begin end)
+    (save-excursion
+      (goto-char begin)
+      (while (re-search-forward
+              non-sgr-control-sequence-regexp end t)
+        (replace-match ""))))
+
+  (defun filter-non-sgr-control-sequences-in-output (ignored)
+    (let ((start-marker
+           (or comint-last-output-start
+               (point-min-marker)))
+          (end-marker
+           (process-mark
+            (get-buffer-process (current-buffer)))))
+      (filter-non-sgr-control-sequences-in-region
+       start-marker
+       end-marker)))
+
+  (add-hook 'comint-output-filter-functions
+            'filter-non-sgr-control-sequences-in-output)
+#+end_src
 * Minibuffer
 ** Vertical completion
 Vertico Setup
@@ -116,6 +168,10 @@ Consult setup
   (straight-use-package 'consult)
 #+end_src
 
+** Display time
+#+begin_src emacs-lisp :tangle lisp/minibuffer.el
+  (display-time)
+#+end_src
 * Org mode
 #+begin_src emacs-lisp :tangle lisp/org.el
   (add-hook 'org-mode-hook 'org-indent-mode)
@@ -149,7 +205,7 @@ Consult setup
 #+end_src
 
 * Versionning
-Magit
+** Magit
 #+begin_src emacs-lisp :tangle lisp/magit.el
   (straight-use-package 'magit)
   (setq display-line-numbers-type 'visual
