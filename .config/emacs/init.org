@@ -1,4 +1,9 @@
-* Set exec path = PATH
+* Miscallaneous
+** Allow pinentry prompt for gpg passphrases
+#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+  (setq epa-pinentry-mode 'loopback)
+#+end_src
+** Set exec path = PATH
 Exec path used by emacs needs to be configured to load path from shell
 #+begin_src emacs-lisp :tangle lisp/miscellaneous.el
   (straight-use-package 'exec-path-from-shell)
