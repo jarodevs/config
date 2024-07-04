@@ -32,7 +32,7 @@ Exec path used by emacs needs to be configured to load path from shell
 
 * Appearance
 ** Global ui tweaks
-#+begin_src emacs-lisp :tangle appearance.el
+#+begin_src emacs-lisp :tangle lisp/appearance.el
   (setq-default indent-tabs-mode nil)
   (global-display-line-numbers-mode)
   (column-number-mode 1)
@@ -42,7 +42,7 @@ Exec path used by emacs needs to be configured to load path from shell
   (scroll-bar-mode 0)
 #+end_src
 ** Font configuration
-#+begin_src emacs-lisp :tangle appearance.el
+#+begin_src emacs-lisp :tangle lisp/appearance.el
   (set-face-attribute 'default nil :font "Ubuntu Mono" :height 160)
 #+end_src
 
