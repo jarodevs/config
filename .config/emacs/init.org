@@ -332,6 +332,13 @@ Candidate documentation annotation
   (evil-define-key 'normal magit-section-mode-map (kbd "3") nil)
   (evil-define-key 'normal magit-section-mode-map (kbd "4") nil)
 #+end_src
+* Project
+#+begin_src emacs-lisp :tangle lisp/project.el
+  (setq project-switch-commands '(
+    (magit-project-status "Magit" "m")
+    (projet-find-file "Find" "f")
+    (project-dired "Dired" "d")))
+#+end_src
 * Coding
 ** LSP Server - EGLOT
 #+begin_src emacs-lisp :tangle lisp/coding.el
