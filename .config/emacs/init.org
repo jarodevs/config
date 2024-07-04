@@ -174,6 +174,7 @@ Candidate documentation annotation
   (global-set-key (kbd "C-x b") #'consult-buffer)
 #+end_src
 *** Orderless
+**** Base configuration
 #+begin_src emacs-lisp :tangle lisp/minibuffer.el
   (straight-use-package 'orderless)
   (require 'orderless)
@@ -242,6 +243,44 @@ Candidate documentation annotation
         orderless-component-separator #'orderless-escapable-split-on-space ;; allow escaping space with backslash!
         orderless-style-dispatchers (list #'+orderless-consult-dispatch
                                           #'orderless-affix-dispatch))
+#+end_src
+
+**** Use Orderless as pattern compiler for consult-grep/ripgrep/find 
+#+begin_src emacs-lisp :tangle lisp/minibuffer.el (straight-use-package 'orderless)
+  (defun consult--orderless-regexp-compiler (input type &rest _config)
+    (setq input (orderless-pattern-compiler input))
+    (cons
+     (mapcar (lambda (r) (consult--convert-regexp r type)) input)
+     (lambda (str) (orderless--highlight input t str))))
+
+  ;; OPTION 1: Activate globally for all consult-grep/ripgrep/find/...
+  ;; (setq consult--regexp-compiler #'consult--orderless-regexp-compiler)
+
+  ;; OPTION 2: Activate only for some commands, e.g., consult-ripgrep!
+  (defun consult--with-orderless (&rest args)
+    (minibuffer-with-setup-hook
+        (lambda ()
+          (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
+      (apply args)))
+  (advice-add #'consult-ripgrep :around #'consult--with-orderless)
+#+end_src
+** Embark
+#+begin_src emacs-lisp :tangle lisp/minibuffer.el
+  (straight-use-package 'embark)
+  (require 'embark)
+  (global-set-key (kbd "C-;") #'embark-act)
+  (global-set-key (kbd "C-'") #'embark-dwim)
+  (global-set-key (kbd "C-h B") #'embark-bindings)
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
+  ;; Consult users will also want the embark-consult package.
+  (straight-use-package 'embark-consult)
+  (require 'embark-consult)
+  (add-hook 'embark-collect-mode 'consult-preview-at-point-mode)
 #+end_src
 
 ** Display time
