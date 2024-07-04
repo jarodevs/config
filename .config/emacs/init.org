@@ -12,6 +12,11 @@ Exec path used by emacs needs to be configured to load path from shell
   (when (daemonp)
     (exec-path-from-shell-initialize))
 #+end_src
+** Easily switch windows
+#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+  (straight-use-package 'ace-window)
+  (global-set-key (kbd "M-o") #'ace-window)
+#+end_src
 * Evil Mode
 #+begin_src emacs-lisp :tangle lisp/evil.el
   (straight-use-package 'evil)
@@ -38,7 +43,7 @@ Exec path used by emacs needs to be configured to load path from shell
 #+end_src
 ** Font configuration
 #+begin_src emacs-lisp :tangle appearance.el
-  (set-face-attribute 'default nil :font "Ubuntu Mono" :height 200)
+  (set-face-attribute 'default nil :font "Ubuntu Mono" :height 160)
 #+end_src
 
 ** Theme configuration
