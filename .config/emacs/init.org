@@ -59,13 +59,13 @@ Exec path used by emacs needs to be configured to load path from shell
   (load-theme 'doom-ayu-dark t)
 #+end_src
 ** Distinguish write buffers from others
-#+begin_src emacs-lisp :tangl lisp/appearance.el
+#+begin_src emacs-lisp :tangle lisp/appearance.el
   (straight-use-package 'solaire-mode)
   (require 'solaire-mode)
   (solaire-global-mode +1)
 #+end_src
 ** Dim non focused buffers
-#+begin_src emacs-lisp :tangl lisp/appearance.el
+#+begin_src emacs-lisp :tangle lisp/appearance.el
   (straight-use-package 'dimmer)
   (require 'dimmer)
   (dimmer-configure-which-key)
@@ -73,7 +73,7 @@ Exec path used by emacs needs to be configured to load path from shell
 #+end_src
 ** Colorize compilation buffer
 There are two parts in this: 
-#+begin_src emacs-lisp :tangl lisp/appearance.el
+#+begin_src emacs-lisp :tangle lisp/appearance.el
   ;; Stolen from (http://endlessparentheses.com/ansi-colors-in-the-compilation-buffer-output.html)
   (require 'ansi-color)
   (defun endless/colorize-compilation ()
@@ -86,7 +86,7 @@ There are two parts in this:
             #'endless/colorize-compilation)
 #+end_src
 Next, filter out unwanted ANSI escape sequences, like the ones intended for ttys but Emacs doesn't know/care about:
-#+begin_src emacs-lisp :tangl lisp/appearance.el
+#+begin_src emacs-lisp :tangle lisp/appearance.el
   ;; Stolen from (https://oleksandrmanzyuk.wordpress.com/2011/11/05/better-emacs-shell-part-i/)
   (defun regexp-alternatives (regexps)
     "Return the alternation of a list of regexps."
