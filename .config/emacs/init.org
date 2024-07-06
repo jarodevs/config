@@ -336,7 +336,7 @@ Candidate documentation annotation
 #+begin_src emacs-lisp :tangle lisp/project.el
   (setq project-switch-commands '(
     (magit-project-status "Magit" "m")
-    (projet-find-file "Find" "f")
+    (project-find-file "Find" "f")
     (project-dired "Dired" "d")))
 #+end_src
 * Coding
@@ -349,6 +349,13 @@ Candidate documentation annotation
   (straight-use-package 'corfu)
   (global-corfu-mode)
   (setq corfu-auto t)
+#+end_src
+Kind icons
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (straight-use-package 'kind-icon)
+  (with-eval-after-load 'corfu
+    (require 'kind-icon)
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 ** Typescript mode
 Enable typescript-ts-mode on ts(x) files
@@ -401,6 +408,7 @@ Global typescript usefull variables
   (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/help-utilities.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/magit.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/project.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/coding.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/miscellaneous.el" user-emacs-directory))
 #+end_src
