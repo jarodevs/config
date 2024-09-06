@@ -17,6 +17,11 @@ Exec path used by emacs needs to be configured to load path from shell
   (straight-use-package 'ace-window)
   (global-set-key (kbd "M-o") #'ace-window)
 #+end_src
+** Wgrep
+#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+  (straight-use-package 'wgrep)
+  (require 'wgrep)
+#+end_src
 * Evil Mode
 #+begin_src emacs-lisp :tangle lisp/evil.el
   (straight-use-package 'evil)
@@ -43,7 +48,7 @@ Exec path used by emacs needs to be configured to load path from shell
 #+end_src
 ** Font configuration
 #+begin_src emacs-lisp :tangle lisp/appearance.el
-  (set-face-attribute 'default nil :font "Ubuntu Mono" :height 160)
+  (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Mono" :height 150)
 #+end_src
 
 ** Theme configuration
@@ -171,7 +176,108 @@ Candidate documentation annotation
 *** Consult setup
 #+begin_src emacs-lisp :tangle lisp/minibuffer.el
   (straight-use-package 'consult)
-  (global-set-key (kbd "C-x b") #'consult-buffer)
+  ;; Load consult package
+  (require 'consult)
+
+  ;; Replace bindings
+  (global-set-key (kbd "C-c M-x") #'consult-mode-command)
+  (global-set-key (kbd "C-c h") #'consult-history)
+  (global-set-key (kbd "C-c k") #'consult-kmacro)
+  (global-set-key (kbd "C-c m") #'consult-man)
+  (global-set-key (kbd "C-c i") #'consult-info)
+  (global-set-key [remap Info-search] #'consult-info)
+
+  (global-set-key (kbd "C-x M-:") #'consult-complex-command)     ;; orig. repeat-complex-command
+  (global-set-key (kbd "C-x b") #'consult-buffer)                ;; orig. switch-to-buffer
+  (global-set-key (kbd "C-x 4 b") #'consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+  (global-set-key (kbd "C-x 5 b") #'consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+  (global-set-key (kbd "C-x t b") #'consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+  (global-set-key (kbd "C-x r b") #'consult-bookmark)            ;; orig. bookmark-jump
+  (global-set-key (kbd "C-x p b") #'consult-project-buffer)      ;; orig. project-switch-to-buffer
+
+  ;; Custom M-# bindings for fast register access
+  (global-set-key (kbd "M-#") #'consult-register-load)
+  (global-set-key (kbd "M-'") #'consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+  (global-set-key (kbd "C-M-#") #'consult-register)
+
+  ;; Other custom bindings
+  (global-set-key (kbd "M-y") #'consult-yank-pop)                ;; orig. yank-pop
+
+  ;; M-g bindings in `goto-map'
+  (global-set-key (kbd "M-g e") #'consult-compile-error)
+  (global-set-key (kbd "M-g f") #'consult-flymake)               ;; Alternative: consult-flycheck
+  (global-set-key (kbd "M-g g") #'consult-goto-line)             ;; orig. goto-line
+  (global-set-key (kbd "M-g M-g") #'consult-goto-line)           ;; orig. goto-line
+  (global-set-key (kbd "M-g o") #'consult-outline)               ;; Alternative: consult-org-heading
+  (global-set-key (kbd "M-g m") #'consult-mark)
+  (global-set-key (kbd "M-g k") #'consult-global-mark)
+  (global-set-key (kbd "M-g i") #'consult-imenu)
+  (global-set-key (kbd "M-g I") #'consult-imenu-multi)
+
+  ;; M-s bindings in `search-map'
+  (global-set-key (kbd "M-s d") #'consult-find)                  ;; Alternative: consult-fd
+  (global-set-key (kbd "M-s c") #'consult-locate)
+  (global-set-key (kbd "M-s g") #'consult-grep)
+  (global-set-key (kbd "M-s G") #'consult-git-grep)
+  (global-set-key (kbd "M-s r") #'consult-ripgrep)
+  (global-set-key (kbd "M-s l") #'consult-line)
+  (global-set-key (kbd "M-s L") #'consult-line-multi)
+  (global-set-key (kbd "M-s k") #'consult-keep-lines)
+  (global-set-key (kbd "M-s u") #'consult-focus-lines)
+
+  ;; Isearch integration
+  (global-set-key (kbd "M-s e") #'consult-isearch-history)
+  (define-key isearch-mode-map (kbd "M-e") #'consult-isearch-history)  ;; orig. isearch-edit-string
+  (define-key isearch-mode-map (kbd "M-s e") #'consult-isearch-history) ;; orig. isearch-edit-string
+  (define-key isearch-mode-map (kbd "M-s l") #'consult-line)            ;; needed by consult-line to detect isearch
+  (define-key isearch-mode-map (kbd "M-s L") #'consult-line-multi)      ;; needed by consult-line to detect isearch
+
+  ;; Minibuffer history
+  (define-key minibuffer-local-map (kbd "M-s") #'consult-history)       ;; orig. next-matching-history-element
+  (define-key minibuffer-local-map (kbd "M-r") #'consult-history)       ;; orig. previous-matching-history-element
+
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  (add-hook 'completion-list-mode-hook #'consult-preview-at-point-mode)
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key "M-.")
+  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key "M-."
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; "C-+"
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
 #+end_src
 *** Orderless
 **** Base configuration
@@ -293,6 +399,41 @@ Candidate documentation annotation
   (setq org-agenda-files '("~/Documents/org/"))
   (evil-set-initial-state 'org-agenda-mode 'normal)
 #+end_src
+** Modern org mode
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (straight-use-package 'org-modern)
+  (require 'org-modern)
+
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers t
+   org-pretty-entities t
+
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "◀── now ─────────────────────────────────────────────────")
+
+  ;; Ellipsis styling
+  (setq org-ellipsis "…")
+  (set-face-attribute 'org-ellipsis nil :inherit 'default :box nil)
+
+  (add-hook 'org-mode-hook #'org-modern-mode)
+  (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+#+end_src
+
 * Help utilities 
 #+begin_src emacs-lisp :tangle lisp/help-utilities.el
   (straight-use-package 'which-key)
@@ -324,13 +465,19 @@ Candidate documentation annotation
 #+begin_src emacs-lisp :tangle lisp/magit.el
   (straight-use-package 'magit)
   (setq display-line-numbers-type 'visual
-	magit-section-disable-line-numbers nil
-	magit-process-finish-apply-ansi-colors t
-	magit-show-long-lines-warning nil)
+        magit-section-disable-line-numbers nil
+        magit-process-finish-apply-ansi-colors t
+        magit-show-long-lines-warning nil)
   (evil-define-key 'normal magit-section-mode-map (kbd "1") nil)
   (evil-define-key 'normal magit-section-mode-map (kbd "2") nil)
   (evil-define-key 'normal magit-section-mode-map (kbd "3") nil)
   (evil-define-key 'normal magit-section-mode-map (kbd "4") nil)
+#+end_src
+** Git share code
+#+begin_src emacs-lisp :tangle lisp/magit.el
+  (straight-use-package
+   '(git-share :type git :host github :repo "mgmarlow/git-share"))
+  (require 'git-share)
 #+end_src
 * Project
 #+begin_src emacs-lisp :tangle lisp/project.el
@@ -340,9 +487,16 @@ Candidate documentation annotation
     (project-dired "Dired" "d")))
 #+end_src
 * Coding
+** Code folding
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (add-hook 'terraform-mode-hook #'outline-minor-mode)
+#+end_src
+
 ** LSP Server - EGLOT
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+  (setq eglot-confirm-server-initiated-edits nil)
+  (global-set-key (kbd "M-s f") #'eglot-code-action-quickfix)
 #+end_src
 ** Code completion
 #+begin_src emacs-lisp :tangle lisp/coding.el
@@ -360,18 +514,40 @@ Kind icons
 ** Typescript mode
 Enable typescript-ts-mode on ts(x) files
 #+begin_src emacs-lisp :tangle lisp/coding.el
-  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 #+end_src
 
 Prettier
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (straight-use-package 'prettier-js)
   (add-hook 'typescript-ts-mode-hook 'prettier-js-mode)
+  (add-hook 'tx-ts-mode-hook 'prettier-js-mode)
 #+end_src
 
 Global typescript usefull variables
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (setq typescript-ts-mode-indent-offset 4)
+  (add-hook 'typescript-ts-mode-hook 'electric-pair-mode)
+#+end_src
+** Terraform mode
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (straight-use-package 'terraform-mode)
+  (require 'terraform-mode)
+#+end_src
+* Text editing
+** Markdown
+#+begin_src emacs-lisp :tangle lisp/text-editing.el
+  (straight-use-package 'markdown-mode)
+  (require 'markdown-mode)
+#+end_src
+* Docker
+Manage docker containers from emacs
+#+begin_src emacs-lisp :tangle lisp/docker.el
+  (straight-use-package 'docker)
+  (require 'docker)
+  (global-set-key (kbd "C-c d") #'docker)
+  (setq docker-compose-command "docker compose")
 #+end_src
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el

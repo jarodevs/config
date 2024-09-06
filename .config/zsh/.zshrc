@@ -37,6 +37,7 @@ alias kubectl="minikube kubectl --"
 alias gcproxy-keru-production="cloud-sql-proxy -i keruproject-production:europe-west9:main --port 5432"
 alias gcproxy-gorgias-ai_agent-staging="cloud-sql-proxy -i gorgias-conversations-staging:us-central1:ai-agent-7d442106 --port 4933"
 alias gcproxy-gorgias-ai_agent-production="cloud-sql-proxy -i gorgias-conversations-prod:us-central1:ai-agent-ca38aecc --port 4932"
+alias gcproxy-gorgias-help_center-production="cloud-sql-proxy -i gorgias-help-center-production:us-central1:help-center-d227c56a --port 4934"
 
 # ENV
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
@@ -96,3 +97,6 @@ if [ -f '/Users/jarodevs/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jarode
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc'; fi
+
+eval "$(starship init zsh)"
+starship preset nerd-font-symbols -o ~/.config/starship.toml
