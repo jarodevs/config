@@ -549,34 +549,40 @@ Manage docker containers from emacs
   (global-set-key (kbd "C-c d") #'docker)
   (setq docker-compose-command "docker compose")
 #+end_src
+* VTerm
+#+begin_src emacs-lisp :tangle lisp/vterm.el
+  (straight-use-package 'vterm)
+  (require 'vterm)
+  #+end_src
+
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
   (setq package-enable-at-startup nil)
   (defvar bootstrap-version)
   (let ((bootstrap-file
-    (expand-file-name
-      "straight/repos/straight.el/bootstrap.el"
-    (or (bound-and-true-p straight-base-dir)
-      user-emacs-directory)))
-  (bootstrap-version 7))
+         (expand-file-name
+          "straight/repos/straight.el/bootstrap.el"
+          (or (bound-and-true-p straight-base-dir)
+              user-emacs-directory)))
+        (bootstrap-version 7))
     (unless (file-exists-p bootstrap-file)
       (with-current-buffer
-    (url-retrieve-synchronously
-      "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-      'silent 'inhibit-cookies)
-  (goto-char (point-max))
-  (eval-print-last-sexp)))
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 #+end_src
 
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
   (setenv "LIBRARY_PATH"
-	(string-join
-	 '("/opt/homebrew/opt/gcc/lib/gcc/14"
-	   "/opt/homebrew/opt/libgccjit/lib/gcc/14"
-	   "/opt/homebrew/opt/gcc/lib/gcc/14/gcc/aarch64-apple-darwin23/14")
-	 ":"))
+          (string-join
+           '("/opt/homebrew/opt/gcc/lib/gcc/14"
+             "/opt/homebrew/opt/libgccjit/lib/gcc/14"
+             "/opt/homebrew/opt/gcc/lib/gcc/14/gcc/aarch64-apple-darwin23/14")
+           ":"))
   (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
@@ -587,4 +593,6 @@ Manage docker containers from emacs
   (load-file (expand-file-name "lisp/project.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/coding.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/miscellaneous.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/docker.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/vterm.el" user-emacs-directory))
 #+end_src
