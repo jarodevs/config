@@ -550,10 +550,12 @@ Manage docker containers from emacs
   (setq docker-compose-command "docker compose")
 #+end_src
 * VTerm
+Multi Vterm management
 #+begin_src emacs-lisp :tangle lisp/vterm.el
-  (straight-use-package 'vterm)
-  (require 'vterm)
+  (straight-use-package 'multi-vterm)
+  (require 'multi-vterm)
   #+end_src
+
 
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
