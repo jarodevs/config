@@ -48,7 +48,7 @@ Exec path used by emacs needs to be configured to load path from shell
 #+end_src
 ** Font configuration
 #+begin_src emacs-lisp :tangle lisp/appearance.el
-  (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Mono" :height 150)
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font Mono-15"))
 #+end_src
 
 ** Theme configuration
@@ -370,70 +370,90 @@ Candidate documentation annotation
       (apply args)))
   (advice-add #'consult-ripgrep :around #'consult--with-orderless)
 #+end_src
-** Embark
-#+begin_src emacs-lisp :tangle lisp/minibuffer.el
-  (straight-use-package 'embark)
-  (require 'embark)
-  (global-set-key (kbd "C-;") #'embark-act)
-  (global-set-key (kbd "C-'") #'embark-dwim)
-  (global-set-key (kbd "C-h B") #'embark-bindings)
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none))))
-  ;; Consult users will also want the embark-consult package.
-  (straight-use-package 'embark-consult)
-  (require 'embark-consult)
-  (add-hook 'embark-collect-mode 'consult-preview-at-point-mode)
-#+end_src
-
 ** Display time
 #+begin_src emacs-lisp :tangle lisp/minibuffer.el
   (display-time)
 #+end_src
+* Embark
+#+begin_src emacs-lisp :tangle lisp/embark.el
+  (straight-use-package 'embark)
+
+  ;; Key bindings for Embark
+  (global-set-key (kbd "C-.") #'embark-act)         ;; pick some comfortable binding
+  (global-set-key (kbd "C-;") #'embark-dwim)        ;; good alternative: M-.
+  (global-set-key (kbd "C-h B") #'embark-bindings)  ;; alternative for `describe-bindings'
+
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  ;; Show the Embark target at point via Eldoc. 
+  ;; Uncomment the following lines if you want to use Eldoc integration:
+  ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
+
+  ;; Install embark-consult package
+  (straight-use-package 'embark-consult)
+
+  ;; Enable consult-preview-at-point-mode in embark-collect-mode
+  (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)
+#+end_src
+
 * Org mode
+** Global configurations
 #+begin_src emacs-lisp :tangle lisp/org.el
+  (straight-use-package 'org)
+  (require 'org)
   (add-hook 'org-mode-hook 'org-indent-mode)
   (setq org-agenda-files '("~/Documents/org/"))
   (evil-set-initial-state 'org-agenda-mode 'normal)
+
+  (straight-use-package 'org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+  (straight-use-package 'org-fancy-priorities)
+  (add-hook 'org-mode-hook 'org-fancy-priorities-mode)
+  (setq org-fancy-priorities-list '("🅰" "🅱" "🅲" "🅳" "🅴"))
+  ;; Diminishing hides the mode from the modeline
+  (when (featurep 'diminish)
+    (diminish 'org-fancy-priorities-mode))
+
+  (add-hook 'org-mode-hook
+    (lambda ()
+      (push '("[-]" .  "󰱑") prettify-symbols-alist)
+      (push '("[ ]" .  "") prettify-symbols-alist)
+      (push '("[X]" . "" ) prettify-symbols-alist)
+      (prettify-symbols-mode)))
+
+  (setq org-todo-keywords
+        '((sequence "TODO" "PROGR" "DONE")))
+  (setq org-todo-keyword-faces
+        '(("TODO" . org-warning)   
+          ("PROGR" . "blue") 
+          ("DONE" . "green")))
+
+  (add-hook 'org-after-todo-state-change-hook
+            (lambda ()
+              (when (string= (org-get-todo-state) "PROGR")
+                (unless (org-clocking-p)
+                  (org-clock-in)))))
+
 #+end_src
-** Modern org mode
+** Clocking in work time
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (straight-use-package 'org-modern)
-  (require 'org-modern)
-
-  (setq
-   ;; Edit settings
-   org-auto-align-tags nil
-   org-tags-column 0
-   org-catch-invisible-edits 'show-and-error
-   org-special-ctrl-a/e t
-   org-insert-heading-respect-content t
-
-   ;; Org styling, hide markup etc.
-   org-hide-emphasis-markers t
-   org-pretty-entities t
-
-   ;; Agenda styling
-   org-agenda-tags-column 0
-   org-agenda-block-separator ?─
-   org-agenda-time-grid
-   '((daily today require-timed)
-     (800 1000 1200 1400 1600 1800 2000)
-     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-   org-agenda-current-time-string
-   "◀── now ─────────────────────────────────────────────────")
-
-  ;; Ellipsis styling
-  (setq org-ellipsis "…")
-  (set-face-attribute 'org-ellipsis nil :inherit 'default :box nil)
-
-  (add-hook 'org-mode-hook #'org-modern-mode)
-  (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+  ;;(setq org-clock-persist 'history)
+  ;;(org-clock-persistence-insinuate)
 #+end_src
-
+* Calendar 
+#+begin_src emacs-lisp :tangle lisp/calendar.el
+  (straight-use-package 'org-timeblock)
+  (require 'org-timeblock)
+#+end_src
 * Help utilities 
 #+begin_src emacs-lisp :tangle lisp/help-utilities.el
   (straight-use-package 'which-key)
@@ -535,6 +555,14 @@ Global typescript usefull variables
   (straight-use-package 'terraform-mode)
   (require 'terraform-mode)
 #+end_src
+** Snippets
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (straight-use-package 'yasnippet)
+  (require 'yasnippet)
+  (yas-global-mode 1)
+  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
+#+end_src
+
 * Text editing
 ** Markdown
 #+begin_src emacs-lisp :tangle lisp/text-editing.el
@@ -556,7 +584,6 @@ Multi Vterm management
   (require 'multi-vterm)
   #+end_src
 
-
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
   (setq package-enable-at-startup nil)
@@ -577,6 +604,251 @@ Multi Vterm management
     (load bootstrap-file nil 'nomessage))
 #+end_src
 
+* Custom commands
+** Starting Gorgias docker containers
+#+begin_src emacs-lisp :tangle lisp/custom-commands.el
+  (defun run-docker-compose (command success-message)
+    "Helper function to run docker-compose commands asynchronously and show a success message."
+    (start-process-shell-command
+     "docker-compose-process"  ;; Name of the process
+     nil                        ;; No associated buffer
+     command)                   ;; Command to run
+    (message success-message))  ;; Message to show when done
+
+  (defun start-ai-agent ()
+    "Run docker-compose up for the ai-agent service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/ai-agent/docker-compose.yml up -d"
+                        "AI Agent service is starting..."))
+
+  (defun stop-ai-agent ()
+    "Run docker-compose down for the ai-agent service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/ai-agent/docker-compose.yml stop"
+                        "AI Agent service is stopping..."))
+
+  (defun start-helpdesk ()
+    "Run docker-compose up for the helpdesk service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/helpdesk/docker-compose.yml up -d"
+                        "Helpdesk service is starting..."))
+
+  (defun stop-helpdesk ()
+    "Run docker-compose down for the helpdesk service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/helpdesk/docker-compose.yml stop"
+                        "Helpdesk service is stopping..."))
+
+  (defun start-chat ()
+    "Run docker-compose up for the gorgias chat service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/gorgias-chat/docker-compose.yml up -d"
+                        "Gorgias chat service is starting..."))
+
+  (defun stop-chat ()
+    "Run docker-compose down for the gorgias chat service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/gorgias-chat/docker-compose.yml stop"
+                        "Gorgias chat service is stopping..."))
+
+  (defun start-help-center ()
+    "Run docker-compose up for the help center service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/help-center/docker-compose.yml up -d"
+                        "Help Center service is starting..."))
+
+  (defun stop-help-center ()
+    "Run docker-compose down for the help center service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/help-center/docker-compose.yml stop"
+                        "Help Center service is stopping..."))
+
+  (defun start-workflows ()
+    "Run docker-compose up for the workflows service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/workflows/docker-compose.yml up -d"
+                        "Workflows service is starting..."))
+
+  (defun stop-workflows ()
+    "Run docker-compose down for the workflows service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/workflows/docker-compose.yml stop"
+                        "Workflows service is stopping..."))
+
+  (defun start-incoming ()
+    "Run docker-compose up for the incoming service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/gorgias-incoming/docker-compose.yml up -d"
+                        "Incoming service is starting..."))
+
+  (defun stop-incoming ()
+    "Run docker-compose down for the incoming service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/gorgias-incoming/docker-compose.yml stop"
+                        "Incoming service is stopping..."))
+
+  (defun start-sendgrid-inbound ()
+    "Run docker-compose up for the sendgrid inbound service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/sendgrid-inbound/docker-compose.yml up -d"
+                        "Sendgrid Inbound service is starting..."))
+
+  (defun stop-sendgrid-inbound ()
+    "Run docker-compose down for the sendgrid inbound service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/sendgrid-inbound/docker-compose.yml stop"
+                        "Sendgrid Inbound service is stopping..."))
+
+  (defun start-account-manager ()
+    "Run docker-compose up for the account manager service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/gorgias-account-manager/docker-compose.yml up -d"
+                        "Account Manager service is starting..."))
+
+  (defun stop-account-manager ()
+    "Run docker-compose down for the account manager service."
+    (interactive)
+    (run-docker-compose "docker compose -f ~/gorgias/gorgias-account-manager/docker-compose.yml stop"
+                        "Account Manager service is stopping..."))
+#+end_src
+** Start ngrok 
+#+begin_src emacs-lisp :tangle lisp/custom-commands.el
+  (defvar ngrok-ai-agent-process nil "Process handle for ai-agent ngrok.")
+  (defvar ngrok-helpdesk-process nil "Process handle for helpdesk ngrok.")
+  (defvar ngrok-chat-process nil "Process handle for chat ngrok.")
+
+  (defun start-ngrok-ai-agent ()
+    "Start ngrok for the ai-agent."
+    (interactive)
+    (setq ngrok-ai-agent-process
+          (start-process-shell-command
+           "ngrok-ai-agent-process"  ;; Name of the process
+           nil                       ;; No associated buffer
+           "cd ~/gorgias/ai-agent && ngrok start --all --config aria-ngrok.yml --log=stdout > /tmp/ngrok-ai-agent.log"))
+    (message "Ngrok for ai-agent is starting... Logs available -> /tmp/ngrok-ai-agent.log"))
+
+  (defun stop-ngrok-ai-agent ()
+    "Stop ngrok for the ai-agent."
+    (interactive)
+    (when (process-live-p ngrok-ai-agent-process)
+      (kill-process ngrok-ai-agent-process)
+      (setq ngrok-ai-agent-process nil)
+      (message "Ngrok for ai-agent is stopping... Logs available -> /tmp/ngrok-ai-agent.log")))
+
+  (defun start-ngrok-helpdesk ()
+    "Start ngrok for the helpdesk."
+    (interactive)
+    (setq ngrok-helpdesk-process
+          (start-process-shell-command
+           "ngrok-helpdesk-process"  ;; Name of the process
+           nil                       ;; No associated buffer
+           "cd ~/gorgias/helpdesk && ngrok start --all --config aria-ngrok.yml --log=stdout > /tmp/ngrok-helpdesk.log"))
+    (message "Ngrok for helpdesk is starting... Logs available -> /tmp/ngrok-helpdesk.log"))
+
+  (defun stop-ngrok-helpdesk ()
+    "Stop ngrok for the helpdesk."
+    (interactive)
+    (when (process-live-p ngrok-helpdesk-process)
+      (kill-process ngrok-helpdesk-process)
+      (setq ngrok-helpdesk-process nil)
+      (message "Ngrok for helpdesk is stopping... Logs available -> /tmp/ngrok-helpdesk.log")))
+
+  (defun start-ngrok-chat ()
+    "Start ngrok for the chat."
+    (interactive)
+    (setq ngrok-chat-process
+          (start-process-shell-command
+           "ngrok-chat-process"  ;; Name of the process
+           nil                   ;; No associated buffer
+           "cd ~/gorgias/gorgias-chat && ngrok start --all --config aria-ngrok.yml --log=stdout > /tmp/ngrok-chat.log"))
+    (message "Ngrok for chat is starting... Logs available -> /tmp/ngrok-chat.log"))
+
+  (defun stop-ngrok-chat ()
+    "Stop ngrok for the chat."
+    (interactive)
+    (when (process-live-p ngrok-chat-process)
+      (kill-process ngrok-chat-process)
+      (setq ngrok-chat-process nil)
+      (message "Ngrok for chat is stopping... Logs available -> /tmp/ngrok-chat.log")))
+#+end_src
+** Start web apps
+#+begin_src emacs-lisp :tangle lisp/custom-commands.el
+  (defvar helpdesk-web-app-process nil "Process handle for the helpdesk web app.")
+  (defvar gorgias-chat-client-process nil "Process handle for the gorgias chat client.")
+
+  (defun start-helpdesk-web-app ()
+    "Start the helpdesk web app (yarn serve) and track logs."
+    (interactive)
+    (setq helpdesk-web-app-process
+          (start-process-shell-command
+           "helpdesk-web-app-process" ;; Name of the process
+           nil                        ;; No associated buffer
+           "cd ~/gorgias/helpdesk-web-app && yarn serve > /tmp/helpdesk-web-app.log 2>&1"))
+    (message "Helpdesk web app is starting... Logs available -> /tmp/helpdesk-web-app.log"))
+
+  (defun stop-helpdesk-web-app ()
+    "Stop the helpdesk web app."
+    (interactive)
+    (when (process-live-p helpdesk-web-app-process)
+      (kill-process helpdesk-web-app-process)
+      (setq helpdesk-web-app-process nil)
+      (message "Helpdesk web app is stopping... Logs available -> /tmp/helpdesk-web-app.log")))
+
+  (defun start-gorgias-chat-client ()
+    "Start the Gorgias chat client (yarn watch:client) and track logs."
+    (interactive)
+    (setq gorgias-chat-client-process
+          (start-process-shell-command
+           "gorgias-chat-client-process" ;; Name of the process
+           nil                           ;; No associated buffer
+           "cd ~/gorgias/gorgias-chat && yarn watch:client > /tmp/gorgias-chat-client.log 2>&1"))
+    (message "Gorgias chat client is starting... Logs available -> /tmp/gorgias-chat-client.log"))
+
+  (defun stop-gorgias-chat-client ()
+    "Stop the Gorgias chat client."
+    (interactive)
+    (when (process-live-p gorgias-chat-client-process)
+      (kill-process gorgias-chat-client-process)
+      (setq gorgias-chat-client-process nil)
+      (message "Gorgias chat client is stoping... Logs available -> /tmp/gorgias-chat-client.log")))
+#+end_src
+** Global start/stop gorgias
+#+begin_src emacs-lisp :tangle lisp/custom-commands.el
+  (defun start-gorgias ()
+    "Run docker-compose up for all Gorgias services."
+    (interactive)
+    (start-helpdesk-web-app)
+    (start-gorgias-chat-client)
+    (start-ngrok-ai-agent)
+    (start-ngrok-helpdesk)
+    (start-ngrok-chat)
+    (start-ai-agent)
+    (start-helpdesk)
+    (start-chat)
+    (start-help-center)
+    (start-incoming)
+    (start-sendgrid-inbound)
+    (start-account-manager)
+    (start-workflows))
+
+  (defun stop-gorgias ()
+    "Run docker-compose stop for all Gorgias services."
+    (interactive)
+    (stop-helpdesk-web-app)
+    (stop-gorgias-chat-client)
+    (stop-ngrok-ai-agent)
+    (stop-ngrok-helpdesk)
+    (stop-ngrok-chat)
+    (stop-ai-agent)
+    (stop-helpdesk)
+    (stop-chat)
+    (stop-help-center)
+    (stop-incoming)
+    (stop-sendgrid-inbound)
+    (stop-account-manager)
+    (stop-workflows))
+#+end_src
+
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
   (setenv "LIBRARY_PATH"
@@ -587,9 +859,9 @@ Multi Vterm management
            ":"))
   (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/help-utilities.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/magit.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/project.el" user-emacs-directory))
@@ -597,4 +869,9 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/miscellaneous.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/docker.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/vterm.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/calendar.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/embark.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/custom-commands.el" user-emacs-directory))
 #+end_src
+
+

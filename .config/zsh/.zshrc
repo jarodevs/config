@@ -32,6 +32,7 @@ add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
 alias ssh="kitty +kitten ssh"
+alias docker-compose="docker compose"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias kubectl="minikube kubectl --"
 alias gcproxy-keru-production="cloud-sql-proxy -i keruproject-production:europe-west9:main --port 5432"
