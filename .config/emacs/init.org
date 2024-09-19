@@ -22,6 +22,10 @@ Exec path used by emacs needs to be configured to load path from shell
   (straight-use-package 'wgrep)
   (require 'wgrep)
 #+end_src
+** Config authinfo file path
+#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+  (setq auth-sources '("~/.authinfo"))
+#+end_src
 * Evil Mode
 #+begin_src emacs-lisp :tangle lisp/evil.el
   (straight-use-package 'evil)
@@ -482,7 +486,7 @@ Candidate documentation annotation
 
 * Versionning
 ** Magit
-#+begin_src emacs-lisp :tangle lisp/magit.el
+#+begin_src emacs-lisp :tangle lisp/versionning.el
   (straight-use-package 'magit)
   (setq display-line-numbers-type 'visual
         magit-section-disable-line-numbers nil
@@ -494,10 +498,20 @@ Candidate documentation annotation
   (evil-define-key 'normal magit-section-mode-map (kbd "4") nil)
 #+end_src
 ** Git share code
-#+begin_src emacs-lisp :tangle lisp/magit.el
+#+begin_src emacs-lisp :tangle lisp/versionning.el
   (straight-use-package
    '(git-share :type git :host github :repo "mgmarlow/git-share"))
   (require 'git-share)
+#+end_src
+** [[https://github.com/blahgeek/emacs-pr-review][PR Review]]
+#+begin_src emacs-lisp :tangle lisp/versionning.el
+  (straight-use-package 'pr-review)
+  (require 'pr-review)
+  (evil-ex-define-cmd "prr" #'pr-review)
+  (evil-ex-define-cmd "prs" #'pr-review-search)
+  (evil-ex-define-cmd "prn" #'pr-review-notification)
+  (add-to-list 'browse-url-default-handlers
+               '(pr-review-url-parse . pr-review-open-url))
 #+end_src
 * Project
 #+begin_src emacs-lisp :tangle lisp/project.el
@@ -812,6 +826,28 @@ Multi Vterm management
       (setq gorgias-chat-client-process nil)
       (message "Gorgias chat client is stoping... Logs available -> /tmp/gorgias-chat-client.log")))
 #+end_src
+** Start ai-agent configuration/feedback 
+#+begin_src emacs-lisp :tangle lisp/custom-commands.el
+    (defvar ai-agent-run-dev-process nil "Process handle for the ai agent app.")
+
+    (defun start-ai-agent-run-dev ()
+      "Start the ai-agent (npm run dev) and track logs."
+      (interactive)
+      (setq ai-agent-run-dev-process
+            (start-process-shell-command
+             "ai-agent-run-dev" ;; Name of the process
+             nil                        ;; No associated buffer
+             "cd ~/gorgias/ai-agent && npm run dev > /tmp/ai-agent-run-dev.log 2>&1"))
+      (message "ai-agent-run-dev app is starting... Logs available -> /tmp/ai-agent-run-dev.log"))
+
+    (defun stop-ai-agent-run-dev ()
+      "Stop the ai-agent-run dev."
+      (interactive)
+      (when (process-live-p ai-agent-run-dev-process)
+        (kill-process ai-agent-run-dev-process)
+        (setq ai-agent-run-dev-process nil)
+        (message "ai-agent-run-dev is stopping... Logs available -> /tmp/ai-agent-run-dev.log")))
+#+end_src
 ** Global start/stop gorgias
 #+begin_src emacs-lisp :tangle lisp/custom-commands.el
   (defun start-gorgias ()
@@ -863,7 +899,7 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/help-utilities.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/magit.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/versionning.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/project.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/coding.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/miscellaneous.el" user-emacs-directory))
