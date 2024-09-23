@@ -516,6 +516,7 @@ Candidate documentation annotation
   (straight-use-package 'forge)
   (with-eval-after-load 'magit
     (require 'forge))
+  (setq forge-buffer-draft-p t)
 #+end_src
 ** [[https://github.com/blahgeek/emacs-pr-review][PR Review]]
 #+begin_src emacs-lisp :tangle lisp/versionning.el
