@@ -590,7 +590,15 @@ Global typescript usefull variables
   (yas-global-mode 1)
   (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
 #+end_src
-
+** Github Copilot
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (straight-use-package
+   '(copilot-chat
+     :type git
+     :host github
+     :repo "chep/copilot-chat.el"
+     :files ("*.el")))
+#+end_src
 * Text editing
 ** Markdown
 #+begin_src emacs-lisp :tangle lisp/text-editing.el
