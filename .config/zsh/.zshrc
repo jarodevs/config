@@ -39,6 +39,7 @@ alias gcproxy-keru-production="cloud-sql-proxy -i keruproject-production:europe-
 alias gcproxy-gorgias-ai_agent-staging="cloud-sql-proxy -i gorgias-conversations-staging:us-central1:ai-agent-7d442106 --port 4933"
 alias gcproxy-gorgias-ai_agent-production="cloud-sql-proxy -i gorgias-conversations-prod:us-central1:ai-agent-ca38aecc --port 4932"
 alias gcproxy-gorgias-chat-staging="cloud-sql-proxy -i gorgias-chat-staging:us-east1:chat-03b7c90c --port 4935"
+alias gcproxy-gorgias-chat-production="cloud-sql-proxy -i gorgias-chat-production:us-east1:chat-f1b2e115 --port 4936"
 alias gcproxy-gorgias-help_center-production="cloud-sql-proxy -i gorgias-help-center-production:us-central1:help-center-d227c56a --port 4934"
 
 # ENV
