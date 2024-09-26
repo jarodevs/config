@@ -439,6 +439,7 @@ Candidate documentation annotation
       (push '("[-]" .  "󰱑") prettify-symbols-alist)
       (push '("[ ]" .  "") prettify-symbols-alist)
       (push '("[X]" . "" ) prettify-symbols-alist)
+      (setq electric-pair-mode nil)
       (prettify-symbols-mode)))
 
   (setq org-todo-keywords
@@ -548,9 +549,14 @@ Candidate documentation annotation
   (global-set-key (kbd "M-s f") #'eglot-code-action-quickfix)
 #+end_src
 ** Python mode
+*** LSP Server
 #+begin_src emacs-lisp :tangle lisp/coding.el
-  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+  (add-hook 'python-mode-hook 'eglot-ensure)
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '(python-mode . ("ruff" "server"))))
 #+end_src
+
 ** Typescript mode
 Enable typescript-ts-mode on ts(x) files
 #+begin_src emacs-lisp :tangle lisp/coding.el
