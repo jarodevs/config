@@ -466,6 +466,9 @@ Candidate documentation annotation
   (straight-use-package 'org-timeblock)
   (require 'org-timeblock)
   (setq org-timeblock-span 1)
+  (add-hook 'org-timeblock-mode-hook
+            (lambda()
+              (setq blink-cursor-mode nil)))
 #+end_src
 * Calendar 
 ** Calfw
