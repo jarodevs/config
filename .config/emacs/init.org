@@ -72,7 +72,7 @@ Exec path used by emacs needs to be configured to load path from shell
 
   (setq custom-safe-theme t)
   (require 'doom-themes)
-  (load-theme 'doom-ayu-dark t)
+  (load-theme 'doom-gruvbox t)
 #+end_src
 ** Distinguish write buffers from others
 #+begin_src emacs-lisp :tangle lisp/appearance.el
@@ -461,11 +461,49 @@ Candidate documentation annotation
   ;;(setq org-clock-persist 'history)
   ;;(org-clock-persistence-insinuate)
 #+end_src
-* Calendar 
-#+begin_src emacs-lisp :tangle lisp/calendar.el
+** Timeblock view
+#+begin_src emacs-lisp :tangle lisp/org.el
   (straight-use-package 'org-timeblock)
   (require 'org-timeblock)
   (setq org-timeblock-span 1)
+#+end_src
+* Calendar 
+** Calfw
+#+begin_src emacs-lisp :tangle lisp/calendar.el
+  (straight-use-package 'calfw)
+  (require 'calfw)
+  (straight-use-package 'calfw-org)
+  (require 'calfw-org)
+  (defun cfw:open-custom-calendar ()
+    (interactive)
+    (cfw:open-calendar-buffer
+     :contents-sources
+     (list
+      (cfw:org-create-source "khaki1")  ; orgmode source
+     ))) 
+#+end_src
+** Configure holidays
+#+begin_src emacs-lisp :tangle lisp/calendar.el
+  (setq holiday-bahai-holidays nil
+        holiday-general-holidays nil)
+
+  (setq holiday-local-holidays
+        '((holiday-fixed 1 1 "Jour de l'An")
+          (holiday-fixed 5 1 "Fête du Travail")
+          (holiday-fixed 5 8 "Victoire 1945")
+          (holiday-fixed 7 14 "Fête Nationale")
+          (holiday-fixed 8 15 "Assomption")
+          (holiday-fixed 11 1 "Toussaint")
+          (holiday-fixed 11 11 "Armistice 1918")
+          (holiday-fixed 12 25 "Noël")
+          ;; Fêtes religieuses mobiles
+          (holiday-easter-etc -2 "Vendredi Saint")
+          (holiday-easter-etc 0 "Pâques")
+          (holiday-easter-etc 1 "Lundi de Pâques")
+          (holiday-easter-etc 39 "Ascension")
+          (holiday-easter-etc 50 "Lundi de Pentecôte")))
+
+  (setq calendar-holidays (append holiday-local-holidays holiday-other-holidays))
 #+end_src
 * Help utilities 
 #+begin_src emacs-lisp :tangle lisp/help-utilities.el
