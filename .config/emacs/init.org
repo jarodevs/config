@@ -500,6 +500,11 @@ Candidate documentation annotation
 #+end_src
 ** Alerts
 #+begin_src emacs-lisp :tangle lisp/org.el
+  (straight-use-package 'org-alert)
+  (require 'org-alert)
+  (setq alert-default-style 'osx-notifier)
+  (setq org-alert-interval 300
+        org-alert-notify-cutoff 10)
 #+end_src
 * Calendar 
 ** Calfw
