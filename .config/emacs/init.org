@@ -1,37 +1,65 @@
-* Miscallaneous
-** Allow pinentry prompt for gpg passphrases
-#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
-  (setq epa-pinentry-mode 'loopback)
-#+end_src
-** Set exec path = PATH
+* Set exec path = PATH
 Exec path used by emacs needs to be configured to load path from shell
-#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+#+begin_src emacs-lisp :tangle lisp/exec-path.el
   (straight-use-package 'exec-path-from-shell)
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
   (when (daemonp)
     (exec-path-from-shell-initialize))
 #+end_src
-** Easily switch windows
-#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+* Ace-window - Easily switch windows
+#+begin_src emacs-lisp :tangle lisp/ace-window.el
   (straight-use-package 'ace-window)
   (global-set-key (kbd "M-o") #'ace-window)
 #+end_src
-** Wgrep
-#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
-  (straight-use-package 'wgrep)
-  (require 'wgrep)
-#+end_src
-** Config authinfo file path
-#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+* GPG 
+** Setting up .authinfo file
+#+begin_src emacs-lisp :tangle lisp/gpg.el
   (setq auth-sources '("~/.authinfo"))
 #+end_src
-** Allow ansi-colors in log files
-#+begin_src emacs-lisp :tangle lisp/miscellaneous.el
+** Allow pinentry prompt for gpg passphrases
+#+begin_src emacs-lisp :tangle lisp/gpg.el
+  (setq epa-pinentry-mode 'loopback)
+#+end_src
+* Allow ansi-colors in log files
+#+begin_src emacs-lisp :tangle lisp/ansi-support-in-buffers.el
   (add-hook 'find-file-hook
     (lambda ()
       (when (string-match "\\.log\\'" (buffer-file-name))
         (ansi-color-apply-on-region (point-min) (point-max)))))
+#+end_src
+* Wgrep - write in grep buffers
+#+begin_src emacs-lisp :tangle lisp/wgrep.el
+  (straight-use-package 'wgrep)
+  (require 'wgrep)
+#+end_src
+* Call functions in popup windows
+#+begin_src emacs-lisp :tangle lisp/popup-function-calls.el
+  (defun jarodevs-window-delete-popup-frame (&rest _)
+    "Kill selected selected frame if it has parameter `jarodevs-window-popup-frame'.
+  Use this function via a hook."
+    (when (frame-parameter nil jarodevs-window-popup-frame)
+      (delete-frame)))
+
+  (defmacro jarodevs-window-define-with-popup-frame (command)
+    "Define interactive function which calls COMMAND in a new frame.
+  Make the new frame have the `jarodevs-window-popup-frame' parameter."
+    `(defun ,(intern (format "jarodevs-window-popup-%s" command)) ()
+       ,(format "Run `%s' in a popup frame with `jarodevs-window-popup-frame' parameter.
+  Also see `jarodevs-window-delete-popup-frame'." command)
+       (interactive)
+       (let ((frame (make-frame '((jarodevs-window-popup-frame . t)))))
+         (select-frame frame)
+         (switch-to-buffer " jarodevs-window-hidden-buffer-for-popup-frame")
+         (condition-case nil
+             (call-interactively ',command)
+           ((quit error user-error)
+            (delete-frame frame))))))
+
+  (declare-function org-capture "org-capture" (&optional goto keys))
+  (defvar org-capture-after-finalize-hook)
+  (jarodevs-window-define-with-popup-frame org-capture)
+  (add-hook 'org-capture-after-finalize-hook #'jarodevs-window-delete-popup-frame)
 #+end_src
 * Evil Mode
 #+begin_src emacs-lisp :tangle lisp/evil.el
@@ -469,6 +497,9 @@ Candidate documentation annotation
   (add-hook 'org-timeblock-mode-hook
             (lambda()
               (setq blink-cursor-mode nil)))
+#+end_src
+** Alerts
+#+begin_src emacs-lisp :tangle lisp/org.el
 #+end_src
 * Calendar 
 ** Calfw
@@ -960,18 +991,23 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/help-utilities.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/versionning.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/project.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/coding.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/miscellaneous.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/docker.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/vterm.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/calendar.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/embark.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/custom-commands.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/popup-function-calls.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/wgrep.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/ansi-support-in-buffers.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/gpg.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/ace-window.el" user-emacs-directory))
 #+end_src
 
 
