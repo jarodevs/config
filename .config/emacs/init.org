@@ -497,6 +497,10 @@ Candidate documentation annotation
   (add-hook 'org-timeblock-mode-hook
             (lambda()
               (setq blink-cursor-mode nil)))
+  (add-hook 'org-timeblock-mode-hook
+            (lambda ()
+              (evil-define-key 'normal org-timeblock-mode-map
+                (kbd "g r") 'org-timeblock-redraw-buffers)))
 #+end_src
 ** Alerts
 #+begin_src emacs-lisp :tangle lisp/org.el
