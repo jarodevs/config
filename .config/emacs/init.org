@@ -446,42 +446,42 @@ Candidate documentation annotation
 * Org mode
 ** Global configurations
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (straight-use-package 'org)
-  (require 'org)
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (setq org-agenda-files '("~/Documents/org/"))
-  (evil-set-initial-state 'org-agenda-mode 'normal)
+    (straight-use-package 'org)
+    (require 'org)
+    (add-hook 'org-mode-hook 'org-indent-mode)
+    (setq org-agenda-files '("~/Documents/org/"))
+    (evil-set-initial-state 'org-agenda-mode 'normal)
 
-  (straight-use-package 'org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+    (straight-use-package 'org-bullets)
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-  (straight-use-package 'org-fancy-priorities)
-  (add-hook 'org-mode-hook 'org-fancy-priorities-mode)
-  (setq org-fancy-priorities-list '("🅰" "🅱" "🅲" "🅳" "🅴"))
-  ;; Diminishing hides the mode from the modeline
-  (when (featurep 'diminish)
-    (diminish 'org-fancy-priorities-mode))
+    (straight-use-package 'org-fancy-priorities)
+    (add-hook 'org-mode-hook 'org-fancy-priorities-mode)
+    (setq org-fancy-priorities-list '("🅰" "🅱" "🅲" "🅳" "🅴"))
+    ;; Diminishing hides the mode from the modeline
+    (when (featurep 'diminish)
+      (diminish 'org-fancy-priorities-mode))
 
-  (add-hook 'org-mode-hook
-    (lambda ()
-      (push '("[-]" .  "󰱑") prettify-symbols-alist)
-      (push '("[ ]" .  "") prettify-symbols-alist)
-      (push '("[X]" . "" ) prettify-symbols-alist)
-      (setq electric-pair-mode nil)
-      (prettify-symbols-mode)))
+    (add-hook 'org-mode-hook
+      (lambda ()
+        (push '("[-]" .  "󰱑") prettify-symbols-alist)
+        (push '("[ ]" .  "") prettify-symbols-alist)
+        (push '("[X]" . "" ) prettify-symbols-alist)
+        (setq electric-pair-mode nil)
+        (prettify-symbols-mode)))
 
-  (setq org-todo-keywords
-        '((sequence "TODO" "PROGR" "DONE")))
-  (setq org-todo-keyword-faces
-        '(("TODO" . org-warning)   
-          ("PROGR" . "blue") 
-          ("DONE" . "green")))
+    (setq org-todo-keywords
+          '((sequence "TODO" "PROGRESS" "DONE")))
+    (setq org-todo-keyword-faces
+          '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow")))
+            ("PROGRESS" . (:foreground "white" :background "DodgerBlue1"))
+            ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))))
 
-  (add-hook 'org-after-todo-state-change-hook
-            (lambda ()
-              (when (string= (org-get-todo-state) "PROGR")
-                (unless (org-clocking-p)
-                  (org-clock-in)))))
+    (add-hook 'org-after-todo-state-change-hook
+              (lambda ()
+                (when (string= (org-get-todo-state) "PROGR")
+                  (unless (org-clocking-p)
+                    (org-clock-in)))))
 
 #+end_src
 ** Clocking in work time
@@ -1015,5 +1015,3 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/ace-window.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
 #+end_src
-
-
