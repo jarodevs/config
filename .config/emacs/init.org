@@ -503,7 +503,9 @@ Candidate documentation annotation
   (straight-use-package 'org-alert)
   (require 'org-alert)
   (setq alert-default-style 'osx-notifier)
-  (setq org-alert-notify-cutoff 0)
+  (setq org-alert-interval 300)
+  (setq org-alert-notify-cutoff 10)
+  (setq org-alert-notify-after-event-cutoff 0)
   (org-alert-enable)
 #+end_src
 * Calendar 
