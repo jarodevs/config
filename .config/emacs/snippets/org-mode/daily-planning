@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: daily-planning
+# key: dp
+# --
+* `(eval (format-time-string "[%d-%m-%Y %a]"))`
+** TODO Planification quotidienne [0/2]
+   - [ ] Planifier le temps libre [0/4]
+     - [ ] Voir le backlog
+     - [ ] Déterminer l'objectif du jour
+     - [ ] Sur quels projets vais-je travailler ?
+     - [ ] S'assurer que toutes les distractions sont gérées
+   - [ ] Programmer les choses
+** TODO Lecture
+** TODO Apprentissage
+** TODO Travail

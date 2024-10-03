@@ -500,13 +500,12 @@ Candidate documentation annotation
 #+end_src
 ** Alerts
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (straight-use-package 'org-alert)
-  (require 'org-alert)
+  (straight-use-package 'alert)
+  (require 'alert)
   (setq alert-default-style 'osx-notifier)
-  (setq org-alert-interval 300)
-  (setq org-alert-notify-cutoff 10)
-  (setq org-alert-notify-after-event-cutoff 0)
-  (org-alert-enable)
+  (straight-use-package 'org-wild-notifier)
+  (require 'org-wild-notifier)
+  (setq org-wild-notifier-keyword-whitelist '("TODO" "PROGR"))
 #+end_src
 * Calendar 
 ** Calfw

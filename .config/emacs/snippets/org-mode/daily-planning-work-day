@@ -1,0 +1,41 @@
+# -*- mode: snippet -*-
+# name: daily-planning-work-day
+# key: dpw
+# --
+* `(eval (format-time-string "[%d-%m-%Y %a]"))`
+** TODO Planification quotidienne [0/3]
+   - [ ] Gorgias [0/3]
+     - [ ] Recuperer les taches [0/5]
+       - [ ] Slack
+       - [ ] Email
+       - [ ] Github
+       - [ ] Notion
+       - [ ] Linear
+       - [ ] Backlog
+     - [ ] Copier le calendrier journalier 
+   - [ ] Personel [0/2]
+     - [ ] Recuperer les taches [0/2]
+       - [ ] Email
+       - [ ] Backlog
+     - [ ] Calendrier
+   - [ ] Planifier les taches
+   - [ ] La journee sera reussie si: (A copier-coller dans le bilan)
+     -  
+     -  
+     -  
+** Gorgias
+** Personel
+*** TODO Lecture
+*** TODO Apprentissage
+*** TODO Sport
+** TODO Bilan
+   - [ ] Journee reussie [/]
+     -
+     -
+     -
+   #+BEGIN: clocktable :scope file :maxlevel 3 :block day 
+   #+CAPTION: Clock summary at `(eval (format-time-string "[%d-%m-%Y %a]"))`
+   | Headline     | Time   |
+   |--------------+--------|
+   | *Total time* | *0:00* |
+   #+END:

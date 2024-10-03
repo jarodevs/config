@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: schedule-meeting
+# key: mte
+# --
+* TODO ${1:Event Title}
+  SCHEDULED: ${2:<`(org-read-date)`>}
+  :PROPERTIES:
+  :WILD_NOTIFIER_NOTIFY_BEFORE: 15 0
+  :END:
