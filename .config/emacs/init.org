@@ -503,8 +503,8 @@ Candidate documentation annotation
   (straight-use-package 'org-alert)
   (require 'org-alert)
   (setq alert-default-style 'osx-notifier)
-  (setq org-alert-interval 300
-        org-alert-notify-cutoff 10)
+  (setq org-alert-notify-cutoff 0)
+  (org-alert-enable)
 #+end_src
 * Calendar 
 ** Calfw
@@ -996,7 +996,6 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/help-utilities.el" user-emacs-directory))
@@ -1013,6 +1012,7 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/ansi-support-in-buffers.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/gpg.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/ace-window.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
 #+end_src
 
 
