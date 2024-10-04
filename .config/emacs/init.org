@@ -479,7 +479,7 @@ Candidate documentation annotation
 
     (add-hook 'org-after-todo-state-change-hook
               (lambda ()
-                (when (string= (org-get-todo-state) "PROGR")
+                (when (string= (org-get-todo-state) "PROGRESS")
                   (unless (org-clocking-p)
                     (org-clock-in)))))
 
