@@ -510,6 +510,7 @@ Candidate documentation annotation
   (straight-use-package 'org-wild-notifier)
   (require 'org-wild-notifier)
   (setq org-wild-notifier-keyword-whitelist '("TODO" "PROGR"))
+  (org-wild-notifier-mode)
 #+end_src
 * Calendar 
 ** Calfw
