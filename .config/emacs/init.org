@@ -612,7 +612,7 @@ Candidate documentation annotation
 * Coding
 ** Code folding
 #+begin_src emacs-lisp :tangle lisp/coding.el
-  (hs-minor-mode t)
+  (add-hook 'prog-mode-hook #'hs-minor-mode)
 #+end_src
 
 ** LSP Client
