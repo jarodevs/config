@@ -1084,4 +1084,5 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/gpg.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/ace-window.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
 #+end_src
