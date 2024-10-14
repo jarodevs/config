@@ -100,7 +100,7 @@ Exec path used by emacs needs to be configured to load path from shell
 
   (setq custom-safe-theme t)
   (require 'doom-themes)
-  (load-theme 'doom-gruvbox t)
+  (load-theme 'gruber-darker t)
 #+end_src
 ** Distinguish write buffers from others
 #+begin_src emacs-lisp :tangle lisp/appearance.el
