@@ -103,3 +103,10 @@ if [ -f '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/
 
 eval "$(starship init zsh)"
 starship preset nerd-font-symbols -o ~/.config/starship.toml
+
+# OpenJDK
+export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+export CPPFLAGS="-I/opt/homebrew/opt/openjdk@11/include"
+
+# Emails
+export MAILDIR=/Users/jarodevs/.mail

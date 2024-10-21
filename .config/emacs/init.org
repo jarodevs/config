@@ -552,28 +552,28 @@ Candidate documentation annotation
 #+end_src
 * Help utilities 
 #+begin_src emacs-lisp :tangle lisp/help-utilities.el
-  (straight-use-package 'which-key)
-  (require 'which-key)
-  (which-key-mode)
+  ;; (straight-use-package 'which-key)
+  ;; (require 'which-key)
+  ;; (which-key-mode)
 
-  (straight-use-package 'helpful)
-  ;; Note that the built-in `describe-function' includes both functions
-  ;; and macros. `helpful-function' is functions only, so we provide
-  ;; `helpful-callable' as a drop-in replacement.
-  (global-set-key (kbd "C-h f") #'helpful-callable)
+  ;; (straight-use-package 'helpful)
+  ;; ;; Note that the built-in `describe-function' includes both functions
+  ;; ;; and macros. `helpful-function' is functions only, so we provide
+  ;; ;; `helpful-callable' as a drop-in replacement.
+  ;; (global-set-key (kbd "C-h f") #'helpful-callable)
 
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-h x") #'helpful-command)
-  ;; Lookup the current symbol at point. C-c C-d is a common keybinding
-  ;; for this in lisp modes.
-  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+  ;; (global-set-key (kbd "C-h v") #'helpful-variable)
+  ;; (global-set-key (kbd "C-h k") #'helpful-key)
+  ;; (global-set-key (kbd "C-h x") #'helpful-command)
+  ;; ;; Lookup the current symbol at point. C-c C-d is a common keybinding
+  ;; ;; for this in lisp modes.
+  ;; (global-set-key (kbd "C-c C-d") #'helpful-at-point)
 
-  ;; Look up *F*unctions (excludes macros).
-  ;;
-  ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
-  ;; already links to the manual, if a function is referenced there.
-  (global-set-key (kbd "C-h F") #'helpful-function)
+  ;; ;; Look up *F*unctions (excludes macros).
+  ;; ;;
+  ;; ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+  ;; ;; already links to the manual, if a function is referenced there.
+  ;; (global-set-key (kbd "C-h F") #'helpful-function)
 #+end_src
 
 * Versionning
@@ -703,71 +703,29 @@ Multi Vterm management
   (straight-use-package 'multi-vterm)
   (require 'multi-vterm)
   #+end_src
-* Email
-** Require packages
+* Email - notmuch
+** Basic configuration
 #+begin_src emacs-lisp :tangle lisp/email.el
-  (straight-use-package 'mu4e)
-  (require 'mu4e)
-  (require 'smtpmail)
+  (straight-use-package 'notmuch)
+  (autoload 'notmuch "notmuch" "Notmuch mail" t)
 #+end_src
-** Mu4e general settings
+** Saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
-  ;; we installed this with homebrew
-  (setq mu4e-mu-binary (executable-find "mu"))
-  (setq mu4e-maildir "~/.mail")
-  (setq mu4e-get-mail-command (concat (executable-find "mbsync") " -a"))
-  (setq mu4e-update-interval 300)
-  (setq mu4e-attachment-dir "~/Downloads")
-  (setq mu4e-change-filenames-when-moving t)
-  (setq mu4e-user-mail-address-list '(
-                                      "aria.groult@gorgias.com"))
+    (setq notmuch-saved-searches
+          '((:name "unread" :query "tag:inbox and tag:unread")
+            (:name "inbox" :query "tag:inbox")))
 #+end_src
-** Mu4e shortcuts
+** Notmuch-hello
 #+begin_src emacs-lisp :tangle lisp/email.el
-  (setq  mu4e-maildir-shortcuts
-          '(("/Gorgias/Inbox" . ?g)
-            ))
-#+end_src
-** Mu4e contexts
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (setq mu4e-contexts
-     `( ,(make-mu4e-context
-           :name "Gorgias"
-           :enter-func (lambda () (mu4e-message "Entering Gorgias context"))
-           :leave-func (lambda () (mu4e-message "Leaving Gorgias context"))
-           ;; we match based on the contact-fields of the message
-           :match-func (lambda (msg)
-                         (when msg
-                           (mu4e-message-contact-field-matches msg
-                             :to "aria.groult@gorgias.com")))
-           :vars '( ( user-mail-address	    . "aria.groult@gorgias.com"  )
-                    ( user-full-name	    . "Aria Groult" )
-                    ( message-user-organization . "Gorgias" )
-                    ( message-signature .
-                      (concat
-                        "Aria Groult\n"
-                        "Software engineer\n"
-                        "AI Agent - Automate - Gorgias\n"))
-                    ( mu4e-sent-folder   "/Gorgias/Sent"
-                      mu4e-drafts-folder "/Gorgias/Drafts"
-                      mu4e-trash-folder  "/Gorgias/Trash"
-                      mu4e-refile-folder "/Gorgias/Archive"
-                      mu4e-sent-messages-behavior 'delete
-                      smtpmail-smtp-server "smtp-relay.gmail.com")))))
+  (add-hook 'notmuch-hello-mode-hook
+            (lambda ()
+              (evil-local-set-key 'normal (kbd "u") (lambda ()
+                                                      (interactive)
+                                                      (notmuch-search "tag:inbox and tag:unread")))
+              (evil-local-set-key 'normal (kbd "i") (lambda ()
+                                                      (interactive)
+                                                      (notmuch-search "tag:inbox")))))
 
-  ;; set `mu4e-context-policy` and `mu4e-compose-policy` to tweak when mu4e should
-  ;; guess or ask the correct context, e.g.
-  ;; start with the first (default) context;
-  ;; default is to ask-if-none (ask when there's no context yet, and none match)
-  (setq mu4e-context-policy 'ask-if-none)
-  ;; compose with the current context is no context matches;
-  ;; default is to ask
-  (setq mu4e-compose-context-policy 'ask)
-#+end_src
-** Sending mails
-#+begin_src emacs-lisp :tangle lisp/email.el
-  ;; tell message-mode how to send mail
-  (setq message-send-mail-function 'smtpmail-send-it)
 #+end_src
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
@@ -1055,7 +1013,40 @@ Multi Vterm management
     (stop-account-manager)
     (stop-workflows))
 #+end_src
+** Copy current buffer absolute path
+#+begin_src emacs-lisp :tangle lisp/custom-commands.el
+  (defun jarodevs-copy-file-path (&optional DirPathOnlyQ)
+    "Copy current buffer file path or dired path.
+  Result is full path.
+  If `universal-argument' is called first, copy only the dir path.
 
+  If in dired, copy the current or marked files.
+
+  If a buffer is not file and not dired, copy value of `default-directory'.
+
+  Created: 2018-06-18
+  Version: 2021-09-30"
+    (interactive "P")
+    (let ((xfpath
+           (if (eq major-mode 'dired-mode)
+               (progn
+                 (let ((xresult (mapconcat #'identity
+                                           (dired-get-marked-files) "\n")))
+                   (if (equal (length xresult) 0)
+                       (progn default-directory )
+                     (progn xresult))))
+             (if buffer-file-name
+                 buffer-file-name
+               (expand-file-name default-directory)))))
+      (kill-new
+       (if DirPathOnlyQ
+           (progn
+             (message "Directory copied: %s" (file-name-directory xfpath))
+             (file-name-directory xfpath))
+         (progn
+           (message "File path copied: %s" xfpath)
+           xfpath )))))
+#+end_src
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
   (setenv "LIBRARY_PATH"

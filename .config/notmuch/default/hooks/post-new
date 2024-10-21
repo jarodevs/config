@@ -1,0 +1,4 @@
+#!/bin/bash
+# Gorgias Gmail Setup
+
+/opt/homebrew/bin/notmuch tag +inbox folder:/Gorgias\/Inbox/
