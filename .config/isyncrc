@@ -1,0 +1,60 @@
+IMAPAccount gorgias
+Host imap.gmail.com
+User aria.groult@gorgias.com
+PassCmd "op item get 2ybnsvh7ri7uxivtoqovdmp27u --reveal --format json | jq -r '.fields[] | select(.label==\"password\") | .value'"
+AuthMechs LOGIN
+TLSType IMAPS
+
+IMAPStore gorgias-remote
+Account gorgias
+
+MaildirStore gorgias-local
+Path ~/.mail/Gorgias/
+Inbox "~/Mail/Gorgias/Inbox"
+
+Channel gorgias-inbox
+Far ":gorgias-remote:INBOX"
+Near ":gorgias-local:Inbox"
+CopyArrivalDate yes
+Create Both
+Expunge Both
+SyncState *
+
+Channel gorgias-trash
+Far ":gorgias-remote:[Gmail]/Trash"
+Near ":gorgias-local:Trash"
+CopyArrivalDate yes
+Create Both
+Expunge Both
+SyncState *
+
+Channel gorgias-spam
+Far ":gorgias-remote:[Gmail]/Spam"
+Near ":gorgias-local:Spam"
+CopyArrivalDate yes
+Create Both
+Expunge Both
+SyncState *
+
+Channel gorgias-sent
+Far ":gorgias-remote:[Gmail]/Sent Mail"
+Near ":gorgias-local:Sent"
+CopyArrivalDate yes
+Create Both
+Expunge Both
+SyncState *
+
+Channel gorgias-drafts
+Far ":gorgias-remote:[Gmail]/Drafts"
+Near ":gorgias-local:Drafts"
+CopyArrivalDate yes
+Create Both
+Expunge Both
+SyncState *
+
+Group gorgias
+Channel gorgias-inbox
+Channel gorgias-trash
+Channel gorgias-spam
+Channel gorgias-sent
+Channel gorgias-drafts
