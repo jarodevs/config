@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/opt/homebrew/bin/mbsync -a && /opt/homebrew/bin/notmuch new
+
+echo "Finished syncing all mail boxes"
