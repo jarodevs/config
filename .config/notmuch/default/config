@@ -29,6 +29,7 @@ path=/Users/jarodevs/.mail
 [user]
 name=Aria Groult
 primary_email=aria.groult@gorgias.com
+other_email=aria.groult@pm.me
 # Configuration for "notmuch new"
 #
 # The following options are supported here:

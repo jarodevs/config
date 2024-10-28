@@ -15,7 +15,7 @@ Exec path used by emacs needs to be configured to load path from shell
 * GPG 
 ** Setting up .authinfo file
 #+begin_src emacs-lisp :tangle lisp/gpg.el
-  (setq auth-sources '("~/.authinfo"))
+  (setq auth-sources '("~/.authinfo.gpg"))
 #+end_src
 ** Allow pinentry prompt for gpg passphrases
 #+begin_src emacs-lisp :tangle lisp/gpg.el
@@ -712,7 +712,7 @@ Multi Vterm management
 ** Saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
     (setq notmuch-saved-searches
-          '((:name "unread" :query "tag:inbox and tag:unread")
+          '((:name "unread" :query "tag:inbox and tag:unread and not tag:deleted")
             (:name "inbox" :query "tag:inbox")))
 #+end_src
 ** Notmuch-hello
@@ -721,10 +721,11 @@ Multi Vterm management
             (lambda ()
               (evil-local-set-key 'normal (kbd "u") (lambda ()
                                                       (interactive)
-                                                      (notmuch-search "tag:inbox and tag:unread")))
+                                                      (notmuch-search "tag:inbox and tag:unread and not tag:deleted")))
               (evil-local-set-key 'normal (kbd "i") (lambda ()
                                                       (interactive)
-                                                      (notmuch-search "tag:inbox")))))
+                                                      (notmuch-search "tag:inbox")))
+              (start-process "mbsync" "mbsync" "mbsync" "-a")))
 
 #+end_src
 * Package Manager - Straight.el 

@@ -1,7 +1,7 @@
 IMAPAccount gorgias
 Host imap.gmail.com
 User aria.groult@gorgias.com
-PassCmd "op item get 2ybnsvh7ri7uxivtoqovdmp27u --reveal --format json | jq -r '.fields[] | select(.label==\"password\") | .value'"
+PassCmd "gpg -d --quiet /Users/jarodevs/.authinfo.gpg | grep aria.groult@gorgias.com | sed -n 's/.*password \"\\([^\"]*\\)\".*/\\1/p'"
 AuthMechs LOGIN
 TLSType IMAPS
 
@@ -10,7 +10,7 @@ Account gorgias
 
 MaildirStore gorgias-local
 Path ~/.mail/Gorgias/
-Inbox "~/Mail/Gorgias/Inbox"
+Inbox "~/.mail/Gorgias/Inbox"
 
 Channel gorgias-inbox
 Far ":gorgias-remote:INBOX"
@@ -58,3 +58,32 @@ Channel gorgias-trash
 Channel gorgias-spam
 Channel gorgias-sent
 Channel gorgias-drafts
+
+##############################################
+
+IMAPAccount proton
+Host 127.0.0.1
+PORT 1143
+User aria.groult@pm.me
+Pass "_JbFZZj1r5-E6pd07s4Stg"
+AuthMechs LOGIN
+TLSType STARTTLS
+TLSVersions +1.2
+CertificateFile /etc/ssl/certs/proton.pem
+
+MaildirStore proton-local
+Path ~/.mail/Proton/
+Inbox ~/.mail/Proton/Inbox
+SubFolders Verbatim
+
+IMAPStore proton-remote
+Account proton
+
+Channel proton
+Far :proton-remote:
+Near :proton-local:
+Patterns "INBOX" "Archive" "Trash" "Spam" "Drafts" "Sent"
+CopyArrivalDate yes
+Create Both
+Expunge Both
+SyncState *
