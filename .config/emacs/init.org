@@ -73,7 +73,13 @@ Exec path used by emacs needs to be configured to load path from shell
   (require 'evil-collection)
   (evil-collection-init)
 #+end_src
-
+** Global evil bindigs
+#+begin_src emacs-lisp :tangle lisp/evil.el
+  (evil-global-set-key 'normal (kbd "g n m") 'notmuch-hello)
+  (evil-global-set-key 'normal (kbd "g d p") (lambda()
+                                               (interactive)
+                                               (find-file "~/Documents/org/daily-planner.org")))
+#+end_src
 * Appearance
 ** Global ui tweaks
 #+begin_src emacs-lisp :tangle lisp/appearance.el
