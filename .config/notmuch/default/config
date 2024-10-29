@@ -45,7 +45,7 @@ other_email=aria.groult@pm.me
 #		in the mail store.
 #
 [new]
-tags=
+tags=inbox;unread
 ignore=
 # Search configuration
 #

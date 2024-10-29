@@ -707,26 +707,38 @@ Multi Vterm management
 ** Basic configuration
 #+begin_src emacs-lisp :tangle lisp/email.el
   (straight-use-package 'notmuch)
-  (autoload 'notmuch "notmuch" "Notmuch mail" t)
+  (require 'notmuch)
 #+end_src
 ** Saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
-    (setq notmuch-saved-searches
-          '((:name "unread" :query "tag:inbox and tag:unread and not tag:deleted")
-            (:name "inbox" :query "tag:inbox")))
+        (setq notmuch-saved-searches
+              '((:name "Gorgias Unread" :query "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted")
+                (:name "Gorgias Inbox" :query "folder:Gorgias/Inbox tag:inbox")
+                (:name "Proton Unread" :query "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted")
+                (:name "Proton Inbox" :query "folder:Proton/Inbox tag:inbox")))
 #+end_src
 ** Notmuch-hello
 #+begin_src emacs-lisp :tangle lisp/email.el
   (add-hook 'notmuch-hello-mode-hook
             (lambda ()
-              (evil-local-set-key 'normal (kbd "u") (lambda ()
+              (evil-local-set-key 'normal (kbd "g u") (lambda ()
                                                       (interactive)
-                                                      (notmuch-search "tag:inbox and tag:unread and not tag:deleted")))
-              (evil-local-set-key 'normal (kbd "i") (lambda ()
+                                                      (notmuch-search "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted")))
+              (evil-local-set-key 'normal (kbd "g i") (lambda ()
                                                       (interactive)
-                                                      (notmuch-search "tag:inbox")))
+                                                      (notmuch-search "folder:Gorgias/Inbox tag:inbox")))
+              (evil-local-set-key 'normal (kbd "p u") (lambda ()
+                                                      (interactive)
+                                                      (notmuch-search "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted")))
+              (evil-local-set-key 'normal (kbd "p i") (lambda ()
+                                                      (interactive)
+                                                      (notmuch-search "folder:Proton/Inbox tag:inbox")))
               (start-process "mbsync" "mbsync" "mbsync" "-a")))
 
+#+end_src
+** Polling new mail
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (setq notmuch-poll-script "~/bin/update-emails")
 #+end_src
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
