@@ -1,5 +1,0 @@
-default-timeout=3000
-
-#Ignore spotify notifications
-[app-name="Spotify"]
-invisible=1
