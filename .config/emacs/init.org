@@ -745,15 +745,12 @@ Multi Vterm management
 ** Sending mail - msmtp
 #+begin_src emacs-lisp :tangle lisp/email.el
   (setq message-sendmail-f-is-evil 't)
-
-  ;; we substitute sendmail with msmtp
   (setq sendmail-program "/opt/homebrew/bin/msmtp")
+  (setq message-sendmail-extra-arguments '("--read-envelope-from"))
 
-  ;; Choose account label to feed msmtp -a option based on From header in Message buffer;
-  ;; This function must be added to message-send-mail-hook for on-the-fly change of From address
-  ;; before sending message since message-send-mail-hook is processed right before sending message.
-  (setq message-sendmail-envelope-from 'header)
-  (add-hook 'message-send-mail-hook 'cg-feed-msmtp)
+  ;; Set up Mail User Agent (MUA)
+  (setq mail-specify-envelope-from 't)
+  (setq mail-envelope-from 'header)
 #+end_src
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el

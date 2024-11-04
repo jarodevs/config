@@ -3,6 +3,7 @@ account default
 auth            on
 tls             on
 logfile         /tmp/msmtp
+aliases         /Users/jarodevs/.config/msmtp/aliases
 
 # gmail
 account         gorgias
