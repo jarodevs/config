@@ -1,5 +1,5 @@
 #!/bin/bash
 
-/opt/homebrew/bin/notmuch new
+/opt/homebrew/bin/notmuch new 
 
-echo "Finished syncing all mail boxes"
+echo "$(date): Finished syncing all mail boxes"

@@ -1,7 +1,7 @@
 IMAPAccount gorgias
 Host imap.gmail.com
 User aria.groult@gorgias.com
-PassCmd "gpg -d --quiet ~/.authinfo.gpg | grep aria.groult@gorgias.com | awk -F'password \"' '{print $2}' | awk -F'\"' '{print $1}'"
+PassCmd "/usr/local/MacGPG2/bin/gpg2 -d --quiet ~/.authinfo.gpg | grep aria.groult@gorgias.com | awk -F'password \"' '{print $2}' | awk -F'\"' '{print $1}'"
 AuthMechs LOGIN
 TLSType IMAPS
 
@@ -65,7 +65,7 @@ IMAPAccount proton
 Host 127.0.0.1
 PORT 1143
 User aria.groult@pm.me
-PassCmd "gpg -d --quiet ~/.authinfo.gpg | grep aria.groult@pm.me | awk -F'password \"' '{print $2}' | awk -F'\"' '{print $1}'"
+PassCmd "/usr/local/MacGPG2/bin/gpg2 -d --quiet ~/.authinfo.gpg | grep aria.groult@pm.me | awk -F'password \"' '{print $2}' | awk -F'\"' '{print $1}'"
 AuthMechs LOGIN
 TLSType STARTTLS
 TLSVersions +1.2

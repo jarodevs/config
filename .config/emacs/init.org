@@ -709,7 +709,7 @@ Multi Vterm management
   (straight-use-package 'multi-vterm)
   (require 'multi-vterm)
   #+end_src
-* Email - notmuch
+* Email
 ** Basic configuration
 #+begin_src emacs-lisp :tangle lisp/email.el
   (straight-use-package 'notmuch)
@@ -738,13 +738,20 @@ Multi Vterm management
                                                       (notmuch-search "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted")))
               (evil-local-set-key 'normal (kbd "p i") (lambda ()
                                                       (interactive)
-                                                      (notmuch-search "folder:Proton/Inbox tag:inbox")))
-              (start-process "mbsync" "mbsync" "mbsync" "-a")))
-
+                                                      (notmuch-search "folder:Proton/Inbox tag:inbox")))))
 #+end_src
-** Polling new mail
+** Sending mail - msmtp
 #+begin_src emacs-lisp :tangle lisp/email.el
-  (setq notmuch-poll-script "~/bin/update-emails")
+  (setq message-sendmail-f-is-evil 't)
+
+  ;; we substitute sendmail with msmtp
+  (setq sendmail-program "/opt/homebrew/bin/msmtp")
+
+  ;; Choose account label to feed msmtp -a option based on From header in Message buffer;
+  ;; This function must be added to message-send-mail-hook for on-the-fly change of From address
+  ;; before sending message since message-send-mail-hook is processed right before sending message.
+  (setq message-sendmail-envelope-from 'header)
+  (add-hook 'message-send-mail-hook 'cg-feed-msmtp)
 #+end_src
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
