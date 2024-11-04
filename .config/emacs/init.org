@@ -718,29 +718,53 @@ Multi Vterm management
 ** Saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
   (setq notmuch-saved-searches
-        '((:name "Gorgias unread" :query "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted")
-          (:name "Gorgias todo" :query "folder:Gorgias/Inbox tag:todo")
-          (:name "Gorgias inbox" :query "folder:Gorgias/Inbox tag:inbox")
-          (:name "Proton unread" :query "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted")
-          (:name "Proton todo" :query "folder:Gorgias/Inbox tag:todo")
-          (:name "Proton inbox" :query "folder:Proton/Inbox tag:inbox")))
+        '((:name "Gorgias unread"
+                 :query "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted"
+                 :sort-order oldest-first)
+          (:name "Gorgias todo"
+                 :query "folder:Gorgias/Inbox tag:todo"
+                 :sort-order oldest-first)
+          (:name "Gorgias inbox"
+                 :query "folder:Gorgias/Inbox tag:inbox"
+                 :sort-order oldest-first)
+          (:name "Proton unread"
+                 :query "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted"
+                 :sort-order oldest-first)
+          (:name "roton todo"
+                 :query "folder:Proton/Inbox tag:inbox and tag:todo"
+                 :sort-order oldest-first)
+          (:name "Proton inbox"
+                 :query "folder:Proton/Inbox tag:inbox"
+                 :sort-order oldest-first)))
 #+end_src
 ** Notmuch-hello
 #+begin_src emacs-lisp :tangle lisp/email.el
   (add-hook 'notmuch-hello-mode-hook
             (lambda ()
-              (evil-local-set-key 'normal (kbd "g u") (lambda ()
-                                                      (interactive)
-                                                      (notmuch-search "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted")))
-              (evil-local-set-key 'normal (kbd "g i") (lambda ()
-                                                      (interactive)
-                                                      (notmuch-search "folder:Gorgias/Inbox tag:inbox")))
-              (evil-local-set-key 'normal (kbd "p u") (lambda ()
-                                                      (interactive)
-                                                      (notmuch-search "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted")))
-              (evil-local-set-key 'normal (kbd "p i") (lambda ()
-                                                      (interactive)
-                                                      (notmuch-search "folder:Proton/Inbox tag:inbox")))))
+              (evil-local-set-key 'normal (kbd "g u")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted" t)))
+              (evil-local-set-key 'normal (kbd "g i")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Gorgias/Inbox tag:inbox" t)))
+              (evil-local-set-key 'normal (kbd "g t")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Gorgias/Inbox tag:inbox and tag:todo" t)))
+              (evil-local-set-key 'normal (kbd "p u")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted" t)))
+              (evil-local-set-key 'normal (kbd "p i")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Proton/Inbox tag:inbox" t)))
+              (evil-local-set-key 'normal (kbd "p t")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Proton/Inbox tag:inbox and tag:todo" t)))))
 #+end_src
 ** Sending mail - msmtp
 #+begin_src emacs-lisp :tangle lisp/email.el
