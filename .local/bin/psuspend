@@ -1,4 +1,0 @@
-#!/bin/bash
-cmd="sudo systemctl suspend"
-
-$cmd &
