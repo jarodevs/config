@@ -717,11 +717,13 @@ Multi Vterm management
 #+end_src
 ** Saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
-        (setq notmuch-saved-searches
-              '((:name "Gorgias Unread" :query "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted")
-                (:name "Gorgias Inbox" :query "folder:Gorgias/Inbox tag:inbox")
-                (:name "Proton Unread" :query "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted")
-                (:name "Proton Inbox" :query "folder:Proton/Inbox tag:inbox")))
+  (setq notmuch-saved-searches
+        '((:name "Gorgias unread" :query "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted")
+          (:name "Gorgias todo" :query "folder:Gorgias/Inbox tag:todo")
+          (:name "Gorgias inbox" :query "folder:Gorgias/Inbox tag:inbox")
+          (:name "Proton unread" :query "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted")
+          (:name "Proton todo" :query "folder:Gorgias/Inbox tag:todo")
+          (:name "Proton inbox" :query "folder:Proton/Inbox tag:inbox")))
 #+end_src
 ** Notmuch-hello
 #+begin_src emacs-lisp :tangle lisp/email.el
