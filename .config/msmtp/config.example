@@ -1,0 +1,31 @@
+# Set default values for all accounts.
+account default
+auth            on
+tls             on
+logfile         /tmp/msmtp
+
+# gmail
+account         gorgias
+auth            on
+tls             on
+host            smtp.gmail.com
+port            587
+from            email@gmail.com
+user            email@gmail.com
+passwordeval    "gpg2 -d --quiet ~/.authinfo.gpg | grep email@gmail.com | awk -F'password \"' '{print $2}' | awk -F'\"' '{print $1}'"
+
+# proton
+account         proton
+host            127.0.0.1
+port            1025
+from            email@pm.me
+user            email@pm.me
+passwordeval    "gpg2 -d --quiet ~/.authinfo.gpg | grep email@pm.me | awk -F'password \"' '{print $2}' | awk -F'\"' '{print $1}'"
+# Not supported by Proton bridge
+auth            on
+tls             on
+tls_starttls    off
+tls_fingerprint #openssl s_client -connect 127.0.0.1:1025 -showcerts </dev/null 2>/dev/null | openssl x509 -noout -fingerprint -sha256
+
+# Syslog logging with facility LOG_MAIL instead of the default LOG_USER
+syslog LOG_MAIL
