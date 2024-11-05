@@ -730,7 +730,7 @@ Multi Vterm management
           (:name "Proton unread"
                  :query "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted"
                  :sort-order oldest-first)
-          (:name "roton todo"
+          (:name "Proton todo"
                  :query "folder:Proton/Inbox tag:inbox and tag:todo"
                  :sort-order oldest-first)
           (:name "Proton inbox"
