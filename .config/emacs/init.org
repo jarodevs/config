@@ -518,6 +518,11 @@ Candidate documentation annotation
   (setq org-wild-notifier-keyword-whitelist '("TODO" "PROGR"))
   (org-wild-notifier-mode)
 #+end_src
+* Org agenda
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (setq org-agenda-include-diary t)
+  (setq org-agenda-insert-diary-extract-time t)
+#+end_src
 * Diary
 #+begin_src emacs-lisp :tangle lisp/diary.el
   (setq diary-file "~/diary")
