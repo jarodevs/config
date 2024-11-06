@@ -450,63 +450,29 @@ Candidate documentation annotation
 #+end_src
 
 * Org mode
-** Global configurations
+** Init
 #+begin_src emacs-lisp :tangle lisp/org.el
-    (straight-use-package 'org)
-    (require 'org)
-    (add-hook 'org-mode-hook 'org-indent-mode)
-    (setq org-agenda-files '("~/Documents/org/"))
-    (evil-set-initial-state 'org-agenda-mode 'normal)
-
-    (straight-use-package 'org-bullets)
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-    (straight-use-package 'org-fancy-priorities)
-    (add-hook 'org-mode-hook 'org-fancy-priorities-mode)
-    (setq org-fancy-priorities-list '("🅰" "🅱" "🅲" "🅳" "🅴"))
-    ;; Diminishing hides the mode from the modeline
-    (when (featurep 'diminish)
-      (diminish 'org-fancy-priorities-mode))
-
-    (add-hook 'org-mode-hook
-      (lambda ()
-        (push '("[-]" .  "󰱑") prettify-symbols-alist)
-        (push '("[ ]" .  "") prettify-symbols-alist)
-        (push '("[X]" . "" ) prettify-symbols-alist)
-        (setq electric-pair-mode nil)
-        (prettify-symbols-mode)))
-
-    (setq org-todo-keywords
-          '((sequence "TODO" "PROGRESS" "DONE")))
-    (setq org-todo-keyword-faces
-          '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow")))
-            ("PROGRESS" . (:foreground "white" :background "DodgerBlue1"))
-            ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))))
+  (straight-use-package 'org)
+  (require 'org)
 #+end_src
-** Timeblock view
+** Setting org agenda files
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (straight-use-package 'org-timeblock)
-  (require 'org-timeblock)
-  (setq org-timeblock-span 1)
-  (add-hook 'org-timeblock-mode-hook
-            (lambda()
-              (setq blink-cursor-mode nil)))
-  (add-hook 'org-timeblock-mode-hook
-            (lambda ()
-              (evil-define-key 'normal org-timeblock-mode-map
-                (kbd "g r") 'org-timeblock-redraw-buffers)))
+  (setq org-agenda-files '("~/Documents/org/"))
 #+end_src
-** Alerts
+** Customizing headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (straight-use-package 'alert)
-  (require 'alert)
-  (setq alert-default-style 'osx-notifier)
-  (straight-use-package 'org-wild-notifier)
-  (require 'org-wild-notifier)
-  (setq org-wild-notifier-keyword-whitelist '("TODO" "PROGR"))
-  (org-wild-notifier-mode)
+  (setq org-todo-keywords
+        '((sequence "TODO" "PROGRESS" "DONE")))
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow")))
+          ("PROGRESS" . (:foreground "white" :background "DodgerBlue1"))
+          ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))))
 #+end_src
-* Org agenda
+** Indent accordingly to headlines
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (add-hook 'org-mode-hook 'org-indent-mode)
+#+end_src
+* Agenda
 ** Displaying diary items in agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-agenda-include-diary t)
@@ -517,6 +483,10 @@ Candidate documentation annotation
   (add-hook 'org-agenda-mode-hook
             (lambda ()
               (evil-local-set-key 'normal (kbd "g r") 'org-agenda-redo)))
+#+end_src
+** Set evil state as default state
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (evil-set-initial-state 'org-agenda-mode 'normal)
 #+end_src
 * Diary
 #+begin_src emacs-lisp :tangle lisp/diary.el
