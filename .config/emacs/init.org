@@ -507,15 +507,21 @@ Candidate documentation annotation
   (org-wild-notifier-mode)
 #+end_src
 * Org agenda
+** Displaying diary items in agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-agenda-include-diary t)
   (setq org-agenda-insert-diary-extract-time t)
+#+end_src
+** Keybindigs
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (add-hook 'org-agenda-mode-hook
+            (lambda ()
+              (evil-local-set-key 'normal (kbd "g r") 'org-agenda-redo)))
 #+end_src
 * Diary
 #+begin_src emacs-lisp :tangle lisp/diary.el
   (setq diary-file "~/diary")
 #+end_src
-* Calendar 
 * Help utilities 
 #+begin_src emacs-lisp :tangle lisp/help-utilities.el
   ;; (straight-use-package 'which-key)
