@@ -3,7 +3,7 @@
 # key: dpw
 # --
 * `(eval (format-time-string "[%d-%m-%Y %a]"))`
-** TODO Planification quotidienne [0/3]
+** Planification quotidienne [0/3]
    - [ ] Personel [0/2]
      - [ ] Recuperer les taches [0/2]
        - [ ] Email
@@ -16,6 +16,3 @@
        - [ ] Github
        - [ ] Backlog
      - [ ] Copier le calendrier journalier 
-   - [ ] Planifier les taches
-** Personel
-** Gorgias
