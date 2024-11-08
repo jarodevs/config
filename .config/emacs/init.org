@@ -90,6 +90,7 @@ Exec path used by emacs needs to be configured to load path from shell
   (tool-bar-mode 0)
   (menu-bar-mode 0)
   (scroll-bar-mode 0)
+  (global-hl-line-mode 1)
 #+end_src
 ** Font configuration
 #+begin_src emacs-lisp :tangle lisp/appearance.el
@@ -107,19 +108,6 @@ Exec path used by emacs needs to be configured to load path from shell
   (setq custom-safe-theme t)
   (require 'doom-themes)
   (load-theme 'gruber-darker t)
-#+end_src
-** Distinguish write buffers from others
-#+begin_src emacs-lisp :tangle lisp/appearance.el
-  (straight-use-package 'solaire-mode)
-  (require 'solaire-mode)
-  (solaire-global-mode +1)
-#+end_src
-** Dim non focused buffers
-#+begin_src emacs-lisp :tangle lisp/appearance.el
-  (straight-use-package 'dimmer)
-  (require 'dimmer)
-  (dimmer-configure-which-key)
-  (dimmer-mode 1)
 #+end_src
 ** Colorize compilation buffer
 There are two parts in this: 
