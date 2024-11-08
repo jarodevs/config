@@ -472,6 +472,10 @@ Candidate documentation annotation
 #+begin_src emacs-lisp :tangle lisp/org.el
   (add-hook 'org-mode-hook 'org-indent-mode)
 #+end_src
+** Setting note when task is set to DONE
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (setq org-log-done 'note)
+#+end_src
 * Agenda
 ** Displaying diary items in agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
