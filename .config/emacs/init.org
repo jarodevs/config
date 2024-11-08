@@ -443,6 +443,11 @@ Candidate documentation annotation
   (straight-use-package 'org)
   (require 'org)
 #+end_src
+** Org modules
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (setq org-modules
+     '(ol-bbdb ol-bibtex ol-docview ol-doi ol-eww ol-gnus org-habit ol-info ol-irc ol-mhe ol-rmail ol-w3m))
+#+end_src
 ** Setting org agenda files
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-agenda-files '("~/Documents/org/"))
@@ -464,6 +469,7 @@ Candidate documentation annotation
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-log-done 'note)
 #+end_src
+
 * Agenda
 ** Displaying diary items in agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
