@@ -543,8 +543,8 @@ Candidate documentation annotation
 
   (setq calendar-holidays (append holiday-local-holidays holiday-other-holidays))
 #+end_src
-* Versionning
-** Magit
+* Magit
+** Base config
 #+begin_src emacs-lisp :tangle lisp/versionning.el
   (straight-use-package 'magit)
   (setq display-line-numbers-type 'visual
@@ -556,11 +556,32 @@ Candidate documentation annotation
   (evil-define-key 'normal magit-section-mode-map (kbd "3") nil)
   (evil-define-key 'normal magit-section-mode-map (kbd "4") nil)
 #+end_src
-** Git share code
+** Share stuff
+*** Code line
 #+begin_src emacs-lisp :tangle lisp/versionning.el
   (straight-use-package
    '(git-share :type git :host github :repo "mgmarlow/git-share"))
   (require 'git-share)
+#+end_src
+*** Github commit 
+#+begin_src emacs-lisp :tangle lisp/versionning.el
+  (defun jarodevs-generate-commit-github-url
+      ()
+    "Generate and copy the GitHub URL for the commit at point."
+    (interactive)
+    (let*
+        ((commit
+          (magit-commit-p
+           (magit-commit-at-point)))
+         (remote-url
+          (forge-get-url :remote
+                         (magit-read-remote "Select remote" "origin" t))))
+      (if (not commit)
+          (print "Could not determine the commit at point"))
+      (if (not remote-url)
+          (print "Could not determine the remote url at point"))
+      (kill-new (format "%s/%s" remote-url commit))
+      ))
 #+end_src
 ** Forge - Create pull requests and interact with versioning services
 #+begin_src emacs-lisp :tangle lisp/versionning.el
