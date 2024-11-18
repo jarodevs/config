@@ -470,6 +470,11 @@ Candidate documentation annotation
   (setq org-log-done 'note)
 #+end_src
 
+** Setting note when task is rescheduled
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (setq org-log-reschedule 'note)
+#+end_src
+
 * Agenda
 ** Displaying diary items in agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
