@@ -585,7 +585,7 @@ Candidate documentation annotation
           (print "Could not determine the commit at point"))
       (if (not remote-url)
           (print "Could not determine the remote url at point"))
-      (kill-new (format "%s/%s" remote-url commit))
+      (kill-new (format "%s/commit/%s" remote-url commit))
       ))
 #+end_src
 ** Forge - Create pull requests and interact with versioning services
@@ -594,6 +594,13 @@ Candidate documentation annotation
   (with-eval-after-load 'magit
     (require 'forge))
   (setq forge-buffer-draft-p t)
+#+end_src
+** Display todos in magit status
+#+begin_src emacs-lisp :tangle lisp/versionning.el
+  (straight-use-package 'magit-todos)
+  (with-eval-after-load 'magit-todos
+    (require 'magit-todos))
+  (setq magit-todos-branch-list t)
 #+end_src
 * Project
 #+begin_src emacs-lisp :tangle lisp/project.el
