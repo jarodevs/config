@@ -597,10 +597,11 @@ Candidate documentation annotation
 #+end_src
 ** Display todos in magit status
 #+begin_src emacs-lisp :tangle lisp/versionning.el
-  (straight-use-package 'magit-todos)
-  (with-eval-after-load 'magit-todos
-    (require 'magit-todos))
-  (setq magit-todos-branch-list t)
+    (straight-use-package 'magit-todos)
+    (with-eval-after-load 'magit
+      (require 'magit-todos)
+      (magit-todos-mode t))
+    (setq magit-todos-branch-list t)
 #+end_src
 * Project
 #+begin_src emacs-lisp :tangle lisp/project.el
@@ -769,6 +770,12 @@ Multi Vterm management
   ;; Set up Mail User Agent (MUA)
   (setq mail-specify-envelope-from 't)
   (setq mail-envelope-from 'header)
+#+end_src
+* Kubernetes
+#+begin_src emacs-lisp :tangle lisp/kubernetes.el
+  (straight-use-package 'kubel)
+  (require 'kubel)
+  (kubel-vterm-setup) 
 #+end_src
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
@@ -1120,4 +1127,5 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/ace-window.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/kubernetes.el" user-emacs-directory))
 #+end_src
