@@ -494,6 +494,15 @@ Candidate documentation annotation
 * Diary
 #+begin_src emacs-lisp :tangle lisp/diary.el
   (setq diary-file "~/diary")
+  (setq appt-message-warning-time 15) ;; start warning 60 minutes before appointments
+  (setq appt-display-interval 15) ;; display warning every minute
+  (appt-activate t) ;; starts the appt "mode"
+
+  (setq appt-disp-window-function
+        (lambda (remaining new-time msg)
+          (alert msg
+           :title (message "In %s minutes" remaining)
+           :severity 'critical)))
 #+end_src
 * Help utilities 
 #+begin_src emacs-lisp :tangle lisp/help-utilities.el
@@ -782,6 +791,12 @@ Multi Vterm management
   (straight-use-package 'kubel)
   (require 'kubel)
   (kubel-vterm-setup) 
+#+end_src
+* Alerts
+#+begin_src emacs-lisp :tangle lisp/alert.el
+  (straight-use-package 'alert)
+  (require 'alert)
+  (setq alert-default-style 'osx-notifier)
 #+end_src
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
@@ -1133,5 +1148,6 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/ace-window.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/alert.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/kubernetes.el" user-emacs-directory))
 #+end_src
