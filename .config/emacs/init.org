@@ -619,6 +619,7 @@ Candidate documentation annotation
 ** LSP Client
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+  (add-hook 'tsx-ts-mode-hook 'eglot-ensure)
   (setq eglot-confirm-server-initiated-edits nil)
   (global-set-key (kbd "M-s f") #'eglot-code-action-quickfix)
 #+end_src
@@ -635,20 +636,25 @@ Candidate documentation annotation
 Enable typescript-ts-mode on ts(x) files
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-ts-mode))
+#+end_src
+
+Enable tsx/jsx file handling
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 #+end_src
 
 Prettier
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (straight-use-package 'prettier-js)
   (add-hook 'typescript-ts-mode-hook 'prettier-js-mode)
-  (add-hook 'tx-ts-mode-hook 'prettier-js-mode)
+  (add-hook 'tsx-ts-mode-hook 'prettier-js-mode)
 #+end_src
 
 Global typescript usefull variables
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (setq typescript-ts-mode-indent-offset 4)
   (add-hook 'typescript-ts-mode-hook 'electric-pair-mode)
+  (add-hook 'tsx-ts-mode-hook 'electric-pair-mode)
 #+end_src
 ** Code completion
 #+begin_src emacs-lisp :tangle lisp/coding.el
