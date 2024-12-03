@@ -104,10 +104,12 @@ Exec path used by emacs needs to be configured to load path from shell
   (straight-use-package 'doom-themes)
   (straight-use-package 'apropospriate-theme)
   (straight-use-package 'gruber-darker-theme)
+  (straight-use-package 'vscode-dark-plus-theme)
 
   (setq custom-safe-theme t)
   (require 'doom-themes)
-  (load-theme 'gruber-darker t)
+  (require 'vscode-dark-plus-theme)
+  (load-theme 'vscode-dark-plus t)
 #+end_src
 ** Colorize compilation buffer
 There are two parts in this: 
@@ -166,29 +168,10 @@ Next, filter out unwanted ANSI escape sequences, like the ones intended for ttys
   (add-hook 'comint-output-filter-functions
             'filter-non-sgr-control-sequences-in-output)
 #+end_src
-** Golden ratio
+** Solaire mode - different tones for focused window
 #+begin_src emacs-lisp :tangle lisp/appearance.el
-  (straight-use-package 'golden-ratio)
-  (require 'golden-ratio)
-  (golden-ratio-mode 1)
-  (golden-ratio-toggle-widescreen)
-  (setq golden-ratio-auto-scale t)
-  (setq golden-ratio-extra-commands
-        (append golden-ratio-extra-commands
-          '(
-            ace-select-window
-            ace-window
-            evil-window-move-far-left
-            evil-window-move-far-right
-            evil-window-move-very-top
-            evil-window-move-very-bottom
-            evil-window-up
-            evil-window-bottom
-            evil-window-left
-            evil-window-right)))
-  ;; The following code will set up golden-ratio to adjust for a moderately wide screen and also allow toggling between normal, with an adjustment factor of 1, and wide with an adjustment factor of .8. For a very wide screen/frame of ~3400 px, .4 works well giving screens with a width ~100 columns wide.
-  (setq golden-ratio-adjust-factor .8
-        golden-ratio-wide-adjust-factor .8)
+  (straight-use-package 'solaire-mode)
+  (solaire-global-mode +1)
 #+end_src
 * Minibuffer
 ** Vertical completion
