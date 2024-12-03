@@ -173,6 +173,11 @@ Next, filter out unwanted ANSI escape sequences, like the ones intended for ttys
   (straight-use-package 'solaire-mode)
   (solaire-global-mode +1)
 #+end_src
+** Dedicated window
+#+begin_src emacs-lisp :tangle lisp/appearance.el
+  (straight-use-package 'dedicated)
+  (require 'dedicated)
+#+end_src
 * Minibuffer
 ** Vertical completion
 Vertico Setup
