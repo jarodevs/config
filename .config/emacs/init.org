@@ -7,12 +7,18 @@ Exec path used by emacs needs to be configured to load path from shell
   (when (daemonp)
     (exec-path-from-shell-initialize))
 #+end_src
-* Ace-window - Easily switch windows
-#+begin_src emacs-lisp :tangle lisp/ace-window.el
+
+* Window management
+** Ace-window - Easily switch windows
+#+begin_src emacs-lisp :tangle lisp/window.el
   (straight-use-package 'ace-window)
   (global-set-key (kbd "M-o") #'ace-window)
 #+end_src
-* GPG 
+** Make switch-to-buffer obey display actions
+#+begin_src emacs-lisp :tangle lisp/window.el
+  (setq switch-to-buffer-obey-display-actions t)
+#+end_src
+* GPG
 ** Setting up .authinfo file
 #+begin_src emacs-lisp :tangle lisp/gpg.el
   (setq auth-sources '("~/.authinfo.gpg"))
@@ -754,7 +760,8 @@ Multi Vterm management
                  :query "folder:Proton/Inbox tag:inbox"
                  :sort-order oldest-first)))
 #+end_src
-** Notmuch-hello
+** Notmuch
+*** Keybinds for saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
   (add-hook 'notmuch-hello-mode-hook
             (lambda ()
@@ -782,6 +789,31 @@ Multi Vterm management
                 (lambda ()
                   (interactive)
                   (notmuch-search "folder:Proton/Inbox tag:inbox and tag:todo" t)))))
+#+end_src
+*** notmuch-hello buffer
+
+**** Defining Gorgias section
+IN PROGRESS
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (defun jarodevs-notmuch-hello-gorgias-section
+      ()
+    "Writes in buffer data relative to the Gorgias email account."
+    (interactive)
+    (goto-char
+     (point-min))
+    (insert "Mail account - Gorgias")
+    (goto-char
+     (point-max))
+    (insert "Hello man")
+    )
+#+end_src
+
+**** Defining Proton section
+TODO 
+**** Configuring sections displayed
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (setq notmuch-hello-logo nil
+        notmuch-hello-sections ())
 #+end_src
 ** Sending mail - msmtp
 #+begin_src emacs-lisp :tangle lisp/email.el
@@ -1152,7 +1184,7 @@ Multi Vterm management
   (load-file (expand-file-name "lisp/wgrep.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/ansi-support-in-buffers.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/gpg.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/ace-window.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/window.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/alert.el" user-emacs-directory))
