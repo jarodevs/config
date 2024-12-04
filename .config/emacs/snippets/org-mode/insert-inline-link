@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: insert new inline link
+# key: iil
+# --
+[[$2][$1]] $3

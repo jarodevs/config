@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: code block with tangle
+# key: cbt
+# --
+
+#+begin_src ${1:language} :tangle ${2:file-path}
+$0
+#+end_src

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: current date
+# key: cd
+# --
+`(eval (format-time-string "[%d-%m-%Y %a]"))` $1

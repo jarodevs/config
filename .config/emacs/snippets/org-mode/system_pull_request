@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: system_pull_request
+# key: spr
+# --
+** Pull request system [0/5]
+   - [ ] Make sure there is 1H available for review and 1h for monitoring
+   - [ ] Code is first reviewed and test cases from it are extracted
+   - [ ] Code is tested [0/2]
+     If needed, tests are made on staging - Ask yourself if it's necessary - Necessary if it uses external services, uses critical systems etc...
+     - [ ] Introduced functionality is tested
+     - [ ] Potential regressions are tested
+   - [ ] PR description is complete [0/3]
+     - [ ] Context is clearly described
+     - [ ] Tests that were made are described
+     - [ ] Step by step to testing is clearly explained
