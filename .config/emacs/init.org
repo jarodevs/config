@@ -473,10 +473,9 @@ Candidate documentation annotation
 ** Customizing headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-todo-keywords
-        '((sequence "TODO" "PROGRESS" "DONE")))
+        '((sequence "TODO" "DONE")))
   (setq org-todo-keyword-faces
-        '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow")))
-          ("PROGRESS" . (:foreground "white" :background "DodgerBlue1"))
+        '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow"))) 
           ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))))
 #+end_src
 ** Indent accordingly to headlines
@@ -791,7 +790,6 @@ Multi Vterm management
                   (notmuch-search "folder:Proton/Inbox tag:inbox and tag:todo" t)))))
 #+end_src
 *** notmuch-hello buffer
-
 **** Defining Gorgias section
 IN PROGRESS
 #+begin_src emacs-lisp :tangle lisp/email.el
