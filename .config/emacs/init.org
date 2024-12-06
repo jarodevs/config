@@ -835,6 +835,15 @@ TODO
   (require 'alert)
   (setq alert-default-style 'osx-notifier)
 #+end_src
+* Auto saving
+#+begin_src emacs-lisp :tangle lisp/auto-saving.el
+  (straight-use-package 'real-auto-save)
+#+end_src
+** Define modes to auto save for
+In some cases like saving habits or org files, I want to make sure that changes are saved
+#+begin_src emacs-lisp :tangle lisp/auto-saving.el
+  (add-hook 'org-mode-hook 'real-auto-save-mode)
+#+end_src
 * Package Manager - Straight.el 
 #+begin_src emacs-lisp :tangle lisp/straight.el
   (setq package-enable-at-startup nil)
@@ -1187,4 +1196,7 @@ TODO
   (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/alert.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/kubernetes.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/auto-saving.el" user-emacs-directory))
 #+end_src
+
+
