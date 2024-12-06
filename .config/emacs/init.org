@@ -18,6 +18,12 @@ Exec path used by emacs needs to be configured to load path from shell
 #+begin_src emacs-lisp :tangle lisp/window.el
   (setq switch-to-buffer-obey-display-actions t)
 #+end_src
+* File backups
+** Setting file backup folder in =~/.config/emacs/backups=
+#+begin_src emacs-lisp :tangle lisp/file-backup.el
+  (setq backup-directory-alist
+            `(("." . ,(concat user-emacs-directory "backups"))))
+#+end_src
 * GPG
 ** Setting up .authinfo file
 #+begin_src emacs-lisp :tangle lisp/gpg.el
@@ -1197,6 +1203,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
   (load-file (expand-file-name "lisp/alert.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/kubernetes.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/auto-saving.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/file-backup.el" user-emacs-directory))
 #+end_src
 
 
