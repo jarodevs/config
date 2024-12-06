@@ -2,7 +2,7 @@
 # name: system_pull_request
 # key: spr
 # --
-** Pull request system [0/5]
+${1} Pull request system [0/5]
    - [ ] Make sure there is 1H available for review and 1h for monitoring
    - [ ] Code is first reviewed and test cases from it are extracted
    - [ ] Code is tested [0/2]
