@@ -88,9 +88,6 @@ Exec path used by emacs needs to be configured to load path from shell
 ** Global evil bindigs
 #+begin_src emacs-lisp :tangle lisp/evil.el
   (evil-global-set-key 'normal (kbd "g n m") 'notmuch-hello)
-  (evil-global-set-key 'normal (kbd "g d p") (lambda()
-                                               (interactive)
-                                               (find-file "~/Documents/org/daily-planner.org")))
 #+end_src
 * Appearance
 ** Global ui tweaks
@@ -738,12 +735,13 @@ Multi Vterm management
   (require 'multi-vterm)
   #+end_src
 * Email
-** Basic configuration
+** Notmuch
+*** Setup
 #+begin_src emacs-lisp :tangle lisp/email.el
   (straight-use-package 'notmuch)
   (require 'notmuch)
 #+end_src
-** Saved searches
+*** Saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
   (setq notmuch-saved-searches
         '((:name "Gorgias unread"
@@ -765,7 +763,106 @@ Multi Vterm management
                  :query "folder:Proton/Inbox tag:inbox"
                  :sort-order oldest-first)))
 #+end_src
-** Notmuch
+*** Defining Gorgias section
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (defun jarodevs-notmuch-hello-gorgias-section
+      ()
+    "Writes in buffer data relative to the Gorgias email account."
+    (interactive)
+    (let
+        ((left-padding "    "))
+      (insert left-padding)
+      (insert
+       (propertize "Mail account - Gorgias\n" 
+                   'face
+                   '(:weight bold :underline t)))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       (concat "🧧 Unread messages ("
+                               (propertize "gu" 'face
+                                           '(:weight bold))
+                               "):")
+                       (notmuch-saved-search-count "folder:Gorgias/Inbox tag:unread"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       "✅ Todo(s):"
+                       (notmuch-saved-search-count "folder:Gorgias/Inbox tag:todo"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       "🥡 Inbox items:"
+                       (notmuch-saved-search-count "folder:Gorgias/Inbox"))))
+      (insert "\n")))
+#+end_src
+
+*** Defining Proton section
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (defun jarodevs-notmuch-hello-personal-section
+      ()
+    "Writes in buffer data relative to the Personal email account."
+    (interactive)
+    (let
+        ((left-padding "    "))
+      (insert
+       (concat "\n" left-padding))
+      (insert
+       (propertize "Mail account - Personal Proton\n" 
+                   'face
+                   '(:weight bold :underline t)))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       (concat "💌 Unread messages ("
+                               (propertize "pu" 'face
+                                           '(:weight bold))
+                               "):")
+                       (notmuch-saved-search-count "folder:Proton/Inbox tag:unread"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       "✅️ Todo(s):"
+                       (notmuch-saved-search-count "folder:Proton/Inbox tag:todo"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       "🍱 Inbox items:"
+                       (notmuch-saved-search-count "folder:Proton/Inbox"))))
+      (insert "\n")))
+#+end_src
+
+*** Defining Notmuch hello buffer
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (defun jarodevs-notmuch-hello
+      ()
+    "Display custom sections in Notmuch Hello buffer while retaining notmuch-hello-mode."
+    (interactive)
+    (let
+        ((buffer
+          (get-buffer-create "*Notmuch Dashboard*"))
+         (vertical-padding 5))
+      (with-current-buffer buffer
+        (let
+            ((inhibit-read-only t))
+          (erase-buffer)
+          (notmuch-hello-mode)
+          (setq-local display-line-numbers nil)
+          (dotimes
+              (_ vertical-padding)
+            (insert "\n"))
+          (jarodevs-notmuch-hello-gorgias-section)
+          (jarodevs-notmuch-hello-personal-section)
+          (dotimes
+              (_ vertical-padding)
+            (insert "\n"))
+          (read-only-mode 1)))
+      (switch-to-buffer buffer)))
+
+
+  (setq notmuch-show-logo nil
+        notmuch-hello-sections '(jarodevs-notmuch-hello))
+#+end_src
 *** Keybinds for saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
   (add-hook 'notmuch-hello-mode-hook
@@ -794,40 +891,6 @@ Multi Vterm management
                 (lambda ()
                   (interactive)
                   (notmuch-search "folder:Proton/Inbox tag:inbox and tag:todo" t)))))
-#+end_src
-*** notmuch-hello buffer
-**** Defining Gorgias section
-IN PROGRESS
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (defun jarodevs-notmuch-hello-gorgias-section
-      ()
-    "Writes in buffer data relative to the Gorgias email account."
-    (interactive)
-    (goto-char
-     (point-min))
-    (insert "Mail account - Gorgias")
-    (goto-char
-     (point-max))
-    (insert "Hello man")
-    )
-#+end_src
-
-**** Defining Proton section
-TODO 
-**** Configuring sections displayed
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (setq notmuch-hello-logo nil
-        notmuch-hello-sections ())
-#+end_src
-** Sending mail - msmtp
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (setq message-sendmail-f-is-evil 't)
-  (setq sendmail-program "/opt/homebrew/bin/msmtp")
-  (setq message-sendmail-extra-arguments '("--read-envelope-from"))
-
-  ;; Set up Mail User Agent (MUA)
-  (setq mail-specify-envelope-from 't)
-  (setq mail-envelope-from 'header)
 #+end_src
 * Kubernetes
 #+begin_src emacs-lisp :tangle lisp/kubernetes.el
