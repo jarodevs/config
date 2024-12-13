@@ -87,7 +87,7 @@ Exec path used by emacs needs to be configured to load path from shell
 #+end_src
 ** Global evil bindigs
 #+begin_src emacs-lisp :tangle lisp/evil.el
-  (evil-global-set-key 'normal (kbd "g n m") 'notmuch-hello)
+  (evil-global-set-key 'normal (kbd "C-x n m") 'notmuch-hello)
 #+end_src
 * Appearance
 ** Global ui tweaks
@@ -475,21 +475,25 @@ Candidate documentation annotation
 #+end_src
 ** Customizing headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (setq org-todo-keywords
-        '((sequence "TODO" "DONE")))
-  (setq org-todo-keyword-faces
-        '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow"))) 
-          ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))))
+    (setq org-todo-keywords
+          '((sequence "TODO" "REVIEW" "DONE")))
+    (setq org-todo-keyword-faces
+          '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow"))) 
+            ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))
+             ("REVIEW" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "blue")))))
 #+end_src
 ** Indent accordingly to headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
   (add-hook 'org-mode-hook 'org-indent-mode)
 #+end_src
+** Log state change in LOGBOOK
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (setq org-log-into-drawer t)
+#+end_src
 ** Setting note when task is set to DONE
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-log-done 'note)
 #+end_src
-
 ** Setting note when task is rescheduled
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-log-reschedule 'note)
@@ -714,6 +718,15 @@ Kind icons
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (setq eldoc-echo-area-use-multiline-p nil)
 #+end_src
+** Compilation
+*** Default compile command
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (setq compile-command "")
+#+end_src
+*** Compilation command keymap
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (global-set-key "\C-xc" 'compile)
+#+end_src
 * Text editing
 ** Markdown
 #+begin_src emacs-lisp :tangle lisp/text-editing.el
@@ -763,7 +776,8 @@ Multi Vterm management
                  :query "folder:Proton/Inbox tag:inbox"
                  :sort-order oldest-first)))
 #+end_src
-*** Defining Gorgias section
+*** Defining Notmuch hello buffer
+**** Defining Gorgias section
 #+begin_src emacs-lisp :tangle lisp/email.el
   (defun jarodevs-notmuch-hello-gorgias-section
       ()
@@ -797,7 +811,7 @@ Multi Vterm management
       (insert "\n")))
 #+end_src
 
-*** Defining Proton section
+**** Defining Proton section
 #+begin_src emacs-lisp :tangle lisp/email.el
   (defun jarodevs-notmuch-hello-personal-section
       ()
@@ -832,7 +846,7 @@ Multi Vterm management
       (insert "\n")))
 #+end_src
 
-*** Defining Notmuch hello buffer
+**** Configuring hello buffer
 #+begin_src emacs-lisp :tangle lisp/email.el
   (defun jarodevs-notmuch-hello
       ()
@@ -1233,6 +1247,10 @@ In some cases like saving habits or org files, I want to make sure that changes 
            (message "File path copied: %s" xfpath)
            xfpath )))))
 #+end_src
+* Misc
+#+begin_src emacs-lisp :tangle lisp/misc.el
+  (global-unset-key "\C-x\C-c")
+#+end_src
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
   (setenv "LIBRARY_PATH"
@@ -1266,6 +1284,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
   (load-file (expand-file-name "lisp/alert.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/kubernetes.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/auto-saving.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/misc.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/file-backup.el" user-emacs-directory))
 #+end_src
 
