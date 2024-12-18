@@ -118,7 +118,7 @@ Exec path used by emacs needs to be configured to load path from shell
   (setq custom-safe-theme t)
   (require 'doom-themes)
   (require 'vscode-dark-plus-theme)
-  (load-theme 'vscode-dark-plus t)
+  (load-theme 'doom-gruvbox t)
 #+end_src
 ** Colorize compilation buffer
 There are two parts in this: 
@@ -499,21 +499,74 @@ Candidate documentation annotation
   (setq org-log-reschedule 'note)
 #+end_src
 
-* Agenda
-** Displaying diary items in agenda
+** Agenda
+*** Displaying diary items in agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-agenda-include-diary t)
   (setq org-agenda-insert-diary-extract-time t)
 #+end_src
-** Keybindigs
+*** Keybindigs
 #+begin_src emacs-lisp :tangle lisp/org.el
   (add-hook 'org-agenda-mode-hook
             (lambda ()
               (evil-local-set-key 'normal (kbd "g r") 'org-agenda-redo)))
 #+end_src
-** Set evil state as default state
+*** Set evil state as default state
 #+begin_src emacs-lisp :tangle lisp/org.el
   (evil-set-initial-state 'org-agenda-mode 'normal)
+#+end_src
+*** Org super agenda
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (straight-use-package 'org-super-agenda)
+  (require 'org-super-agenda)
+
+  (setq org-super-agenda-groups
+         '(;; Each group has an implicit boolean OR operator between its selectors.
+           (:name "Today"  ; Optionally specify section name
+                  :time-grid t  ; Items that appear on the time grid
+                  :todo "TODAY")  ; Items that have this TODO keyword
+           (:name "Important"
+                  ;; Single arguments given alone
+                  :tag "bills"
+                  :priority "A")
+           ;; Set order of multiple groups at once
+           (:order-multi (2 (:name "Shopping in town"
+                                   ;; Boolean AND group matches items that match all subgroups
+                                   :and (:tag "shopping" :tag "@town"))
+                            (:name "Food-related"
+                                   ;; Multiple args given in list with implicit OR
+                                   :tag ("food" "dinner"))
+                            (:name "Personal"
+                                   :habit t
+                                   :tag "personal")
+                            (:name "Space-related (non-moon-or-planet-related)"
+                                   ;; Regexps match case-insensitively on the entire entry
+                                   :and (:regexp ("space" "NASA")
+                                                 ;; Boolean NOT also has implicit OR between selectors
+                                                 :not (:regexp "moon" :tag "planet")))))
+           ;; Groups supply their own section names when none are given
+           (:todo "WAITING" :order 8)  ; Set order of this section
+           (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
+                  ;; Show this group at the end of the agenda (since it has the
+                  ;; highest number). If you specified this group last, items
+                  ;; with these todo keywords that e.g. have priority A would be
+                  ;; displayed in that group instead, because items are grouped
+                  ;; out in the order the groups are listed.
+                  :order 9)
+           (:priority<= "B"
+                        ;; Show this section after "Today" and "Important", because
+                        ;; their order is unspecified, defaulting to 0. Sections
+                        ;; are displayed lowest-number-first.
+                        :order 1)
+           ;; After the last group, the agenda will display items that didn't
+           ;; match any of these groups, with the default order position of 99
+           ))
+
+  ;; Temporarily disable the keymaps as I don't know what I need
+  (setq org-super-agenda-mode-map (make-sparse-keymap))
+  (setq org-super-agenda-header-map (make-sparse-keymap))
+
+  (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
 #+end_src
 * Diary
 #+begin_src emacs-lisp :tangle lisp/diary.el
@@ -905,6 +958,14 @@ Multi Vterm management
                 (lambda ()
                   (interactive)
                   (notmuch-search "folder:Proton/Inbox tag:inbox and tag:todo" t)))))
+#+end_src
+** Sending mail - MSMTP
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (setq send-mail-function 'sendmail-send-it
+        sendmail-program "/opt/homebrew/bin/msmtp"
+        mail-specify-envelope-from t
+        message-sendmail-envelope-from 'header
+        mail-envelope-from 'header)
 #+end_src
 * Kubernetes
 #+begin_src emacs-lisp :tangle lisp/kubernetes.el
