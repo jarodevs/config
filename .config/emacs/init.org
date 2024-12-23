@@ -1309,8 +1309,18 @@ In some cases like saving habits or org files, I want to make sure that changes 
            xfpath )))))
 #+end_src
 * Misc
+** Unset default emacs binding
 #+begin_src emacs-lisp :tangle lisp/misc.el
   (global-unset-key "\C-x\C-c")
+#+end_src
+** Kill all other buffers emacs command
+#+begin_src emacs-lisp :tangle lisp/misc.el
+  (defun kill-other-buffers ()
+      "Kill all other buffers."
+      (interactive)
+      (mapc 'kill-buffer 
+            (delq (current-buffer) 
+                  (remove-if-not 'buffer-file-name (buffer-list)))))
 #+end_src
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
