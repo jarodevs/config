@@ -41,6 +41,8 @@ alias gcproxy-gorgias-ai_agent-production="cloud-sql-proxy -i gorgias-conversati
 alias gcproxy-gorgias-chat-staging="cloud-sql-proxy -i gorgias-chat-staging:us-east1:chat-03b7c90c --port 4935"
 alias gcproxy-gorgias-chat-production="cloud-sql-proxy -i gorgias-chat-production:us-east1:chat-f1b2e115 --port 4936"
 alias gcproxy-gorgias-help_center-production="cloud-sql-proxy -i gorgias-help-center-production:us-central1:help-center-d227c56a --port 4934"
+alias dpss="docker ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk 'BEGIN { printf \"%-20s %-50s %-50s\\n\", \"CONTAINER ID\", \"NAME\", \"STATUS\" } { printf \"%-20s %-50s %-50s\\n\", \$1, \$2, \$3 }'"
+alias dcpss="docker compose ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk 'BEGIN { printf \"%-20s %-50s %-50s\\n\", \"CONTAINER ID\", \"NAME\", \"STATUS\" } { printf \"%-20s %-50s %-50s\\n\", \$1, \$2, \$3 }'"
 
 # ENV
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
@@ -88,7 +90,7 @@ TYPEWRITTEN_PROMPT_LAYOUT="pure"
 
 source $ZSH/oh-my-zsh.sh
 
-export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin
+export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin:/usr/bin/gcc
 
 GPG_TTY=$(tty)
 export GPG_TTY

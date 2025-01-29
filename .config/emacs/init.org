@@ -118,7 +118,7 @@ Exec path used by emacs needs to be configured to load path from shell
   (setq custom-safe-theme t)
   (require 'doom-themes)
   (require 'vscode-dark-plus-theme)
-  (load-theme 'doom-gruvbox t)
+  (load-theme 'modus-vivendi-tritanopia t)
 #+end_src
 ** Colorize compilation buffer
 There are two parts in this: 
@@ -464,6 +464,12 @@ Candidate documentation annotation
   (straight-use-package 'org)
   (require 'org)
 #+end_src
+** Org babel
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((C . t) (emacs-lisp . t))) ;; Enable C and Emacs Lisp
+#+end_src
 ** Org modules
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-modules
@@ -471,16 +477,18 @@ Candidate documentation annotation
 #+end_src
 ** Setting org agenda files
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (setq org-agenda-files '("~/Documents/org/"))
+  (setq org-agenda-files '("~/Documents/org/" "~/Documents/org/events/"))
 #+end_src
 ** Customizing headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
-    (setq org-todo-keywords
-          '((sequence "TODO" "REVIEW" "DONE")))
-    (setq org-todo-keyword-faces
-          '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow"))) 
-            ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))
-             ("REVIEW" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "blue")))))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "DOING(o)" "REVIEW(r)" "|" "DONE(d)")))
+
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow"))) 
+          ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))
+           ("REVIEW" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "blue")))
+           ("DOING" . (:foreground "white" :background "dark cyan"))))
 #+end_src
 ** Indent accordingly to headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -520,53 +528,30 @@ Candidate documentation annotation
   (straight-use-package 'org-super-agenda)
   (require 'org-super-agenda)
 
-  (setq org-super-agenda-groups
-         '(;; Each group has an implicit boolean OR operator between its selectors.
-           (:name "Today"  ; Optionally specify section name
-                  :time-grid t  ; Items that appear on the time grid
-                  :todo "TODAY")  ; Items that have this TODO keyword
-           (:name "Important"
-                  ;; Single arguments given alone
-                  :tag "bills"
-                  :priority "A")
-           ;; Set order of multiple groups at once
-           (:order-multi (2 (:name "Shopping in town"
-                                   ;; Boolean AND group matches items that match all subgroups
-                                   :and (:tag "shopping" :tag "@town"))
-                            (:name "Food-related"
-                                   ;; Multiple args given in list with implicit OR
-                                   :tag ("food" "dinner"))
-                            (:name "Personal"
-                                   :habit t
-                                   :tag "personal")
-                            (:name "Space-related (non-moon-or-planet-related)"
-                                   ;; Regexps match case-insensitively on the entire entry
-                                   :and (:regexp ("space" "NASA")
-                                                 ;; Boolean NOT also has implicit OR between selectors
-                                                 :not (:regexp "moon" :tag "planet")))))
-           ;; Groups supply their own section names when none are given
-           (:todo "WAITING" :order 8)  ; Set order of this section
-           (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
-                  ;; Show this group at the end of the agenda (since it has the
-                  ;; highest number). If you specified this group last, items
-                  ;; with these todo keywords that e.g. have priority A would be
-                  ;; displayed in that group instead, because items are grouped
-                  ;; out in the order the groups are listed.
-                  :order 9)
-           (:priority<= "B"
-                        ;; Show this section after "Today" and "Important", because
-                        ;; their order is unspecified, defaulting to 0. Sections
-                        ;; are displayed lowest-number-first.
-                        :order 1)
-           ;; After the last group, the agenda will display items that didn't
-           ;; match any of these groups, with the default order position of 99
-           ))
-
   ;; Temporarily disable the keymaps as I don't know what I need
   (setq org-super-agenda-mode-map (make-sparse-keymap))
   (setq org-super-agenda-header-map (make-sparse-keymap))
 
   (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
+#+end_src
+** Org alert
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (straight-use-package 'org-alert)
+  (require 'org-alert)
+
+  (setq alert-default-style 'osx-notifier)
+
+  (setq org-alert-interval 300
+        org-alert-notify-cutoff 10
+        org-alert-notify-after-event-cutoff 10)
+
+  (setq org-alert-notification-title "Org")
+  (setq org-alert-match-string
+        "SCHEDULED>=\"<today>\"+SCHEDULED<\"<tomorrow>\"\
+  |DEADLINE>=\"<today>\"+DEADLINE<\"<tomorrow>\"\
+  |TIMESTAMP>=\"<today>\"+TIMESTAMP<\"<tomorrow>\"")
+  (setq org-alert-time-match-string
+        "*?<.*?\\([0-9]\\{2\\}:[0-9]\\{2\\}\\).*>")
 #+end_src
 * Diary
 #+begin_src emacs-lisp :tangle lisp/diary.el
@@ -1115,6 +1100,28 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (run-docker-compose "docker compose -f ~/gorgias/gorgias-account-manager/docker-compose.yml stop"
                         "Account Manager service is stopping..."))
 #+end_src
+** Start workflows service
+#+begin_src emacs-lisp :tangle lisp/custom-commands.el
+  (defvar workflows-service-process nil "Process to manage the gorgias workflows service")
+
+  (defun start-workflows-service ()
+    "Start the start-workflows-service (npx nx serve api) and track logs."
+    (interactive)
+    (setq workflows-service-process
+          (start-process-shell-command
+           "workflows-service-process" ;; Name of the process
+           nil                        ;; No associated buffer
+           "cd ~/gorgias/workflows && npx nx serve api > /tmp/workflows_service.log 2>&1"))
+    (message "Workflows service is starting... Logs available -> /tmp/workflows_service.log"))
+
+  (defun stop-workflows-service ()
+    "Stop the workflows service."
+    (interactive)
+    (when (process-live-p workflows-service-process)
+      (kill-process workflows-service-process)
+      (setq workflows-service-process nil)
+      (message "Workflows service process is stopping... Logs available -> /tmp/workflows_service.log")))
+#+end_src
 ** Start ngrok 
 #+begin_src emacs-lisp :tangle lisp/custom-commands.el
   (defvar ngrok-ai-agent-process nil "Process handle for ai-agent ngrok.")
@@ -1255,7 +1262,8 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (start-incoming)
     (start-sendgrid-inbound)
     (start-account-manager)
-    (start-workflows))
+    (start-workflows)
+    (start-workflows-service))
 
   (defun stop-gorgias ()
     "Run docker-compose stop for all Gorgias services."
@@ -1272,6 +1280,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (stop-incoming)
     (stop-sendgrid-inbound)
     (stop-account-manager)
+    (stop-workflows-service)
     (stop-workflows))
 #+end_src
 ** Copy current buffer absolute path
@@ -1308,6 +1317,13 @@ In some cases like saving habits or org files, I want to make sure that changes 
            (message "File path copied: %s" xfpath)
            xfpath )))))
 #+end_src
+* Dashboard
+#+begin_src emacs-lisp :tangle lisp/dashboard.el
+  ;; use-package with package.el:
+  (straight-use-package 'dashboard)
+  (require 'dashboard)
+  (dashboard-setup-startup-hook)
+#+end_src
 * Misc
 ** Unset default emacs binding
 #+begin_src emacs-lisp :tangle lisp/misc.el
@@ -1315,12 +1331,10 @@ In some cases like saving habits or org files, I want to make sure that changes 
 #+end_src
 ** Kill all other buffers emacs command
 #+begin_src emacs-lisp :tangle lisp/misc.el
-  (defun kill-other-buffers ()
+ (defun kill-other-buffers ()
       "Kill all other buffers."
       (interactive)
-      (mapc 'kill-buffer 
-            (delq (current-buffer) 
-                  (remove-if-not 'buffer-file-name (buffer-list)))))
+      (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 #+end_src
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
@@ -1357,6 +1371,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
   (load-file (expand-file-name "lisp/auto-saving.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/misc.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/file-backup.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/dashboard.el" user-emacs-directory))
 #+end_src
 
 
