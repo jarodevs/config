@@ -542,7 +542,7 @@ Candidate documentation annotation
   (setq alert-default-style 'osx-notifier)
 
   (setq org-alert-interval 300
-        org-alert-notify-cutoff 10
+        org-alert-notify-cutoff 15
         org-alert-notify-after-event-cutoff 10)
 
   (setq org-alert-notification-title "Org")
@@ -815,25 +815,22 @@ Multi Vterm management
                  :sort-order oldest-first)))
 #+end_src
 *** Defining Notmuch hello buffer
-**** Defining Gorgias section
 #+begin_src emacs-lisp :tangle lisp/email.el
-  (defun jarodevs-notmuch-hello-gorgias-section
-      ()
+  (defun notmuch-hello-empty-header ()
+    "Insert some top padding, no actual header text."
+    (dotimes (_ 3) (insert "\n"))) ; 3 blank lines
+
+  (defun notmuch-hello-insert-gorgias-section ()
     "Writes in buffer data relative to the Gorgias email account."
-    (interactive)
-    (let
-        ((left-padding "    "))
+    (let ((left-padding "    "))
       (insert left-padding)
-      (insert
-       (propertize "Mail account - Gorgias\n" 
-                   'face
-                   '(:weight bold :underline t)))
+      (insert (propertize "Mail account - Gorgias\n"
+                          'face '(:weight bold :underline t)))
       (insert
        (concat left-padding
                (format "%-25s %6s\n"
                        (concat "🧧 Unread messages ("
-                               (propertize "gu" 'face
-                                           '(:weight bold))
+                               (propertize "gu" 'face '(:weight bold))
                                "):")
                        (notmuch-saved-search-count "folder:Gorgias/Inbox tag:unread"))))
       (insert
@@ -847,28 +844,18 @@ Multi Vterm management
                        "🥡 Inbox items:"
                        (notmuch-saved-search-count "folder:Gorgias/Inbox"))))
       (insert "\n")))
-#+end_src
 
-**** Defining Proton section
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (defun jarodevs-notmuch-hello-personal-section
-      ()
+  (defun notmuch-hello-insert-personal-section ()
     "Writes in buffer data relative to the Personal email account."
-    (interactive)
-    (let
-        ((left-padding "    "))
-      (insert
-       (concat "\n" left-padding))
-      (insert
-       (propertize "Mail account - Personal Proton\n" 
-                   'face
-                   '(:weight bold :underline t)))
+    (let ((left-padding "    "))
+      (insert (concat "\n" left-padding))
+      (insert (propertize "Mail account - Personal Proton\n"
+                          'face '(:weight bold :underline t)))
       (insert
        (concat left-padding
                (format "%-25s %6s\n"
                        (concat "💌 Unread messages ("
-                               (propertize "pu" 'face
-                                           '(:weight bold))
+                               (propertize "pu" 'face '(:weight bold))
                                "):")
                        (notmuch-saved-search-count "folder:Proton/Inbox tag:unread"))))
       (insert
@@ -882,39 +869,13 @@ Multi Vterm management
                        "🍱 Inbox items:"
                        (notmuch-saved-search-count "folder:Proton/Inbox"))))
       (insert "\n")))
+
+  (setq notmuch-hello-sections
+        '(notmuch-hello-empty-header
+          notmuch-hello-insert-gorgias-section
+          notmuch-hello-insert-personal-section))
 #+end_src
 
-**** Configuring hello buffer
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (defun jarodevs-notmuch-hello
-      ()
-    "Display custom sections in Notmuch Hello buffer while retaining notmuch-hello-mode."
-    (interactive)
-    (let
-        ((buffer
-          (get-buffer-create "*Notmuch Dashboard*"))
-         (vertical-padding 5))
-      (with-current-buffer buffer
-        (let
-            ((inhibit-read-only t))
-          (erase-buffer)
-          (notmuch-hello-mode)
-          (setq-local display-line-numbers nil)
-          (dotimes
-              (_ vertical-padding)
-            (insert "\n"))
-          (jarodevs-notmuch-hello-gorgias-section)
-          (jarodevs-notmuch-hello-personal-section)
-          (dotimes
-              (_ vertical-padding)
-            (insert "\n"))
-          (read-only-mode 1)))
-      (switch-to-buffer buffer)))
-
-
-  (setq notmuch-show-logo nil
-        notmuch-hello-sections '(jarodevs-notmuch-hello))
-#+end_src
 *** Keybinds for saved searches
 #+begin_src emacs-lisp :tangle lisp/email.el
   (add-hook 'notmuch-hello-mode-hook
