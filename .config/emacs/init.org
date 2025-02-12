@@ -468,7 +468,9 @@ Candidate documentation annotation
 #+begin_src emacs-lisp :tangle lisp/org.el
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((C . t) (emacs-lisp . t))) ;; Enable C and Emacs Lisp
+   '((C . t) (emacs-lisp . t) (shell . t))) ;; Enable C and Emacs Lisp
+
+  (setq org-confirm-babel-evaluate nil)
 #+end_src
 ** Org modules
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -500,13 +502,13 @@ Candidate documentation annotation
 #+end_src
 ** Setting note when task is set to DONE
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (setq org-log-done 'note)
+  (setq org-log-done 'time)
 #+end_src
-** Setting note when task is rescheduled
+** Preventing parents to be marked as done if children are not
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (setq org-log-reschedule 'note)
+  (setq org-enforce-todo-dependencies t)
+  (setq org-auto-repeat-maybe t)
 #+end_src
-
 ** Agenda
 *** Displaying diary items in agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -536,22 +538,23 @@ Candidate documentation annotation
 #+end_src
 ** Org alert
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (straight-use-package 'org-alert)
-  (require 'org-alert)
+    (straight-use-package 'org-alert)
+    (require 'org-alert)
 
-  (setq alert-default-style 'osx-notifier)
+    (setq alert-default-style 'osx-notifier)
 
-  (setq org-alert-interval 300
+  (setq org-alert-interval 900
         org-alert-notify-cutoff 15
-        org-alert-notify-after-event-cutoff 10)
+        org-alert-notify-after-event-cutoff 0)
 
-  (setq org-alert-notification-title "Org")
-  (setq org-alert-match-string
-        "SCHEDULED>=\"<today>\"+SCHEDULED<\"<tomorrow>\"\
-  |DEADLINE>=\"<today>\"+DEADLINE<\"<tomorrow>\"\
-  |TIMESTAMP>=\"<today>\"+TIMESTAMP<\"<tomorrow>\"")
-  (setq org-alert-time-match-string
-        "*?<.*?\\([0-9]\\{2\\}:[0-9]\\{2\\}\\).*>")
+    (setq org-alert-notification-title "Org")
+    (setq org-alert-match-string
+          "SCHEDULED>=\"<today>\"+SCHEDULED<\"<tomorrow>\"\
+    |DEADLINE>=\"<today>\"+DEADLINE<\"<tomorrow>\"\
+    |TIMESTAMP>=\"<today>\"+TIMESTAMP<\"<tomorrow>\"")
+    (setq org-alert-time-match-string
+          "*?<.*?\\([0-9]\\{2\\}:[0-9]\\{2\\}\\).*>")
+    (org-alert-enable)
 #+end_src
 ** Org notmuch
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -743,7 +746,7 @@ Candidate documentation annotation
   ;; ;; already links to the manual, if a function is referenced there.
   ;; (global-set-key (kbd "C-h F") #'helpful-function)
 #+end_src
-
+* Calendar
 ** Set first day of week
 #+begin_src emacs-lisp :tangle lisp/calendar.el
   (setq calendar-week-start-day 1)
@@ -770,6 +773,14 @@ Candidate documentation annotation
           (holiday-easter-etc 50 "Lundi de Pentecôte")))
 
   (setq calendar-holidays (append holiday-local-holidays holiday-other-holidays))
+#+end_src
+** Calfw (calendar framework)
+#+begin_src emacs-lisp :tangle lisp/calendar.el
+  (straight-use-package 'calfw)
+  (require 'calfw)
+  (straight-use-package 'calfw-org)
+  (require 'calfw-org)
+  (setq cfw:org-agenda-schedule-args '(:timestamp))
 #+end_src
 * Magit
 ** Base config
@@ -878,6 +889,12 @@ Global typescript usefull variables
   (setq typescript-ts-mode-indent-offset 4)
   (add-hook 'typescript-ts-mode-hook 'electric-pair-mode)
   (add-hook 'tsx-ts-mode-hook 'electric-pair-mode)
+#+end_src
+
+** C Mode
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (add-hook 'c-mode 'electric-pair-mode)
+  (setq electric-pair-open-newline-between-pairs t)
 #+end_src
 ** Code completion
 #+begin_src emacs-lisp :tangle lisp/coding.el
@@ -1437,6 +1454,11 @@ In some cases like saving habits or org files, I want to make sure that changes 
   (require 'dashboard)
   (dashboard-setup-startup-hook)
 #+end_src
+* Ediff
+#+begin_src emacs-lisp :tangle lisp/ediff.el
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+#+end_src
 * Misc
 ** Unset default emacs binding
 #+begin_src emacs-lisp :tangle lisp/misc.el
@@ -1451,40 +1473,35 @@ In some cases like saving habits or org files, I want to make sure that changes 
 #+end_src
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
-  (setenv "LIBRARY_PATH"
-          (string-join
-           '("/opt/homebrew/opt/gcc/lib/gcc/14"
-             "/opt/homebrew/opt/libgccjit/lib/gcc/14"
-             "/opt/homebrew/opt/gcc/lib/gcc/14/gcc/aarch64-apple-darwin23/14")
-           ":"))
-  (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/help-utilities.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/versionning.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/project.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/coding.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/docker.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/vterm.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/diary.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/calendar.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/embark.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/custom-commands.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/popup-function-calls.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/wgrep.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/ansi-support-in-buffers.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/gpg.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/window.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/alert.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/kubernetes.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/auto-saving.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/misc.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/file-backup.el" user-emacs-directory))
-  (load-file (expand-file-name "lisp/dashboard.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/help-utilities.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/versionning.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/project.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/coding.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/docker.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/vterm.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/diary.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/calendar.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/embark.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/custom-commands.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/popup-function-calls.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/wgrep.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/ansi-support-in-buffers.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/gpg.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/window.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/alert.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/kubernetes.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/auto-saving.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/misc.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/file-backup.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/dashboard.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/ediff.el" user-emacs-directory))
 #+end_src
 
 
