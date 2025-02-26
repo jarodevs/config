@@ -1,11 +1,10 @@
 * Set exec path = PATH
 Exec path used by emacs needs to be configured to load path from shell
 #+begin_src emacs-lisp :tangle lisp/exec-path.el
-  (straight-use-package 'exec-path-from-shell)
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
-  (when (daemonp)
-    (exec-path-from-shell-initialize))
+  ;; Temp: Explicitly set PATH environment variable and update exec-path to match it.
+  ;; (the string here should be copied from the PATH in Emacs.app/Contents/Info.plist)
+  (setenv "PATH" "/opt/homebrew/opt/openjdk@11/bin:/Users/jarodevs/google-cloud-sdk/bin:/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin")
+  (setq exec-path (split-string (getenv "PATH") path-separator))
 #+end_src
 
 * Window management
@@ -23,6 +22,134 @@ Exec path used by emacs needs to be configured to load path from shell
 #+begin_src emacs-lisp :tangle lisp/file-backup.el
   (setq backup-directory-alist
             `(("." . ,(concat user-emacs-directory "backups"))))
+#+end_src
+* Email
+** Notmuch
+*** Setup
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (straight-use-package 'notmuch)
+  (require 'notmuch)
+#+end_src
+*** Saved searches
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (setq notmuch-saved-searches
+        '((:name "Gorgias unread"
+                 :query "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted"
+                 :sort-order oldest-first)
+          (:name "Gorgias todo"
+                 :query "folder:Gorgias/Inbox tag:todo"
+                 :sort-order oldest-first)
+          (:name "Gorgias inbox"
+                 :query "folder:Gorgias/Inbox tag:inbox"
+                 :sort-order oldest-first)
+          (:name "Proton unread"
+                 :query "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted"
+                 :sort-order oldest-first)
+          (:name "Proton todo"
+                 :query "folder:Proton/Inbox tag:inbox and tag:todo"
+                 :sort-order oldest-first)
+          (:name "Proton inbox"
+                 :query "folder:Proton/Inbox tag:inbox"
+                 :sort-order oldest-first)))
+#+end_src
+*** Defining Notmuch hello buffer
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (defun notmuch-hello-empty-header ()
+    "Insert some top padding, no actual header text."
+    (dotimes (_ 3) (insert "\n"))) ; 3 blank lines
+
+  (defun notmuch-hello-insert-gorgias-section ()
+    "Writes in buffer data relative to the Gorgias email account."
+    (let ((left-padding "    "))
+      (insert left-padding)
+      (insert (propertize "Mail account - Gorgias\n"
+                          'face '(:weight bold :underline t)))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       (concat "🧧 Unread messages ("
+                               (propertize "gu" 'face '(:weight bold))
+                               "):")
+                       (notmuch-saved-search-count "folder:Gorgias/Inbox tag:unread"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       "✅ Todo(s):"
+                       (notmuch-saved-search-count "folder:Gorgias/Inbox tag:todo"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       "🥡 Inbox items:"
+                       (notmuch-saved-search-count "folder:Gorgias/Inbox"))))
+      (insert "\n")))
+
+  (defun notmuch-hello-insert-personal-section ()
+    "Writes in buffer data relative to the Personal email account."
+    (let ((left-padding "    "))
+      (insert (concat "\n" left-padding))
+      (insert (propertize "Mail account - Personal Proton\n"
+                          'face '(:weight bold :underline t)))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       (concat "💌 Unread messages ("
+                               (propertize "pu" 'face '(:weight bold))
+                               "):")
+                       (notmuch-saved-search-count "folder:Proton/Inbox tag:unread"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       "✅️ Todo(s):"
+                       (notmuch-saved-search-count "folder:Proton/Inbox tag:todo"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
+                       "🍱 Inbox items:"
+                       (notmuch-saved-search-count "folder:Proton/Inbox"))))
+      (insert "\n")))
+
+  (setq notmuch-hello-sections
+        '(notmuch-hello-empty-header
+          notmuch-hello-insert-gorgias-section
+          notmuch-hello-insert-personal-section))
+#+end_src
+
+*** Keybinds for saved searches
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (add-hook 'notmuch-hello-mode-hook
+            (lambda ()
+              (evil-local-set-key 'normal (kbd "g u")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted" t)))
+              (evil-local-set-key 'normal (kbd "g i")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Gorgias/Inbox tag:inbox" t)))
+              (evil-local-set-key 'normal (kbd "g t")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Gorgias/Inbox tag:inbox and tag:todo" t)))
+              (evil-local-set-key 'normal (kbd "p u")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted" t)))
+              (evil-local-set-key 'normal (kbd "p i")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Proton/Inbox tag:inbox" t)))
+              (evil-local-set-key 'normal (kbd "p t")
+                (lambda ()
+                  (interactive)
+                  (notmuch-search "folder:Proton/Inbox tag:inbox and tag:todo" t)))))
+#+end_src
+** Sending mail - MSMTP
+#+begin_src emacs-lisp :tangle lisp/email.el
+  (setq send-mail-function 'sendmail-send-it
+        sendmail-program "/opt/homebrew/bin/msmtp"
+        mail-specify-envelope-from t
+        message-sendmail-envelope-from 'header
+        mail-envelope-from 'header)
 #+end_src
 * GPG
 ** Setting up .authinfo file
@@ -118,7 +245,7 @@ Exec path used by emacs needs to be configured to load path from shell
   (setq custom-safe-theme t)
   (require 'doom-themes)
   (require 'vscode-dark-plus-theme)
-  (load-theme 'modus-vivendi-tritanopia t)
+  (load-theme 'gruber-darker t)
 #+end_src
 ** Colorize compilation buffer
 There are two parts in this: 
@@ -516,6 +643,11 @@ Candidate documentation annotation
   (setq org-agenda-insert-diary-extract-time t)
 #+end_src
 *** Keybindigs
+**** Open org agenda
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (global-set-key (kbd "C-c a") 'org-agenda)
+#+end_src
+**** In org agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
   (add-hook 'org-agenda-mode-hook
             (lambda ()
@@ -525,6 +657,15 @@ Candidate documentation annotation
 #+begin_src emacs-lisp :tangle lisp/org.el
   (evil-set-initial-state 'org-agenda-mode 'normal)
 #+end_src
+*** Org agenda custom commands on splash screen
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (setq org-agenda-custom-commands
+        '(("d" "Today's Agenda (Day View)"
+           ((agenda ""
+                    ;; These options ensure a single-day agenda for "today"
+                    ((org-agenda-span 1)
+                     (org-agenda-start-day "+0")))))))
+#+end_src
 *** Org super agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
   (straight-use-package 'org-super-agenda)
@@ -533,28 +674,49 @@ Candidate documentation annotation
   ;; Temporarily disable the keymaps as I don't know what I need
   (setq org-super-agenda-mode-map (make-sparse-keymap))
   (setq org-super-agenda-header-map (make-sparse-keymap))
-
-  (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
+#+end_src
+**** Define groups
+#+begin_src emacs-lisp :tangle lisp/org.el
+  (setq org-super-agenda-groups
+         '(;; Each group has an implicit boolean OR operator between its selectors.
+           (:name "Today"  ; Optionally specify section name
+                  :time-grid t  ; Items that appear on the time grid
+                  )
+           (:name "Important"
+                  :and (:priority>= "A" :todo ("TODO" "DOING"))
+                  :order 1)
+           (:name "Deadlines"
+                  :deadline t
+                  :order 2)
+           (:name "In review"
+                  :todo "REVIEW"
+                  :order 8)
+           (:name "Habits"
+                  :habit t
+                  :order 9)
+           ;; After the last group, the agenda will display items that didn't
+           ;; match any of these groups, with the default order position of 99
+           ))
 #+end_src
 ** Org alert
-#+begin_src emacs-lisp :tangle lisp/org.el
-    (straight-use-package 'org-alert)
-    (require 'org-alert)
+  #+begin_src emacs-lisp :tangle lisp/org.el
+      (straight-use-package 'org-alert)
+      (require 'org-alert)
 
-    (setq alert-default-style 'osx-notifier)
+      (setq alert-default-style 'osx-notifier)
 
-  (setq org-alert-interval 900
-        org-alert-notify-cutoff 15
-        org-alert-notify-after-event-cutoff 0)
+    (setq org-alert-interval 900
+          org-alert-notify-cutoff 15
+          org-alert-notify-after-event-cutoff 0)
 
-    (setq org-alert-notification-title "Org")
-    (setq org-alert-match-string
-          "SCHEDULED>=\"<today>\"+SCHEDULED<\"<tomorrow>\"\
-    |DEADLINE>=\"<today>\"+DEADLINE<\"<tomorrow>\"\
-    |TIMESTAMP>=\"<today>\"+TIMESTAMP<\"<tomorrow>\"")
-    (setq org-alert-time-match-string
-          "*?<.*?\\([0-9]\\{2\\}:[0-9]\\{2\\}\\).*>")
-    (org-alert-enable)
+      (setq org-alert-notification-title "Org")
+      (setq org-alert-match-string
+            "SCHEDULED>=\"<today>\"+SCHEDULED<\"<tomorrow>\"\
+      |DEADLINE>=\"<today>\"+DEADLINE<\"<tomorrow>\"\
+      |TIMESTAMP>=\"<today>\"+TIMESTAMP<\"<tomorrow>\"")
+      (setq org-alert-time-match-string
+            "*?<.*?\\([0-9]\\{2\\}:[0-9]\\{2\\}\\).*>")
+      (org-alert-enable)
 #+end_src
 ** Org notmuch
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -954,134 +1116,6 @@ Multi Vterm management
   (straight-use-package 'multi-vterm)
   (require 'multi-vterm)
   #+end_src
-* Email
-** Notmuch
-*** Setup
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (straight-use-package 'notmuch)
-  (require 'notmuch)
-#+end_src
-*** Saved searches
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (setq notmuch-saved-searches
-        '((:name "Gorgias unread"
-                 :query "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted"
-                 :sort-order oldest-first)
-          (:name "Gorgias todo"
-                 :query "folder:Gorgias/Inbox tag:todo"
-                 :sort-order oldest-first)
-          (:name "Gorgias inbox"
-                 :query "folder:Gorgias/Inbox tag:inbox"
-                 :sort-order oldest-first)
-          (:name "Proton unread"
-                 :query "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted"
-                 :sort-order oldest-first)
-          (:name "Proton todo"
-                 :query "folder:Proton/Inbox tag:inbox and tag:todo"
-                 :sort-order oldest-first)
-          (:name "Proton inbox"
-                 :query "folder:Proton/Inbox tag:inbox"
-                 :sort-order oldest-first)))
-#+end_src
-*** Defining Notmuch hello buffer
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (defun notmuch-hello-empty-header ()
-    "Insert some top padding, no actual header text."
-    (dotimes (_ 3) (insert "\n"))) ; 3 blank lines
-
-  (defun notmuch-hello-insert-gorgias-section ()
-    "Writes in buffer data relative to the Gorgias email account."
-    (let ((left-padding "    "))
-      (insert left-padding)
-      (insert (propertize "Mail account - Gorgias\n"
-                          'face '(:weight bold :underline t)))
-      (insert
-       (concat left-padding
-               (format "%-25s %6s\n"
-                       (concat "🧧 Unread messages ("
-                               (propertize "gu" 'face '(:weight bold))
-                               "):")
-                       (notmuch-saved-search-count "folder:Gorgias/Inbox tag:unread"))))
-      (insert
-       (concat left-padding
-               (format "%-25s %6s\n"
-                       "✅ Todo(s):"
-                       (notmuch-saved-search-count "folder:Gorgias/Inbox tag:todo"))))
-      (insert
-       (concat left-padding
-               (format "%-25s %6s\n"
-                       "🥡 Inbox items:"
-                       (notmuch-saved-search-count "folder:Gorgias/Inbox"))))
-      (insert "\n")))
-
-  (defun notmuch-hello-insert-personal-section ()
-    "Writes in buffer data relative to the Personal email account."
-    (let ((left-padding "    "))
-      (insert (concat "\n" left-padding))
-      (insert (propertize "Mail account - Personal Proton\n"
-                          'face '(:weight bold :underline t)))
-      (insert
-       (concat left-padding
-               (format "%-25s %6s\n"
-                       (concat "💌 Unread messages ("
-                               (propertize "pu" 'face '(:weight bold))
-                               "):")
-                       (notmuch-saved-search-count "folder:Proton/Inbox tag:unread"))))
-      (insert
-       (concat left-padding
-               (format "%-25s %6s\n"
-                       "✅️ Todo(s):"
-                       (notmuch-saved-search-count "folder:Proton/Inbox tag:todo"))))
-      (insert
-       (concat left-padding
-               (format "%-25s %6s\n"
-                       "🍱 Inbox items:"
-                       (notmuch-saved-search-count "folder:Proton/Inbox"))))
-      (insert "\n")))
-
-  (setq notmuch-hello-sections
-        '(notmuch-hello-empty-header
-          notmuch-hello-insert-gorgias-section
-          notmuch-hello-insert-personal-section))
-#+end_src
-
-*** Keybinds for saved searches
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (add-hook 'notmuch-hello-mode-hook
-            (lambda ()
-              (evil-local-set-key 'normal (kbd "g u")
-                (lambda ()
-                  (interactive)
-                  (notmuch-search "folder:Gorgias/Inbox tag:inbox and tag:unread and not tag:deleted" t)))
-              (evil-local-set-key 'normal (kbd "g i")
-                (lambda ()
-                  (interactive)
-                  (notmuch-search "folder:Gorgias/Inbox tag:inbox" t)))
-              (evil-local-set-key 'normal (kbd "g t")
-                (lambda ()
-                  (interactive)
-                  (notmuch-search "folder:Gorgias/Inbox tag:inbox and tag:todo" t)))
-              (evil-local-set-key 'normal (kbd "p u")
-                (lambda ()
-                  (interactive)
-                  (notmuch-search "folder:Proton/Inbox tag:inbox and tag:unread and not tag:deleted" t)))
-              (evil-local-set-key 'normal (kbd "p i")
-                (lambda ()
-                  (interactive)
-                  (notmuch-search "folder:Proton/Inbox tag:inbox" t)))
-              (evil-local-set-key 'normal (kbd "p t")
-                (lambda ()
-                  (interactive)
-                  (notmuch-search "folder:Proton/Inbox tag:inbox and tag:todo" t)))))
-#+end_src
-** Sending mail - MSMTP
-#+begin_src emacs-lisp :tangle lisp/email.el
-  (setq send-mail-function 'sendmail-send-it
-        sendmail-program "/opt/homebrew/bin/msmtp"
-        mail-specify-envelope-from t
-        message-sendmail-envelope-from 'header
-        mail-envelope-from 'header)
-#+end_src
 * Kubernetes
 #+begin_src emacs-lisp :tangle lisp/kubernetes.el
   (straight-use-package 'kubel)
@@ -1459,6 +1493,12 @@ In some cases like saving habits or org files, I want to make sure that changes 
   (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 #+end_src
+* Sops
+#+begin_src emacs-lisp :tangle lisp/sops.el
+  (straight-use-package 'sops)
+  (require 'sops)
+  (global-sops-mode 1)
+#+end_src
 * Misc
 ** Unset default emacs binding
 #+begin_src emacs-lisp :tangle lisp/misc.el
@@ -1475,6 +1515,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
 #+begin_src emacs-lisp :tangle init.el
     (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
@@ -1494,7 +1535,6 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (load-file (expand-file-name "lisp/gpg.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/window.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/exec-path.el" user-emacs-directory))
-    (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/alert.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/kubernetes.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/auto-saving.el" user-emacs-directory))
