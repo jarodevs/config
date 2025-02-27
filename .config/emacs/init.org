@@ -156,9 +156,10 @@ Exec path used by emacs needs to be configured to load path from shell
 #+begin_src emacs-lisp :tangle lisp/gpg.el
   (setq auth-sources '("~/.authinfo.gpg"))
 #+end_src
-** Allow pinentry prompt for gpg passphrases
+** Allow emacs to be used for gpg
 #+begin_src emacs-lisp :tangle lisp/gpg.el
   (setq epa-pinentry-mode 'loopback)
+  (setq epg-gpg-program "gpg")
 #+end_src
 * Allow ansi-colors in log files
 #+begin_src emacs-lisp :tangle lisp/ansi-support-in-buffers.el
