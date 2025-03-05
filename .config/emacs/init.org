@@ -612,12 +612,13 @@ Candidate documentation annotation
 ** Customizing headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "DOING(o)" "REVIEW(r)" "|" "DONE(d)")))
+        '((sequence "TODO(t)" "DOING(o)" "REVIEW(r)" "FROZEN(f)" "|" "DONE(d)")))
 
   (setq org-todo-keyword-faces
         '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow"))) 
           ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))
            ("REVIEW" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "blue")))
+           ("FROZEN" . (:foreground "dark cyan" :background "white"))
            ("DOING" . (:foreground "white" :background "dark cyan"))))
 #+end_src
 ** Indent accordingly to headlines
@@ -637,7 +638,7 @@ Candidate documentation annotation
   (setq org-enforce-todo-dependencies t)
   (setq org-auto-repeat-maybe t)
 #+end_src
-** Agenda
+** Org Agenda
 *** Displaying diary items in agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-agenda-include-diary t)
@@ -675,6 +676,9 @@ Candidate documentation annotation
   ;; Temporarily disable the keymaps as I don't know what I need
   (setq org-super-agenda-mode-map (make-sparse-keymap))
   (setq org-super-agenda-header-map (make-sparse-keymap))
+
+  (with-eval-after-load 'org-mode
+      (org-super-agenda-mode)) 
 #+end_src
 **** Define groups
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -686,12 +690,18 @@ Candidate documentation annotation
            (:name "Important"
                   :and (:priority>= "A" :todo ("TODO" "DOING"))
                   :order 1)
-           (:name "Deadlines"
-                  :deadline t
+           (:name "Mid prio"
+                  :and (:priority< "A" :priority>= "C" :todo ("TODO" "DOING"))
                   :order 2)
            (:name "In review"
                   :todo "REVIEW"
+                  :order 7)
+           (:name "Frozen"
+                  :todo "FROZEN"
                   :order 8)
+           (:name "Deadlines"
+                  :deadline t
+                  :order 2)
            (:name "Habits"
                   :habit t
                   :order 9)
@@ -1359,7 +1369,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
           (start-process-shell-command
            "helpdesk-web-app-process" ;; Name of the process
            nil                        ;; No associated buffer
-           "cd ~/gorgias/helpdesk-web-app && yarn serve > /tmp/helpdesk-web-app.log 2>&1"))
+           "cd ~/gorgias/helpdesk-web-app && source ~/.config/zsh/.zshrc && yarn serve > /tmp/helpdesk-web-app.log 2>&1"))
     (message "Helpdesk web app is starting... Logs available -> /tmp/helpdesk-web-app.log"))
 
   (defun stop-helpdesk-web-app ()

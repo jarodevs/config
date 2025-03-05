@@ -31,6 +31,7 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
+alias gpg="/usr/local/MacGPG2/bin/gpg"
 alias ssh="kitty +kitten ssh"
 alias docker-compose="docker compose"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
@@ -90,7 +91,7 @@ TYPEWRITTEN_PROMPT_LAYOUT="pure"
 
 source $ZSH/oh-my-zsh.sh
 
-export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin
+export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin:/usr/local/MacGPG2/bin
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/jarodevs/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/path.zsh.inc'; fi
