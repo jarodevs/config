@@ -35,7 +35,6 @@ alias gpg="/usr/local/MacGPG2/bin/gpg"
 alias ssh="kitty +kitten ssh"
 alias docker-compose="docker compose"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias kubectl="minikube kubectl --"
 alias gcproxy-keru-production="cloud-sql-proxy -i keruproject-production:europe-west9:main --port 5432"
 alias gcproxy-gorgias-ai_agent-staging="cloud-sql-proxy -i gorgias-conversations-staging:us-central1:ai-agent-7d442106 --port 4933"
 alias gcproxy-gorgias-ai_agent-production="cloud-sql-proxy -i gorgias-conversations-prod:us-central1:ai-agent-ca38aecc --port 4932"
@@ -105,6 +104,10 @@ starship preset nerd-font-symbols -o ~/.config/starship.toml
 # OpenJDK
 export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
 export CPPFLAGS="-I/opt/homebrew/opt/openjdk@11/include"
+
+# LLVM
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+
 
 # Emails
 export MAILDIR=/Users/jarodevs/.mail

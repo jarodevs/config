@@ -1,10 +1,10 @@
 * Set exec path = PATH
 Exec path used by emacs needs to be configured to load path from shell
 #+begin_src emacs-lisp :tangle lisp/exec-path.el
-  ;; Temp: Explicitly set PATH environment variable and update exec-path to match it.
-  ;; (the string here should be copied from the PATH in Emacs.app/Contents/Info.plist)
-  (setenv "PATH" "/opt/homebrew/opt/openjdk@11/bin:/Users/jarodevs/google-cloud-sdk/bin:/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin")
-  (setq exec-path (split-string (getenv "PATH") path-separator))
+  (straight-use-package 'exec-path-from-shell)
+  (require 'exec-path-from-shell)
+  (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize))
 #+end_src
 
 * Window management
@@ -1027,6 +1027,10 @@ Candidate documentation annotation
     (project-find-file "Find" "f")
     (project-dired "Dired" "d")))
 #+end_src
+* Dired
+#+begin_src emacs-lisp :tangle lisp/dired.el
+  (setq dired-dwim-target t)
+#+end_src
 * Coding
 ** Code folding
 #+begin_src emacs-lisp :tangle lisp/coding.el
@@ -1035,8 +1039,6 @@ Candidate documentation annotation
 
 ** LSP Client
 #+begin_src emacs-lisp :tangle lisp/coding.el
-  (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
-  (add-hook 'tsx-ts-mode-hook 'eglot-ensure)
   (setq eglot-confirm-server-initiated-edits nil)
   (global-set-key (kbd "M-s f") #'eglot-code-action-quickfix)
 #+end_src
@@ -1053,11 +1055,13 @@ Candidate documentation annotation
 Enable typescript-ts-mode on ts(x) files
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+  (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
 #+end_src
 
 Enable tsx/jsx file handling
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+  (add-hook 'tsx-ts-mode-hook 'eglot-ensure)
 #+end_src
 
 Prettier
@@ -1076,6 +1080,9 @@ Global typescript usefull variables
 
 ** C Mode
 #+begin_src emacs-lisp :tangle lisp/coding.el
+  (require 'eglot)
+  (add-to-list 'eglot-server-programs '((c-mode) "clangd"))
+  (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c-mode 'electric-pair-mode)
   (setq electric-pair-open-newline-between-pairs t)
 #+end_src
@@ -1562,6 +1569,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (load-file (expand-file-name "lisp/misc.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/file-backup.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/dashboard.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/dired.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/ediff.el" user-emacs-directory))
 #+end_src
 
