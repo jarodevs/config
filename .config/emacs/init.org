@@ -662,11 +662,17 @@ Candidate documentation annotation
 *** Org agenda custom commands on splash screen
 #+begin_src emacs-lisp :tangle lisp/org.el
   (setq org-agenda-custom-commands
-        '(("d" "Today's Agenda (Day View)"
+        '(("p" "Perso Agenda (Day View)"
            ((agenda ""
-                    ;; These options ensure a single-day agenda for "today"
                     ((org-agenda-span 1)
-                     (org-agenda-start-day "+0")))))))
+                     (org-agenda-start-day "+0"))))
+           ((org-agenda-category-filter-preset '("+Habits" "-Gorgias RDV" "-Gorgias" "+Perso RDV"))))
+          ("g" "Gorgias Agenda (Day View)"
+           ((agenda ""
+                    ((org-agenda-span 1)
+                     (org-agenda-start-day "+0")
+                     )))
+           ((org-agenda-category-filter-preset '("-Habits" "+Gorgias RDV" "+Gorgias" "+Perso RDV"))))))
 #+end_src
 *** Org super agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
