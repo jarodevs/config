@@ -668,13 +668,14 @@ Candidate documentation annotation
            ((agenda ""
                     ((org-agenda-span 1)
                      (org-agenda-start-day "+0"))))
-           ((org-agenda-category-filter-preset '("+Habits" "-Gorgias RDV" "-Gorgias" "+Perso RDV"))))
+           ((org-agenda-category-filter-preset '("-Gorgias" "-Gorgias RDV"))))
           ("g" "Gorgias Agenda (Day View)"
            ((agenda ""
                     ((org-agenda-span 1)
                      (org-agenda-start-day "+0")
                      )))
-           ((org-agenda-category-filter-preset '("-Habits" "+Gorgias RDV" "+Gorgias" "+Perso RDV"))))))
+           ((org-agenda-category-filter-preset '("-Perso" "-Habits")))
+           )))
 #+end_src
 *** Org super agenda
 #+begin_src emacs-lisp :tangle lisp/org.el
