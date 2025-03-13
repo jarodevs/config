@@ -1,8 +1,13 @@
 * Set exec path = PATH
 Exec path used by emacs needs to be configured to load path from shell
 #+begin_src emacs-lisp :tangle lisp/exec-path.el
+  (setq-default explicit-shell-file-name "/bin/zsh")
+  (setq shell-file-name "/bin/zsh")
+  (setenv "SHELL" shell-file-name)
   (straight-use-package 'exec-path-from-shell)
   (require 'exec-path-from-shell)
+  (dolist (var '("KUBECONFIG" "NVM_DIR"))
+    (add-to-list 'exec-path-from-shell-variables var))
   (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize))
 #+end_src
@@ -1165,6 +1170,7 @@ Multi Vterm management
 #+begin_src emacs-lisp :tangle lisp/vterm.el
   (straight-use-package 'multi-vterm)
   (require 'multi-vterm)
+  (setq vterm-shell "/bin/zsh -i")
   #+end_src
 * Kubernetes
 #+begin_src emacs-lisp :tangle lisp/kubernetes.el

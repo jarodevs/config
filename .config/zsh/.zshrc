@@ -1,12 +1,46 @@
-#ZSH_THEME="typewritten/typewritten"
-export XDG_CONFIG_HOME="/Users/jarodevs/.config"
 export ZSH="$HOME/.config/.oh-my-zsh"
+alias gpg="/usr/local/MacGPG2/bin/gpg"
+alias ssh="kitty +kitten ssh"
+alias docker-compose="docker compose"
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias gcproxy-keru-production="cloud-sql-proxy -i keruproject-production:europe-west9:main --port 5432"
+alias gcproxy-gorgias-ai_agent-staging="cloud-sql-proxy -i gorgias-conversations-staging:us-central1:ai-agent-7d442106 --port 4933"
+alias gcproxy-gorgias-ai_agent-production="cloud-sql-proxy -i gorgias-conversations-prod:us-central1:ai-agent-ca38aecc --port 4932"
+alias gcproxy-gorgias-chat-staging="cloud-sql-proxy -i gorgias-chat-staging:us-east1:chat-03b7c90c --port 4935"
+alias gcproxy-gorgias-chat-production="cloud-sql-proxy -i gorgias-chat-production:us-east1:chat-f1b2e115 --port 4936"
+alias gcproxy-gorgias-help_center-production="cloud-sql-proxy -i gorgias-help-center-production:us-central1:help-center-d227c56a --port 4934"
+alias dpss="docker ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk 'BEGIN { printf \"%-20s %-50s %-50s\\n\", \"CONTAINER ID\", \"NAME\", \"STATUS\" } { printf \"%-20s %-50s %-50s\\n\", \$1, \$2, \$3 }'"
+alias dcpss="docker compose ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk 'BEGIN { printf \"%-20s %-50s %-50s\\n\", \"CONTAINER ID\", \"NAME\", \"STATUS\" } { printf \"%-20s %-50s %-50s\\n\", \$1, \$2, \$3 }'"
+
+# ENV
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+plugins=(
+    git
+    zsh-autosuggestions
+    zsh-autocomplete
+)
+
+TYPEWRITTEN_PROMPT_LAYOUT="pure"
+
+source $ZSH/oh-my-zsh.sh
+
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jarodevs/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc'; fi
+
+eval "$(starship init zsh)"
+starship preset nerd-font-symbols -o ~/.config/starship.toml
+
+# NVM
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # place this after nvm initialization!
-# Automatically execute nvm use in .nvmrc directory
 autoload -U add-zsh-hook
 
 load-nvmrc() {
@@ -30,87 +64,4 @@ load-nvmrc() {
 
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
-
-alias gpg="/usr/local/MacGPG2/bin/gpg"
-alias ssh="kitty +kitten ssh"
-alias docker-compose="docker compose"
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias gcproxy-keru-production="cloud-sql-proxy -i keruproject-production:europe-west9:main --port 5432"
-alias gcproxy-gorgias-ai_agent-staging="cloud-sql-proxy -i gorgias-conversations-staging:us-central1:ai-agent-7d442106 --port 4933"
-alias gcproxy-gorgias-ai_agent-production="cloud-sql-proxy -i gorgias-conversations-prod:us-central1:ai-agent-ca38aecc --port 4932"
-alias gcproxy-gorgias-chat-staging="cloud-sql-proxy -i gorgias-chat-staging:us-east1:chat-03b7c90c --port 4935"
-alias gcproxy-gorgias-chat-production="cloud-sql-proxy -i gorgias-chat-production:us-east1:chat-f1b2e115 --port 4936"
-alias gcproxy-gorgias-help_center-production="cloud-sql-proxy -i gorgias-help-center-production:us-central1:help-center-d227c56a --port 4934"
-alias dpss="docker ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk 'BEGIN { printf \"%-20s %-50s %-50s\\n\", \"CONTAINER ID\", \"NAME\", \"STATUS\" } { printf \"%-20s %-50s %-50s\\n\", \$1, \$2, \$3 }'"
-alias dcpss="docker compose ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk 'BEGIN { printf \"%-20s %-50s %-50s\\n\", \"CONTAINER ID\", \"NAME\", \"STATUS\" } { printf \"%-20s %-50s %-50s\\n\", \$1, \$2, \$3 }'"
-
-# ENV
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-#COMPLETION_WAITING_DOTS="true"
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-    git
-    zsh-autosuggestions
-    #zsh-autocomplete
-)
-
-TYPEWRITTEN_PROMPT_LAYOUT="pure"
-
-source $ZSH/oh-my-zsh.sh
-
-export PATH=/Users/jarodevs/.config/nvm/versions/node/v20.12.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin:/usr/local/MacGPG2/bin
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jarodevs/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc'; fi
-
-eval "$(starship init zsh)"
-starship preset nerd-font-symbols -o ~/.config/starship.toml
-
-# OpenJDK
-export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
-export CPPFLAGS="-I/opt/homebrew/opt/openjdk@11/include"
-
-# LLVM
-export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
-
-
-# Emails
-export MAILDIR=/Users/jarodevs/.mail
-
-# K8s
-export KUBECONFIG=/Users/jarodevs/.kube/k8s-learning:/Users/jarodevs/.kube/gorgias
+# END NVM
