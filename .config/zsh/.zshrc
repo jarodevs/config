@@ -111,3 +111,6 @@ export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 
 # Emails
 export MAILDIR=/Users/jarodevs/.mail
+
+# K8s
+export KUBECONFIG=/Users/jarodevs/.kube/k8s-learning:/Users/jarodevs/.kube/gorgias

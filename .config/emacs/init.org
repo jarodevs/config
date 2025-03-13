@@ -700,8 +700,7 @@ Candidate documentation annotation
   (setq org-super-agenda-mode-map (make-sparse-keymap))
   (setq org-super-agenda-header-map (make-sparse-keymap))
 
-  (with-eval-after-load 'org-mode
-      (org-super-agenda-mode)) 
+  (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode) 
 #+end_src
 **** Define groups
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -1171,7 +1170,9 @@ Multi Vterm management
 #+begin_src emacs-lisp :tangle lisp/kubernetes.el
   (straight-use-package 'kubel)
   (require 'kubel)
-  (kubel-vterm-setup) 
+
+  (with-eval-after-load 'kubel
+    (kubel-vterm-setup))
 #+end_src
 * Alerts
 #+begin_src emacs-lisp :tangle lisp/alert.el
