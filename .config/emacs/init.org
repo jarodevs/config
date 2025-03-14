@@ -6,7 +6,7 @@ Exec path used by emacs needs to be configured to load path from shell
   (setenv "SHELL" shell-file-name)
   (straight-use-package 'exec-path-from-shell)
   (require 'exec-path-from-shell)
-  (dolist (var '("KUBECONFIG" "NVM_DIR"))
+  (dolist (var '("KUBECONFIG" "NVM_DIR" "PATH"))
     (add-to-list 'exec-path-from-shell-variables var))
   (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize))
@@ -240,6 +240,8 @@ Exec path used by emacs needs to be configured to load path from shell
 #+end_src
 
 ** Theme configuration
+
+*** Global theme declaration
 #+begin_src emacs-lisp :tangle lisp/appearance.el
     (straight-use-package 'modus-themes)
     (straight-use-package 'dracula-theme)
@@ -254,6 +256,11 @@ Exec path used by emacs needs to be configured to load path from shell
 
     (setq custom-safe-theme t)
     (load-theme 'github-dark t)
+#+end_src
+*** Github theme tweaks
+#+begin_src emacs-lisp :tangle lisp/appearance.el
+  (with-eval-after-load 'github-dark-theme
+    (set-face-attribute 'org-date nil :foreground "light green"))
 #+end_src
 ** Colorize compilation buffer
 There are two parts in this: 

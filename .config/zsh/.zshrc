@@ -1,4 +1,12 @@
 export ZSH="$HOME/.config/.oh-my-zsh"
+
+
+# PATH
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin:/usr/local/MacGPG2/bin:/opt/homebrew/opt/openjdk@11/bin
+# END PATH
+
+
+alias build_emacs="cd $XDG_CONFIG_HOME/emacs && make clean && make"
 alias gpg="/usr/local/MacGPG2/bin/gpg"
 alias ssh="kitty +kitten ssh"
 alias docker-compose="docker compose"
@@ -17,8 +25,6 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 plugins=(
     git
-    zsh-autosuggestions
-    zsh-autocomplete
 )
 
 TYPEWRITTEN_PROMPT_LAYOUT="pure"
@@ -65,3 +71,4 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 # END NVM
+
