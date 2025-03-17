@@ -940,28 +940,29 @@ Candidate documentation annotation
 #+end_src
 * Help utilities 
 #+begin_src emacs-lisp :tangle lisp/help-utilities.el
-  ;; (straight-use-package 'which-key)
-  ;; (require 'which-key)
-  ;; (which-key-mode)
+  ;; This will be in emacs@30
+  (straight-use-package 'which-key)
+  (require 'which-key)
+  (which-key-mode)
 
-  ;; (straight-use-package 'helpful)
-  ;; ;; Note that the built-in `describe-function' includes both functions
-  ;; ;; and macros. `helpful-function' is functions only, so we provide
-  ;; ;; `helpful-callable' as a drop-in replacement.
-  ;; (global-set-key (kbd "C-h f") #'helpful-callable)
+  (straight-use-package 'helpful)
+  ;; Note that the built-in `describe-function' includes both functions
+  ;; and macros. `helpful-function' is functions only, so we provide
+  ;; `helpful-callable' as a drop-in replacement.
+  (global-set-key (kbd "C-h f") #'helpful-callable)
 
-  ;; (global-set-key (kbd "C-h v") #'helpful-variable)
-  ;; (global-set-key (kbd "C-h k") #'helpful-key)
-  ;; (global-set-key (kbd "C-h x") #'helpful-command)
-  ;; ;; Lookup the current symbol at point. C-c C-d is a common keybinding
-  ;; ;; for this in lisp modes.
-  ;; (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-h x") #'helpful-command)
+  ;; Lookup the current symbol at point. C-c C-d is a common keybinding
+  ;; for this in lisp modes.
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
 
-  ;; ;; Look up *F*unctions (excludes macros).
-  ;; ;;
-  ;; ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
-  ;; ;; already links to the manual, if a function is referenced there.
-  ;; (global-set-key (kbd "C-h F") #'helpful-function)
+  ;; Look up *F*unctions (excludes macros).
+  ;;
+  ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+  ;; already links to the manual, if a function is referenced there.
+  (global-set-key (kbd "C-h F") #'helpful-function)
 #+end_src
 * Calendar
 ** Set first day of week
@@ -1071,41 +1072,26 @@ Candidate documentation annotation
   (add-hook 'prog-mode-hook #'hs-minor-mode)
 #+end_src
 
-** LSP Client
-#+begin_src emacs-lisp :tangle lisp/coding.el
-  (setq eglot-confirm-server-initiated-edits nil)
-  (global-set-key (kbd "M-s f") #'eglot-code-action-quickfix)
-#+end_src
-** Python mode
-*** LSP Server
-#+begin_src emacs-lisp :tangle lisp/coding.el
-  (add-hook 'python-mode-hook 'eglot-ensure)
-  (with-eval-after-load 'eglot
-    (add-to-list 'eglot-server-programs
-                 '(python-mode . ("ruff" "server"))))
-#+end_src
-
 ** Typescript mode
-Enable typescript-ts-mode on ts(x) files
+*** Enable typescript-ts-mode on ts(x) files
+
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-  (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
 #+end_src
 
-Enable tsx/jsx file handling
+*** Enable tsx/jsx file handling
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
-  (add-hook 'tsx-ts-mode-hook 'eglot-ensure)
 #+end_src
 
-Prettier
+*** Prettier
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (straight-use-package 'prettier-js)
   (add-hook 'typescript-ts-mode-hook 'prettier-js-mode)
   (add-hook 'tsx-ts-mode-hook 'prettier-js-mode)
 #+end_src
 
-Global typescript usefull variables
+*** Global typescript usefull variables
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (setq typescript-ts-mode-indent-offset 4)
   (add-hook 'typescript-ts-mode-hook 'electric-pair-mode)
@@ -1114,11 +1100,25 @@ Global typescript usefull variables
 
 ** C Mode
 #+begin_src emacs-lisp :tangle lisp/coding.el
-  (require 'eglot)
-  (add-to-list 'eglot-server-programs '((c-mode) "clangd"))
-  (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c-mode 'electric-pair-mode)
   (setq electric-pair-open-newline-between-pairs t)
+#+end_src
+
+** Syntax checking
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (straight-use-package 'flycheck)
+  (require 'flycheck)
+  (global-flycheck-mode)
+#+end_src
+** LSP Client
+*** EGLOT
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (setq eglot-confirm-server-initiated-edits nil)
+  (global-set-key (kbd "M-s f") #'eglot-code-action-quickfix)
+  (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+  (add-hook 'tsx-ts-mode-hook 'eglot-ensure)
+  (add-hook 'c-mode-hook 'eglot-ensure)
+  ;;(add-to-list 'eglot-server-programs '((c-mode) "clangd"))
 #+end_src
 ** Code completion
 #+begin_src emacs-lisp :tangle lisp/coding.el
@@ -1146,6 +1146,7 @@ Kind icons
   (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
 #+end_src
 ** Eldoc
+*** COMMENT Disabling eldoc multiline
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (setq eldoc-echo-area-use-multiline-p nil)
 #+end_src

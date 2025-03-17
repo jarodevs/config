@@ -8,7 +8,6 @@ export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29
 
 alias build_emacs="cd $XDG_CONFIG_HOME/emacs && make clean && make"
 alias gpg="/usr/local/MacGPG2/bin/gpg"
-alias ssh="kitty +kitten ssh"
 alias docker-compose="docker compose"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias gcproxy-keru-production="cloud-sql-proxy -i keruproject-production:europe-west9:main --port 5432"
@@ -25,6 +24,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 plugins=(
     git
+    zsh-autosuggestions
 )
 
 TYPEWRITTEN_PROMPT_LAYOUT="pure"
@@ -38,8 +38,8 @@ if [ -f '/Users/jarodevs/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jarode
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc'; fi
 
-eval "$(starship init zsh)"
-starship preset nerd-font-symbols -o ~/.config/starship.toml
+# eval "$(starship init zsh)"
+# starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 # NVM
 export NVM_DIR="$HOME/.config/nvm"
