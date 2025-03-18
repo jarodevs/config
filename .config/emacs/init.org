@@ -1072,6 +1072,11 @@ Candidate documentation annotation
   (add-hook 'prog-mode-hook #'hs-minor-mode)
 #+end_src
 
+** Json mode
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (add-to-list 'auto-mode-alist '("\\.json\\'" . json-js-mode))
+#+end_src
+
 ** Typescript mode
 *** Enable typescript-ts-mode on ts(x) files
 
@@ -1104,12 +1109,6 @@ Candidate documentation annotation
   (setq electric-pair-open-newline-between-pairs t)
 #+end_src
 
-** Syntax checking
-#+begin_src emacs-lisp :tangle lisp/coding.el
-  (straight-use-package 'flycheck)
-  (require 'flycheck)
-  (global-flycheck-mode)
-#+end_src
 ** LSP Client
 *** EGLOT
 #+begin_src emacs-lisp :tangle lisp/coding.el
