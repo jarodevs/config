@@ -1159,6 +1159,55 @@ Kind icons
 #+begin_src emacs-lisp :tangle lisp/coding.el
   (global-set-key "\C-xc" 'compile)
 #+end_src
+** DAPE debugging
+#+begin_src emacs-lisp :tangle lisp/coding.el
+  (straight-use-package 'dape)
+
+  ;; Configure dape once it is loaded
+  (with-eval-after-load 'dape
+    ;; By default dape shares the same keybinding prefix as `gud'.
+    (setq dape-key-prefix "\C-x\C-a")
+
+    ;; --- Hooks ---
+    ;; To save breakpoints when quitting, uncomment the following:
+    (add-hook 'kill-emacs-hook 'dape-breakpoint-save)
+    ;; To load breakpoints on startup, uncomment the following:
+    (add-hook 'after-init-hook 'dape-breakpoint-load)
+
+    ;; --- Configuration ---
+    ;; Enable global bindings for setting breakpoints with the mouse:
+    (dape-breakpoint-global-mode)
+
+    ;; Arrange info buffers on the right:
+    (setq dape-buffer-window-arrangement 'right)
+
+    ;; Alternatively, to mimic gud (gdb-mi) buffers:
+    ;; (setq dape-buffer-window-arrangement 'gud)
+    ;; (setq dape-info-hide-mode-line nil)
+
+    ;; To pulse the source line (note: may affect performance):
+    (add-hook 'dape-display-source-hook 'pulse-momentary-highlight-one-line)
+
+    ;; Enable inlay hints:
+    (setq dape-inlay-hints t)
+
+    ;; Automatically save buffers on startup (useful for interpreted languages):
+    (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
+
+    ;; Kill the compile buffer on build success:
+    (add-hook 'dape-compile-hook 'kill-buffer)
+
+    ;; For Projectile users, set the current working directory function:
+    ;; (setq dape-cwd-function 'projectile-project-root)
+    )
+
+  ;; Install repeat using straight.el
+  (straight-use-package 'repeat)
+
+  ;; Enable repeat-mode after the package is loaded
+  (with-eval-after-load 'repeat
+    (repeat-mode 1))
+#+end_src
 * Text editing
 ** Markdown
 #+begin_src emacs-lisp :tangle lisp/text-editing.el

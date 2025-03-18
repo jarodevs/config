@@ -2,7 +2,7 @@ export ZSH="$HOME/.config/.oh-my-zsh"
 
 
 # PATH
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin:/usr/local/MacGPG2/bin:/opt/homebrew/opt/openjdk@11/bin
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin:/usr/local/MacGPG2/bin:/opt/homebrew/opt/openjdk@11/bin:/opt/homebrew/opt/llvm/bin
 # END PATH
 
 
