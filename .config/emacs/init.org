@@ -6,7 +6,7 @@ Exec path used by emacs needs to be configured to load path from shell
   (setenv "SHELL" shell-file-name)
   (straight-use-package 'exec-path-from-shell)
   (require 'exec-path-from-shell)
-  (dolist (var '("KUBECONFIG" "NVM_DIR" "PATH"))
+  (dolist (var '("KUBECONFIG" "NVM_DIR" "PATH" "XDG_CONFIG_HOME"))
     (add-to-list 'exec-path-from-shell-variables var))
   (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize))
