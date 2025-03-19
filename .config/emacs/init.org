@@ -1625,6 +1625,15 @@ In some cases like saving habits or org files, I want to make sure that changes 
       (interactive)
       (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 #+end_src
+* Buffer positioning rules
+** Calendar below current buffer
+#+begin_src emacs-lisp :tangle lisp/buffer-positioning.el
+  (add-to-list 'display-buffer-alist
+               '("\\*Calendar\\*"
+                 (display-buffer-in-direction)
+                 (direction . below)
+                 (window-height . 0.3)))
+#+end_src
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
     (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
@@ -1656,6 +1665,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (load-file (expand-file-name "lisp/file-backup.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/dashboard.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/dired.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/buffer-positioning.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/ediff.el" user-emacs-directory))
 #+end_src
 
