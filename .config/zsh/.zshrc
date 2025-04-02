@@ -1,6 +1,9 @@
 export ZSH="$HOME/.config/.oh-my-zsh"
 
 
+source /opt/z/z.sh
+
+
 # PATH
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/MacGPG2/bin:/Users/jarodevs/.cargo/bin:/Users/jarodevs/bin:/usr/local/MacGPG2/bin:/opt/homebrew/opt/openjdk@11/bin:/opt/homebrew/opt/llvm/bin
 # END PATH
@@ -18,6 +21,7 @@ alias gcproxy-gorgias-chat-production="cloud-sql-proxy -i gorgias-chat-productio
 alias gcproxy-gorgias-help_center-production="cloud-sql-proxy -i gorgias-help-center-production:us-central1:help-center-d227c56a --port 4934"
 alias dpss="docker ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk 'BEGIN { printf \"%-20s %-50s %-50s\\n\", \"CONTAINER ID\", \"NAME\", \"STATUS\" } { printf \"%-20s %-50s %-50s\\n\", \$1, \$2, \$3 }'"
 alias dcpss="docker compose ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk 'BEGIN { printf \"%-20s %-50s %-50s\\n\", \"CONTAINER ID\", \"NAME\", \"STATUS\" } { printf \"%-20s %-50s %-50s\\n\", \$1, \$2, \$3 }'"
+alias sed="gsed"
 
 # ENV
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
