@@ -1625,6 +1625,10 @@ In some cases like saving habits or org files, I want to make sure that changes 
       (interactive)
       (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 #+end_src
+** Set safe local variables values
+#+begin_src emacs-lisp :tangle lisp/misc.el
+  (setq safe-local-variable-values '(prettier-js-command . "/Users/jarodevs/gorgias/helpdesk-web-app/node_modules/prettier/bin/prettier.cjs"))
+#+end_src
 * Buffer positioning rules
 ** Calendar below current buffer
 #+begin_src emacs-lisp :tangle lisp/buffer-positioning.el
