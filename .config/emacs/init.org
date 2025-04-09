@@ -1613,6 +1613,11 @@ In some cases like saving habits or org files, I want to make sure that changes 
   (require 'sops)
   (global-sops-mode 1)
 #+end_src
+* IMenu-list
+#+begin_src emacs-lisp :tangle lisp/imenu-list.el
+  (straight-use-package 'imenu-list)
+  (require 'imenu-list)
+#+end_src
 * Misc
 ** Unset default emacs binding
 #+begin_src emacs-lisp :tangle lisp/misc.el
@@ -1627,7 +1632,8 @@ In some cases like saving habits or org files, I want to make sure that changes 
 #+end_src
 ** Set safe local variables values
 #+begin_src emacs-lisp :tangle lisp/misc.el
-  (setq safe-local-variable-values '(prettier-js-command . "/Users/jarodevs/gorgias/helpdesk-web-app/node_modules/prettier/bin/prettier.cjs"))
+  (setq safe-local-variable-values
+        '((prettier-js-command . "/Users/jarodevs/gorgias/helpdesk-web-app/node_modules/prettier/bin/prettier.cjs")))
 #+end_src
 * Buffer positioning rules
 ** Calendar below current buffer
@@ -1671,6 +1677,5 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (load-file (expand-file-name "lisp/dired.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/buffer-positioning.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/ediff.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/imenu-list.el" user-emacs-directory))
 #+end_src
-
-
