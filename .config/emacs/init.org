@@ -178,7 +178,7 @@ Exec path used by emacs needs to be configured to load path from shell
   (straight-use-package 'wgrep)
   (require 'wgrep)
 #+end_src
-* Call functions in popup windows
+* COMMENT Call functions in popup windows
 #+begin_src emacs-lisp :tangle lisp/popup-function-calls.el
   (defun jarodevs-window-delete-popup-frame (&rest _)
     "Kill selected selected frame if it has parameter `jarodevs-window-popup-frame'.
@@ -924,6 +924,13 @@ Candidate documentation annotation
   ;; indent-tabs-mode: nil
   ;; End:
   ;;; ol-notmuch.el ends here
+#+end_src
+* Org roam
+#+begin_src emacs-lisp :tangle lisp/org-roam.el
+  (straight-use-package 'org-roam)
+  (require 'org-roam)
+  (setq org-roam-directory (file-truename "~/org-roam"))
+  (org-roam-db-autosync-mode)
 #+end_src
 * Diary
 #+begin_src emacs-lisp :tangle lisp/diary.el
