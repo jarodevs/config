@@ -342,6 +342,14 @@ Next, filter out unwanted ANSI escape sequences, like the ones intended for ttys
    '(whitespace-space ((t (:foreground "gray20" :background nil))))
    '(whitespace-tab ((t (:foreground "gray20" :background nil))))
    '(whitespace-newline ((t (:foreground "gray20" :background nil)))))
+
+  (with-eval-after-load "apropospriate-light"  ;; or the theme's file name
+    (let ((my-foreground (face-attribute 'font-lock-comment-face :foreground nil 'default)))
+      (custom-set-faces
+       `(whitespace-space ((t (:foreground "#ecf0f1" :background nil))))
+       `(whitespace-tab ((t (:foreground "#ecf0f1"  :background nil))))
+       `(whitespace-newline ((t (:foreground "#ecf0f1" :background nil)))))))
+
 #+end_src
 * Minibuffer
 ** Vertical completion
@@ -1479,7 +1487,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
           (start-process-shell-command
            "helpdesk-web-app-process" ;; Name of the process
            nil                        ;; No associated buffer
-           "cd ~/gorgias/helpdesk-web-app && source ~/.config/zsh/.zshrc && yarn serve > /tmp/helpdesk-web-app.log 2>&1"))
+           "cd ~/gorgias/helpdesk-web-app && source ~/.config/zsh/.zshrc && yarn pnpm dev:local > /tmp/helpdesk-web-app.log 2>&1"))
     (message "Helpdesk web app is starting... Logs available -> /tmp/helpdesk-web-app.log"))
 
   (defun stop-helpdesk-web-app ()
@@ -1640,7 +1648,8 @@ In some cases like saving habits or org files, I want to make sure that changes 
 ** Set safe local variables values
 #+begin_src emacs-lisp :tangle lisp/misc.el
   (setq safe-local-variable-values
-        '((prettier-js-command . "/Users/jarodevs/gorgias/helpdesk-web-app/node_modules/prettier/bin/prettier.cjs")))
+        '((prettier-js-command . "/Users/jarodevs/gorgias/helpdesk-web-app/node_modules/prettier/bin/prettier.cjs")
+          (prettier-js-command . "/Users/jarodevs/gorgias/ai-agent/node_modules/prettier/bin/prettier.cjs")))
 #+end_src
 * Buffer positioning rules
 ** Calendar below current buffer
