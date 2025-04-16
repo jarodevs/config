@@ -178,34 +178,6 @@ Exec path used by emacs needs to be configured to load path from shell
   (straight-use-package 'wgrep)
   (require 'wgrep)
 #+end_src
-* COMMENT Call functions in popup windows
-#+begin_src emacs-lisp :tangle lisp/popup-function-calls.el
-  (defun jarodevs-window-delete-popup-frame (&rest _)
-    "Kill selected selected frame if it has parameter `jarodevs-window-popup-frame'.
-  Use this function via a hook."
-    (when (frame-parameter nil jarodevs-window-popup-frame)
-      (delete-frame)))
-
-  (defmacro jarodevs-window-define-with-popup-frame (command)
-    "Define interactive function which calls COMMAND in a new frame.
-  Make the new frame have the `jarodevs-window-popup-frame' parameter."
-    `(defun ,(intern (format "jarodevs-window-popup-%s" command)) ()
-       ,(format "Run `%s' in a popup frame with `jarodevs-window-popup-frame' parameter.
-  Also see `jarodevs-window-delete-popup-frame'." command)
-       (interactive)
-       (let ((frame (make-frame '((jarodevs-window-popup-frame . t)))))
-         (select-frame frame)
-         (switch-to-buffer " jarodevs-window-hidden-buffer-for-popup-frame")
-         (condition-case nil
-             (call-interactively ',command)
-           ((quit error user-error)
-            (delete-frame frame))))))
-
-  (declare-function org-capture "org-capture" (&optional goto keys))
-  (defvar org-capture-after-finalize-hook)
-  (jarodevs-window-define-with-popup-frame org-capture)
-  (add-hook 'org-capture-after-finalize-hook #'jarodevs-window-delete-popup-frame)
-#+end_src
 * Evil Mode
 #+begin_src emacs-lisp :tangle lisp/evil.el
   (straight-use-package 'evil)
@@ -643,7 +615,7 @@ Candidate documentation annotation
 #+end_src
 ** Setting org agenda files
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (setq org-agenda-files '("~/Documents/org/" "~/Documents/org/events/" "~/.notes"))
+  (setq org-agenda-files '("~/Documents/org/" "~/Documents/org/events/" "~/.notes.org"))
 #+end_src
 ** Customizing headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -1678,7 +1650,6 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (load-file (expand-file-name "lisp/calendar.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/embark.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/custom-commands.el" user-emacs-directory))
-    (load-file (expand-file-name "lisp/popup-function-calls.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/wgrep.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/ansi-support-in-buffers.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/gpg.el" user-emacs-directory))
