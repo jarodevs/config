@@ -215,19 +215,19 @@ Exec path used by emacs needs to be configured to load path from shell
 
 *** Global theme declaration
 #+begin_src emacs-lisp :tangle lisp/appearance.el
-    (straight-use-package 'modus-themes)
-    (straight-use-package 'dracula-theme)
-    (straight-use-package 'doom-themes)
-    (straight-use-package 'apropospriate-theme)
-    (straight-use-package 'gruber-darker-theme)
-    (straight-use-package 'vscode-dark-plus-theme)
-    (straight-use-package 'autothemer) ;Dependency of github theme package
-    (require 'autothemer)
-    (straight-use-package
-      '(github-emacs-theme :type git :host github :repo "ladroid/github-emacs-theme"))
+  (straight-use-package 'modus-themes)
+  (straight-use-package 'dracula-theme)
+  (straight-use-package 'doom-themes)
+  (straight-use-package 'apropospriate-theme)
+  (straight-use-package 'gruber-darker-theme)
+  (straight-use-package 'vscode-dark-plus-theme)
+  (straight-use-package 'autothemer) ;Dependency of github theme package
+  (require 'autothemer)
+  (straight-use-package
+    '(github-emacs-theme :type git :host github :repo "ladroid/github-emacs-theme"))
 
-    (setq custom-safe-theme t)
-    (load-theme 'github-dark t)
+  (setq custom-safe-theme t)
+  (load-theme 'doom-laserwave t)
 #+end_src
 *** Github theme tweaks
 #+begin_src emacs-lisp :tangle lisp/appearance.el
@@ -615,7 +615,7 @@ Candidate documentation annotation
 #+end_src
 ** Setting org agenda files
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (setq org-agenda-files '("~/Documents/org/" "~/Documents/org/events/" "~/.notes.org"))
+  (setq org-agenda-files '("~/Documents/org/" "~/Documents/org/events/" "~/.notes"))
 #+end_src
 ** Customizing headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
