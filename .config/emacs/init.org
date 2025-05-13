@@ -620,8 +620,7 @@ Candidate documentation annotation
         '((sequence "TODO(t)" "DOING(o)" "REVIEW(r)" "FROZEN(f)" "|" "DONE(d)")))
 
   (setq org-todo-keyword-faces
-        '(("TODO" . (:foreground "yellow" :background "unspecified" :box (:line-width 1 :color "yellow"))) 
-          ("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))
+        '(("DONE" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "dark gray")))
            ("REVIEW" . (:foreground "dark gray" :background "unspecified" :box(:line-width 1 :color "blue")))
            ("FROZEN" . (:foreground "dark cyan" :background "white"))
            ("DOING" . (:foreground "white" :background "dark cyan"))))
