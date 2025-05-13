@@ -227,12 +227,17 @@ Exec path used by emacs needs to be configured to load path from shell
     '(github-emacs-theme :type git :host github :repo "ladroid/github-emacs-theme"))
 
   (setq custom-safe-theme t)
-  (load-theme 'doom-laserwave t)
+  (load-theme 'modus-operandi t)
 #+end_src
 *** Github theme tweaks
 #+begin_src emacs-lisp :tangle lisp/appearance.el
   (with-eval-after-load 'github-dark-theme
     (set-face-attribute 'org-date nil :foreground "light green"))
+#+end_src
+*** Modus Operandi tweaks
+#+begin_src emacs-lisp :tangle lisp/appearance.el
+  (setq modus-operandi-palette-overrides
+        '((bg-space "#ffffff")))
 #+end_src
 ** Colorize compilation buffer
 There are two parts in this: 
@@ -310,18 +315,10 @@ Next, filter out unwanted ANSI escape sequences, like the ones intended for ttys
           (tab-mark 9 [9655 9] [92 9]))) ; Display tabs as ▷
   (global-whitespace-mode 1)  ; Enable globally
 
-  (custom-set-faces
-   '(whitespace-space ((t (:foreground "gray20" :background nil))))
-   '(whitespace-tab ((t (:foreground "gray20" :background nil))))
-   '(whitespace-newline ((t (:foreground "gray20" :background nil)))))
-
-  (with-eval-after-load "apropospriate-light"  ;; or the theme's file name
-    (let ((my-foreground (face-attribute 'font-lock-comment-face :foreground nil 'default)))
-      (custom-set-faces
-       `(whitespace-space ((t (:foreground "#ecf0f1" :background nil))))
-       `(whitespace-tab ((t (:foreground "#ecf0f1"  :background nil))))
-       `(whitespace-newline ((t (:foreground "#ecf0f1" :background nil)))))))
-
+  ;; (custom-set-faces
+  ;;  '(whitespace-space ((t (:foreground "gray20" :background nil))))
+  ;;  '(whitespace-tab ((t (:foreground "gray20" :background nil))))
+  ;;  '(whitespace-newline ((t (:foreground "gray20" :background nil)))))
 #+end_src
 * Minibuffer
 ** Vertical completion
@@ -615,7 +612,7 @@ Candidate documentation annotation
 #+end_src
 ** Setting org agenda files
 #+begin_src emacs-lisp :tangle lisp/org.el
-  (setq org-agenda-files '("~/Documents/org/" "~/Documents/org/events/" "~/.notes"))
+  (setq org-agenda-files '("~/Documents/org/" "~/Documents/org/events/"))
 #+end_src
 ** Customizing headlines
 #+begin_src emacs-lisp :tangle lisp/org.el
@@ -1459,7 +1456,7 @@ In some cases like saving habits or org files, I want to make sure that changes 
           (start-process-shell-command
            "helpdesk-web-app-process" ;; Name of the process
            nil                        ;; No associated buffer
-           "cd ~/gorgias/helpdesk-web-app && source ~/.config/zsh/.zshrc && yarn pnpm dev:local > /tmp/helpdesk-web-app.log 2>&1"))
+           "cd ~/gorgias/helpdesk-web-app && source ~/.config/zsh/.zshrc && pnpm dev:local > /tmp/helpdesk-web-app.log 2>&1"))
     (message "Helpdesk web app is starting... Logs available -> /tmp/helpdesk-web-app.log"))
 
   (defun stop-helpdesk-web-app ()
