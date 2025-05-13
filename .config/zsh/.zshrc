@@ -24,7 +24,7 @@ alias dcpss="docker compose ps --format '{{.ID}} {{.Names}} {{.Status}}' | awk '
 alias sed="gsed"
 
 # ENV
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
+#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9be0f7,bg=#162c70,bold,underline"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 plugins=(
     git
