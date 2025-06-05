@@ -227,7 +227,13 @@ Exec path used by emacs needs to be configured to load path from shell
     '(github-emacs-theme :type git :host github :repo "ladroid/github-emacs-theme"))
 
   (setq custom-safe-theme t)
-  (load-theme 'modus-operandi t)
+  (load-theme 'modus-vivendi t)
+
+  '(modus-themes-vivendi-color-overrides '(
+      (bg-header . "#4c566a")
+      (bg-hl-line . "#434c5e")
+      (bg-inactive . "#3b4252")
+      (bg-main . "#2e3440")))
 #+end_src
 *** Github theme tweaks
 #+begin_src emacs-lisp :tangle lisp/appearance.el
@@ -308,12 +314,12 @@ Next, filter out unwanted ANSI escape sequences, like the ones intended for ttys
 #+end_src
 ** Configuring Space/Tab/Newline markers
 #+begin_src emacs-lisp :tangle lisp/appearance.el
-  (setq whitespace-style '(face spaces tabs newline space-mark tab-mark newline-mark))
-  (setq whitespace-display-mappings
-        '((space-mark 32 [183] [46])  ; 183 (·) is the middle dot, 46 (.) is fallback
-          (newline-mark 10 [172 10])  ; Display newline as ¬
-          (tab-mark 9 [9655 9] [92 9]))) ; Display tabs as ▷
-  (global-whitespace-mode 1)  ; Enable globally
+  ;; (setq whitespace-style '(face spaces tabs newline space-mark tab-mark newline-mark))
+  ;; (setq whitespace-display-mappings
+  ;;       '((space-mark 32 [183] [46])  ; 183 (·) is the middle dot, 46 (.) is fallback
+  ;;         (newline-mark 10 [172 10])  ; Display newline as ¬
+  ;;         (tab-mark 9 [9655 9] [92 9]))) ; Display tabs as ▷
+  ;; (global-whitespace-mode 1)  ; Enable globally
 
   ;; (custom-set-faces
   ;;  '(whitespace-space ((t (:foreground "gray20" :background nil))))
@@ -715,6 +721,9 @@ Candidate documentation annotation
            (:name "Habits"
                   :habit t
                   :order 9)
+           (:name "All Todos"
+                  :todo t
+                  :order 99)
            ;; After the last group, the agenda will display items that didn't
            ;; match any of these groups, with the default order position of 99
            ))
@@ -1660,5 +1669,6 @@ In some cases like saving habits or org files, I want to make sure that changes 
     (load-file (expand-file-name "lisp/dired.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/buffer-positioning.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/ediff.el" user-emacs-directory))
+    (load-file (expand-file-name "lisp/org-roam.el" user-emacs-directory))
     (load-file (expand-file-name "lisp/imenu-list.el" user-emacs-directory))
 #+end_src
