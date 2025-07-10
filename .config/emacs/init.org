@@ -2056,11 +2056,42 @@ Not directly part of workgroups but kinda linked as it allows to get back to pre
   ;; Recommended keymap prefix on Windows/Linux
   ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 #+end_src
+* Checking and correcting spelling
+** Using langtool instead - Flyspell Mode
+#+begin_src emacs-lisp :tangle lisp/spelling.el
+  ;; To load flyspell-mode when loading a file in any of the recognized text-mode’s, we load it with:
+  (dolist (hook '(text-mode-hook))
+      (add-hook hook (lambda () (flyspell-mode 1))))
+
+  ;; And we can also avoid loading them in any other specific text-mode, for example change-log-mode and log-edit-mode:
+  (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+      (add-hook hook (lambda () (flyspell-mode -1))))
+
+  (add-hook 'prog-mode-hook
+      (lambda ()
+        (flyspell-prog-mode)))
+#+end_src
+** Integrating with LanguageToolDesktop
+#+begin_src emacs-lisp :tangle lisp/spelling.el
+  (straight-use-package 'langtool)
+  (setq langtool-language-tool-jar "/usr/local/language-tool/languagetool-commandline.jar")
+  (setq
+   langtool-mother-tongue "en"
+   langtool-default-language "en-US")
+  (require 'langtool)
+#+end_src
+
+*** Activating langtool in specific modes
+#+begin_src emacs-lisp :tangle lisp/spelling.el
+  (add-hook 'text-mode-hook
+            (lambda () 
+               (add-hook 'after-save-hook 'langtool-check nil 'make-it-local)))
+#+end_src
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
   (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
-    (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
-    (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/evil.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/org.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/email.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/appearance.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/minibuffer.el" user-emacs-directory))
@@ -2095,4 +2126,5 @@ Not directly part of workgroups but kinda linked as it allows to get back to pre
   (load-file (expand-file-name "lisp/claude-code.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/workgroups.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/projectile.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/spelling.el" user-emacs-directory))
 #+end_src
