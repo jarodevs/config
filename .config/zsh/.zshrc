@@ -1,4 +1,5 @@
 export ZSH="$HOME/.config/.oh-my-zsh"
+export GNUPGHOME="$HOME/.config/gnupg"
 
 
 source /opt/z/z.sh
@@ -9,7 +10,7 @@ export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/emacs-plus@29
 # END PATH
 
 
-alias build_emacs="cd $XDG_CONFIG_HOME/emacs && make clean && make"
+alias build_emacs="cd $XDG_CONFIG_HOME/emacs && make"
 alias gpg="/usr/local/MacGPG2/bin/gpg"
 alias docker-compose="docker compose"
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
@@ -29,6 +30,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 plugins=(
     git
     zsh-autosuggestions
+    zsh-vi-mode
 )
 
 TYPEWRITTEN_PROMPT_LAYOUT="pure"
@@ -42,8 +44,8 @@ if [ -f '/Users/jarodevs/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jarode
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jarodevs/google-cloud-sdk/completion.zsh.inc'; fi
 
-# eval "$(starship init zsh)"
-# starship preset nerd-font-symbols -o ~/.config/starship.toml
+eval "$(starship init zsh)"
+starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 # NVM
 export NVM_DIR="$HOME/.config/nvm"
@@ -75,4 +77,3 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 # END NVM
-
