@@ -2081,12 +2081,20 @@ Not directly part of workgroups but kinda linked as it allows to get back to pre
   (require 'langtool)
 #+end_src
 
-*** Activating langtool in specific modes
+*** COMMENT Activating langtool in specific modes
 #+begin_src emacs-lisp :tangle lisp/spelling.el
   (add-hook 'text-mode-hook
             (lambda () 
                (add-hook 'after-save-hook 'langtool-check nil 'make-it-local)))
 #+end_src
+
+* No distractions tools
+
+** Writeroom-mode
+#+begin_src emacs-lisp :tangle lisp/no-distraction-tools.el
+  (straight-use-package 'writeroom-mode)
+#+end_src
+
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
   (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
@@ -2127,4 +2135,5 @@ Not directly part of workgroups but kinda linked as it allows to get back to pre
   (load-file (expand-file-name "lisp/workgroups.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/projectile.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/spelling.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/no-distraction-tools.el" user-emacs-directory))
 #+end_src
