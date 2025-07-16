@@ -2095,6 +2095,10 @@ Not directly part of workgroups but kinda linked as it allows to get back to pre
   (straight-use-package 'writeroom-mode)
 #+end_src
 
+* Highlighting buffer lines
+#+begin_src emacs-lisp :tangle lisp/highlighting-buffer-lines.el
+  (straight-use-package 'bm)
+#+end_src
 * Bootstrap
 #+begin_src emacs-lisp :tangle init.el
   (load-file (expand-file-name "lisp/straight.el" user-emacs-directory))
@@ -2136,4 +2140,5 @@ Not directly part of workgroups but kinda linked as it allows to get back to pre
   (load-file (expand-file-name "lisp/projectile.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/spelling.el" user-emacs-directory))
   (load-file (expand-file-name "lisp/no-distraction-tools.el" user-emacs-directory))
+  (load-file (expand-file-name "lisp/highlighting-buffer-lines.el" user-emacs-directory))
 #+end_src
