@@ -728,15 +728,18 @@ Candidate documentation annotation
            (
             (tags-todo "+chore"
                        ((org-agenda-overriding-header "🧹 Chore tasks")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'habit 'scheduled 'deadline 'timestamp))
                         (org-agenda-files '("~/Documents/org/personnal_backlog.org"))))
             (tags-todo "+finance"
                        ((org-agenda-overriding-header "💰 Finance tasks")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'habit 'scheduled 'deadline 'timestamp))
                         (org-agenda-files '("~/Documents/org/personnal_backlog.org"))))
             (tags-todo "+learning\|+emacs\|+read"
                        ((org-agenda-overriding-header "📚 Learning & Emacs")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'habit 'scheduled 'deadline 'timestamp))
                         (org-agenda-files '("~/Documents/org/personnal_backlog.org"))))
             (tags-todo "-learning-emacs-chore-finance"
-                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'habit))
+                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'habit 'scheduled 'deadline 'timestamp))
                         (org-agenda-overriding-header "🔸 Other TODOs")
                         (org-agenda-files '("~/Documents/org/personnal_backlog.org"))))
             ))
