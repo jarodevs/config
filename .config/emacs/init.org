@@ -347,6 +347,10 @@ Next, filter out unwanted ANSI escape sequences, like the ones intended for ttys
   ;;  '(whitespace-tab ((t (:foreground "gray20" :background nil))))
   ;;  '(whitespace-newline ((t (:foreground "gray20" :background nil)))))
 #+end_src
+** Making sure emacs takes 100% window height
+#+begin_src emacs-lisp :tangle lisp/appearance.el
+  (setq frame-resize-pixelwise t)
+#+end_src
 * Minibuffer
 ** Vertical completion
 Vertico Setup
