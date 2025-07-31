@@ -85,6 +85,11 @@
       (insert
        (concat left-padding
                (format "%-25s %6s\n"
+                       "🧑‍💻 PR(s) to review:"
+                       (notmuch-saved-search-count "folder:Gorgias/Inbox tag:pr_to_review"))))
+      (insert
+       (concat left-padding
+               (format "%-25s %6s\n"
                        "✅ Todo(s):"
                        (notmuch-saved-search-count "folder:Gorgias/Inbox tag:todo"))))
       (insert
